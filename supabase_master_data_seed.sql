@@ -1,12 +1,96 @@
 -- ==============================================================================
--- 🍔 THE ENGINEER BURGER (برجر المهندس) - SCRIPT D'INSERTION DES DONNÉES MASTER
+-- 🍔 THE ENGINEER BURGER (برجر المهندس) - SCRIPT D'INSERTION DES DONNÉES MASTER (100% SÉCURISÉ)
 -- ==============================================================================
 -- Exécutez ce script dans Supabase (SQL Editor > New query > Run)
--- Il remplit automatiquement : Catégories, 20+ Plats, Ingrédients/Sauces 0-15,
--- Comptes Utilisateurs (Admin, Clients, Livreurs) et Commandes Récentes !
+-- Il met à jour automatiquement la structure des colonnes si besoin et insère
+-- tout le catalogue de plats, catégories, ingrédients 0-15 et utilisateurs !
 -- ==============================================================================
 
--- 1. CONFIGURATION DU RESTAURANT
+-- 📌 ÉTAPE 0 : S'ASSURER QUE TOUTES LES COLONNES EXISTENT (ÉVITE TOUTE ERREUR)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Table restaurant_config
+CREATE TABLE IF NOT EXISTS public.restaurant_config (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name_fr TEXT NOT NULL DEFAULT 'The Engineer Burger',
+    name_ar TEXT NOT NULL DEFAULT 'المهندس برغر',
+    currency_fr TEXT DEFAULT 'DA',
+    delivery_fee INTEGER DEFAULT 250,
+    phone TEXT DEFAULT '05 50 12 34 56',
+    address_fr TEXT DEFAULT '14 Boulevard Sidi Yahia, Hydra, Alger',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS address_ar TEXT DEFAULT '14 شارع سيدي يحيى، حيدرة، الجزائر العاصمة';
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS tagline_fr TEXT;
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS tagline_ar TEXT;
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS currency_ar TEXT DEFAULT 'د.ج';
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS maps_url TEXT;
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS logo_url TEXT DEFAULT '/logo.png';
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS prep_time_minutes INTEGER DEFAULT 15;
+ALTER TABLE public.restaurant_config ADD COLUMN IF NOT EXISTS is_open BOOLEAN DEFAULT true;
+
+-- Table categories
+CREATE TABLE IF NOT EXISTS public.categories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name_fr TEXT NOT NULL,
+    name_ar TEXT NOT NULL,
+    icon TEXT DEFAULT '🍔'
+);
+ALTER TABLE public.categories ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;
+ALTER TABLE public.categories ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+
+-- Table menu_items
+CREATE TABLE IF NOT EXISTS public.menu_items (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
+    name_fr TEXT NOT NULL,
+    name_ar TEXT NOT NULL,
+    price INTEGER NOT NULL CHECK (price >= 0),
+    image_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+ALTER TABLE public.menu_items ADD COLUMN IF NOT EXISTS description_fr TEXT;
+ALTER TABLE public.menu_items ADD COLUMN IF NOT EXISTS description_ar TEXT;
+ALTER TABLE public.menu_items ADD COLUMN IF NOT EXISTS prep_time TEXT DEFAULT '15 min';
+ALTER TABLE public.menu_items ADD COLUMN IF NOT EXISTS is_available BOOLEAN DEFAULT true;
+ALTER TABLE public.menu_items ADD COLUMN IF NOT EXISTS is_featured BOOLEAN DEFAULT false;
+
+-- Table ingredients_stock
+CREATE TABLE IF NOT EXISTS public.ingredients_stock (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name_fr TEXT NOT NULL,
+    name_ar TEXT NOT NULL,
+    icon TEXT DEFAULT '🥫',
+    is_available BOOLEAN DEFAULT true
+);
+ALTER TABLE public.ingredients_stock ADD COLUMN IF NOT EXISTS min_gauge INTEGER DEFAULT 0;
+ALTER TABLE public.ingredients_stock ADD COLUMN IF NOT EXISTS max_gauge INTEGER DEFAULT 15;
+ALTER TABLE public.ingredients_stock ADD COLUMN IF NOT EXISTS default_gauge INTEGER DEFAULT 7;
+ALTER TABLE public.ingredients_stock ADD COLUMN IF NOT EXISTS extra_cost INTEGER DEFAULT 0;
+ALTER TABLE public.ingredients_stock ADD COLUMN IF NOT EXISTS unit_label TEXT DEFAULT 'Niveau';
+
+-- Table app_users
+CREATE TABLE IF NOT EXISTS public.app_users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    phone TEXT NOT NULL UNIQUE,
+    pin_code TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    age INTEGER CHECK (age >= 5 AND age <= 120),
+    role TEXT NOT NULL DEFAULT 'client',
+    status TEXT NOT NULL DEFAULT 'active',
+    vehicle TEXT,
+    loyalty_points INTEGER DEFAULT 0,
+    google_id TEXT,
+    google_email TEXT,
+    avatar_url TEXT,
+    default_address TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ==============================================================================
+-- 📌 1. CONFIGURATION DU RESTAURANT
+-- ==============================================================================
 DELETE FROM public.restaurant_config;
 INSERT INTO public.restaurant_config (name_fr, name_ar, currency_fr, delivery_fee, phone, address_fr, address_ar)
 VALUES (
@@ -19,7 +103,9 @@ VALUES (
     '14 شارع سيدي يحيى، حيدرة، الجزائر العاصمة'
 );
 
--- 2. CATÉGORIES DE PLATS
+-- ==============================================================================
+-- 📌 2. CATÉGORIES DU MENU
+-- ==============================================================================
 TRUNCATE TABLE public.menu_items CASCADE;
 TRUNCATE TABLE public.categories CASCADE;
 
@@ -31,7 +117,9 @@ INSERT INTO public.categories (id, name_fr, name_ar, icon, display_order) VALUES
 ('c5555555-5555-5555-5555-555555555555', 'Boissons Fraîches', 'مشروبات باردة وعصائر', '🥤', 5),
 ('c6666666-6666-6666-6666-666666666666', 'Desserts & Glaces', 'تحليات وحلويات', '🍦', 6);
 
--- 3. INSERTION DE TOUS LES PLATS GOURMETS DU MENU (EN DINAR ALGÉRIEN - DA)
+-- ==============================================================================
+-- 📌 3. PLATS DU MENU (PRIX EN DINAR ALGÉRIEN - DA)
+-- ==============================================================================
 INSERT INTO public.menu_items (category_id, name_fr, name_ar, description_fr, description_ar, price, image_url, prep_time, is_featured) VALUES
 
 -- 🍔 BURGERS SIGNATURE
@@ -72,7 +160,7 @@ INSERT INTO public.menu_items (category_id, name_fr, name_ar, description_fr, de
     'c1111111-1111-1111-1111-111111111111',
     'Smokey BBQ Bacon Burger',
     'برجر البيكون والباربيكيو المدخن',
-    'Steak bœuf grillé à la flamme, tranches de bacon croustillant, oignons frits croustillants et sauce BBQ texane.',
+    'Steak bœuf grillé à la flamme, tranches de bacon croustillant, oignons frits et sauce BBQ texane.',
     'لحم مشوي على اللهب مع بيكون مقرمش وبصل مقلي وصلصة باربيكيو تكساس.',
     1150,
     'https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=80',
@@ -162,17 +250,6 @@ INSERT INTO public.menu_items (category_id, name_fr, name_ar, description_fr, de
     '7 min',
     false
 ),
-(
-    'c4444444-4444-4444-4444-444444444444',
-    'Tenders Poulet Croustillant (4 pcs)',
-    'قطع تندر دجاج كريسبي (4 قطع)',
-    'Aiguillettes de poulet 100% filet panées aux herbes et épices.',
-    'قطع دجاج تندر مقرمشة شهية.',
-    500,
-    'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80',
-    '9 min',
-    false
-),
 
 -- 🥤 BOISSONS FRAÎCHES
 (
@@ -244,7 +321,9 @@ INSERT INTO public.menu_items (category_id, name_fr, name_ar, description_fr, de
     false
 );
 
--- 4. GESTION DU STOCK DES INGRÉDIENTS & SAUCES (JAUGES 0 À 15)
+-- ==============================================================================
+-- 📌 4. INGRÉDIENTS & SAUCES (CURSEURS 0 À 15)
+-- ==============================================================================
 TRUNCATE TABLE public.ingredients_stock CASCADE;
 INSERT INTO public.ingredients_stock (name_fr, name_ar, icon, is_available, min_gauge, max_gauge, default_gauge, extra_cost) VALUES
 ('Harissa Algérienne (Piment / حار)', 'هريسة حارة جزائرية', '🌶️', true, 0, 15, 5, 0),
@@ -256,19 +335,21 @@ INSERT INTO public.ingredients_stock (name_fr, name_ar, icon, is_available, min_
 ('Pickles Maison Croquants', 'مخلل خيار مقرمش', '🥒', true, 0, 15, 5, 0),
 ('Jalapeños Piquants', 'فلفل هالبينو حار', '🌶️', true, 0, 15, 3, 50);
 
--- 5. UTILISATEURS & AUTHENTIFICATION RAPIDE (APP_USERS)
+-- ==============================================================================
+-- 📌 5. COMPTES UTILISATEURS & AUTHENTIFICATION (APP_USERS)
+-- ==============================================================================
 TRUNCATE TABLE public.app_users CASCADE;
 INSERT INTO public.app_users (phone, pin_code, full_name, age, role, status, vehicle, loyalty_points, default_address) VALUES
--- Admin Restaurant (Code PIN: 1234)
+-- Admin (Code PIN: 1234)
 ('0550123456', '1234', 'Directeur Restaurant', 38, 'admin', 'active', NULL, 0, '14 Boulevard Sidi Yahia, Hydra, Alger'),
 
--- Clients Gourmets Fidèles (Code PIN: 123456)
+-- Clients Gourmets (Code PIN: 123456)
 ('0554887766', '123456', 'Amine Bouzid', 26, 'client', 'active', NULL, 450, '14 Bd Sidi Yahia, Hydra, Alger'),
 ('0772334455', '123456', 'Yasmine Khelil', 23, 'client', 'active', NULL, 260, '28 Rue Didouche Mourad, Alger Centre'),
 ('0663991122', '123456', 'Nabil Cherif', 31, 'client', 'active', NULL, 310, '5 Cité El Biar, Alger'),
 ('0550998877', '123456', 'Ryad Mahrez', 33, 'client', 'active', NULL, 680, 'Boulevard Principal, Chéraga, Alger'),
 
--- Livreurs de la Flotte (1 Actif et 1 En attente de validation)
+-- Livreurs (Karim actif, Mehdi actif, Sofiane en attente)
 ('0552112233', '123456', 'Karim Benali', 28, 'driver', 'active', 'Moto Yamaha 125', 0, 'Hydra, Alger'),
 ('0661445566', '123456', 'Mehdi Meziane', 25, 'driver', 'active', 'Scooter Sym 150', 0, 'Alger Centre'),
 ('0770889900', '123456', 'Sofiane Mansouri', 22, 'driver', 'pending_approval', 'Vélo Électrique', 0, 'El Biar, Alger');
