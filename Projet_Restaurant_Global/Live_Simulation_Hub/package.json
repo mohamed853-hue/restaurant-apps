@@ -1,0 +1,13 @@
+{
+  "name": "restaurant-live-simulation-hub",
+  "version": "1.0.0",
+  "description": "Multi-view interactive simulation hub for Customer, Driver (Livreur) and Admin Restaurant Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="emerald-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Client • The Engineer Burger | برجر المهندس</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- GSAP for Interactive Yeti -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+
+  <style>
+    :root {
+      --bg-main: #F4F7F6;
+      --surface-card: #FFFFFF;
+      --border-card: #E2E8F0;
+      --primary-accent: #059669;
+      --primary-gold: #F59E0B;
+      --accent-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --font-main: 'Outfit', sans-serif;
+      --font-ar: 'Cairo', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 🍔 FALLING BURGERS RAIN ANIMATION BACKGROUND */
+    .falling-burgers-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .falling-burger {
+      position: absolute;
+      font-size: 24px;
+      user-select: none;
+      animation: fallBurger linear infinite;
+      opacity: 0.75;
+    }
+
+    @keyframes fallBurger {
+      0% {
+        transform: translateY(-80px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Top Bar */
+    .top-header-bar {
+      position: absolute;
+      top: 16px;
+      left: 24px;
+      right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .brand-logo-flex {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      border: 2px solid var(--primary-gold);
+      object-fit: cover;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    }
+
+    .brand-logo-text h2 {
+      font-size: 16.5px;
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .brand-logo-text span {
+      font-size: 11px;
+      color: var(--primary-accent);
+      font-weight: 800;
+    }
+
+    .lang-switcher-pill {
+      display: flex;
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 3px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      gap: 2px;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .lang-btn.active {
+      background: var(--accent-gradient);
+      color: #FFFFFF;
+    }
+
+    /* Welcome Banner Above Yeti */
+    .welcome-banner-text {
+      text-align: center;
+      margin-top: 50px;
+      margin-bottom: 2px;
+      z-index: 20;
+      max-width: 440px;
+    }
+
+    .welcome-banner-text h1 {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .welcome-banner-text p {
+      font-size: 12px;
+      color: var(--primary-accent);
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    /* Login Card Container */
+    .login-container-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 20px 50px rgba(5, 150, 105, 0.1);
+      width: 100%;
+      max-width: 440px;
+      padding: 24px 28px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 65px;
+      position: relative;
+      z-index: 20;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Yeti SVG Container */
+    .svgContainer {
+      width: 150px;
+      height: 150px;
+      position: relative;
+      margin-top: -95px;
+      margin-bottom: 8px;
+    }
+
+    .mySVG {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Auth Mode Tabs (Connexion vs Inscription) */
+    .auth-mode-tabs {
+      display: flex;
+      background: #F1F5F9;
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      padding: 4px;
+      width: 100%;
+      margin-bottom: 16px;
+      gap: 4px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 6px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .auth-tab-btn.active {
+      background: #FFFFFF;
+      color: var(--primary-accent);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Form Fields */
+    .form-group-row {
+      width: 100%;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    .form-group-row label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+
+    .form-group-row input {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-card);
+      background: #FFFFFF;
+      color: var(--text-main);
+      font-size: 13px;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .form-group-row input:focus {
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+
+    /* Slider Container */
+    .slider-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 10px 14px;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+
+    .slider-box .slider-hdr {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .slider-box input[type=range] {
+      width: 100%;
+      accent-color: var(--primary-accent);
+      cursor: pointer;
+    }
+
+    .btn-submit-main {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: #FFFFFF;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.15s;
+    }
+
+    .btn-submit-main:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .toast-alert {
+      position: fixed;
+      top: 20px;
+      background: #0F172A;
+      color: #FFFFFF;
+      border-left: 4px solid var(--primary-gold);
+      padding: 12px 20px;
+      border-radius: 12px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      z-index: 3000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🍔 BURGERS RAINING BACKGROUND -->
+  <div class="falling-burgers-container" id="fallingBurgersZone"></div>
+
+  <!-- Top Bar -->
+  <div class="top-header-bar">
+    <a href="/" class="brand-logo-flex">
+      <img src="/logo.png" alt="Logo" class="brand-logo-img">
+      <div class="brand-logo-text">
+        <h2 id="brandTitle">The Engineer Burger</h2>
+        <span id="brandSub">🍔 Espace Client Gourmet</span>
+      </div>
+    </a>
+
+    <!-- Language Selector FR / AR -->
+    <div class="lang-switcher-pill">
+      <button class="lang-btn active" id="btnLangFr" onclick="switchLanguage('fr')">🇫🇷 FR</button>
+      <button class="lang-btn" id="btnLangAr" onclick="switchLanguage('ar')">🇩🇿 العربية</button>
+    </div>
+  </div>
+
+  <!-- Welcome Header Above Yeti -->
+  <div class="welcome-banner-text">
+    <h1 id="welcomeTitle">Le Restaurant The Engineer Burger vous souhaite la bienvenue ! 🍔</h1>
+    <p id="welcomeSubtitle">Découvrez nos créations gourmandes et cumulez des points de fidélité ⭐</p>
+  </div>
+
+  <!-- Toast Alert -->
+  <div class="toast-alert" id="loginToast">
+    <span style="font-size:18px;">✅</span>
+    <span id="loginToastMsg">Connexion réussie !</span>
+  </div>
+
+  <!-- Login Card with Animated Yeti -->
+  <div class="login-container-card">
+
+    <!-- 🐵 INTERACTIVE YETI SVG -->
+    <div class="svgContainer">
+      <svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
+        <defs>
+          <circle id="armMaskPath" cx="100" cy="100" r="100"/>
+        </defs>
+        <clipPath id="armMask">
+          <use xlink:href="#armMaskPath" overflow="visible"/>
+        </clipPath>
+        
+        <circle cx="100" cy="100" r="95" fill="#FEF3C7" stroke="#F59E0B" stroke-width="3"/>
+        
+        <g class="body">
+          <path fill="#FFFFFF" d="M193.3,135.9c-5.8-8.4-15.5-13.9-26.5-13.9H151V72c0-27.6-22.4-50-50-50S51,44.4,51,72v50H32.1 c-10.6,0-20,5.1-25.8,13l0,78h187L193.3,135.9z"/>
+          <path fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" d="M193.3,135.9 c-5.8-8.4-15.5-13.9-26.5-13.9H151V72c0-27.6-22.4-50-50-50S51,44.4,51,72v50H32.1c-10.6,0-20,5.1-25.8,13"/>
+          <path fill="#ECFDF5" d="M100,156.4c-22.9,0-43,11.1-54.1,27.7c15.6,10,34.2,15.9,54.1,15.9s38.5-5.8,54.1-15.9 C143,167.5,122.9,156.4,100,156.4z"/>
+        </g>
+        
+        <g class="earL">
+          <g class="outerEar" fill="#ECFDF5" stroke="#0F172A" stroke-width="2.5">
+            <circle cx="47" cy="83" r="11.5"/>
+            <path d="M46.3 78.9c-2.3 0-4.1 1.9-4.1 4.1 0 2.3 1.9 4.1 4.1 4.1" stroke-linecap="round"/>
+          </g>
+        </g>
+        <g class="earR">
+          <g class="outerEar" fill="#ECFDF5" stroke="#0F172A" stroke-width="2.5">
+            <circle cx="155" cy="83" r="11.5"/>
+            <path d="M155.7 78.9c2.3 0 4.1 1.9 4.1 4.1 0 2.3-1.9 4.1-4.1 4.1" stroke-linecap="round"/>
+          </g>
+        </g>
+        
+        <path class="chin" d="M84.1 121.6c2.7 2.9 6.1 5.4 9.8 7.5l.9-4.5c2.9 2.5 6.3 4.8 10.2 6.5 0-1.9-.1-3.9-.2-5.8 3 1.2 6.2 2 9.7 2.5-.3-2.1-.7-4.1-1.2-6.1" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+        <path class="face" fill="#ECFDF5" d="M134.5,46v35.5c0,21.815-15.446,39.5-34.5,39.5s-34.5-17.685-34.5-39.5V46"/>
+        <path class="hair" fill="#F59E0B" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" d="M81.457,27.929 c1.755-4.084,5.51-8.262,11.253-11.77c0.979,2.565,1.883,5.14,2.712,7.723c3.162-4.265,8.626-8.27,16.272-11.235 c-0.737,3.293-1.588,6.573-2.554,9.837c4.857-2.116,11.049-3.64,18.428-4.156c-2.403,3.23-5.021,6.391-7.852,9.474"/>
+        
+        <g class="eyebrow">
+          <path fill="#FFFFFF" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round" d="M63.56,55.102 c6.243,5.624,13.38,10.614,21.296,14.738c2.071-2.785,4.01-5.626,5.816-8.515c4.537,3.785,9.583,7.263,15.097,10.329 c1.197-3.043,2.287-6.104,3.267-9.179c4.087,2.004,8.427,3.761,12.996,5.226c0.545-3.348,0.986-6.696,1.322-10.037 c4.913-0.481,9.857-1.34,14.787-2.599"/>
+        </g>
+        
+        <g class="eyeL">
+          <circle cx="85.5" cy="78.5" r="4.5" fill="#0F172A"/>
+          <circle cx="84" cy="76" r="1.5" fill="#FFF"/>
+        </g>
+        <g class="eyeR">
+          <circle cx="114.5" cy="78.5" r="4.5" fill="#0F172A"/>
+          <circle cx="113" cy="76" r="1.5" fill="#FFF"/>
+        </g>
+        
+        <g class="mouth">
+          <path class="mouthBG" fill="#059669" d="M100.2,101c-0.4,0-1.4,0-1.8,0c-2.7-0.3-5.3-1.1-8-2.5c-0.7-0.3-0.9-1.2-0.6-1.8 c0.2-0.5,0.7-0.7,1.2-0.7c0.2,0,0.5,0.1,0.6,0.2c3,1.5,5.8,2.3,8.6,2.3s5.7-0.7,8.6-2.3c0.2-0.1,0.4-0.2,0.6-0.2 c0.5,0,1,0.3,1.2,0.7c0.4,0.7,0.1,1.5-0.6,1.9c-2.6,1.4-5.3,2.2-7.9,2.5C101.7,101,100.5,101,100.2,101z"/>
+        </g>
+        
+        <path class="nose" d="M97.7 79.9h4.7c1.9 0 3 2.2 1.9 3.7l-2.3 3.3c-.9 1.3-2.9 1.3-3.8 0l-2.3-3.3c-1.3-1.6-.2-3.7 1.8-3.7z" fill="#0F172A"/>
+        
+        <g class="arms" clip-path="url(#armMask)">
+          <g class="armL">
+            <path fill="#ECFDF5" stroke="#0F172A" stroke-linecap="round" stroke-width="2.5" d="M121.3 97.4L111 58.7l38.8-10.4 20 36.1z"/>
+            <path fill="#fff" stroke="#0F172A" stroke-linecap="round" stroke-width="2.5" d="M123.5 96.8c-41.4 14.9-84.1 30.7-108.2 35.5L1.2 80c33.5-9.9 71.9-16.5 111.9-21.8"/>
+          </g>
+          <g class="armR">
+            <path fill="#ECFDF5" stroke="#0F172A" stroke-linecap="round" stroke-width="2.5" d="M265.4 97.3l10.4-38.6-38.9-10.5-20 36.1z"/>
+            <path fill="#fff" stroke="#0F172A" stroke-linecap="round" stroke-width="2.5" d="M263.3 96.7c41.4 14.9 84.1 30.7 108.2 35.5l14-52.3C352 70 313.6 63.5 273.6 58.1"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Mode Tabs: Connexion vs Inscription -->
+    <div class="auth-mode-tabs">
+      <button class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthMode('login')">🔑 Connexion Rapide</button>
+      <button class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthMode('register')">📝 Créer mon Compte</button>
+    </div>
+
+    <!-- 1. FORMULAIRE DE CONNEXION CLIENT -->
+    <div id="formClientLogin" style="width:100%;">
+      <div class="form-group-row">
+        <label id="lblLoginPhone">📞 Numéro de Téléphone (Algérie)</label>
+        <input type="text" id="login-phone" value="05 54 88 77 66" placeholder="05 / 06 / 07 xx xx xx">
+      </div>
+
+      <div class="form-group-row">
+        <label id="lblLoginPin">🔒 Code PIN Secret (6 chiffres)</label>
+        <input type="password" id="login-pin" value="123456" maxlength="6" placeholder="••••••">
+      </div>
+
+      <button class="btn-submit-main" onclick="submitClientLogin()">
+        <span>🚀 Se Connecter & Commander</span>
+      </button>
+    </div>
+
+    <!-- 2. FORMULAIRE D'INSCRIPTION CLIENT -->
+    <div id="formClientRegister" style="display:none; width:100%;">
+      <div class="form-group-row">
+        <label id="lblRegName">👤 Nom & Prénom d'Appel</label>
+        <input type="text" id="reg-name" placeholder="Ex: Amine Bouzid">
+      </div>
+
+      <div class="form-group-row">
+        <label id="lblRegPhone">📞 Numéro de Téléphone</label>
+        <input type="text" id="reg-phone" placeholder="05 / 06 / 07 xx xx xx">
+      </div>
+
+      <!-- Age Slider -->
+      <div class="slider-box">
+        <div class="slider-hdr">
+          <span id="lblRegAge">🎂 Votre Âge</span>
+          <span style="color:var(--primary-accent); font-weight:900;" id="clientAgeVal">26 ans</span>
+        </div>
+        <input type="range" min="5" max="90" value="26" oninput="document.getElementById('clientAgeVal').innerText = this.value + ' ans'">
+      </div>
+
+      <div class="form-group-row">
+        <label id="lblRegPin">🔒 Créer un Code PIN (6 chiffres)</label>
+        <input type="password" id="reg-pin" maxlength="6" placeholder="Ex: 123456">
+      </div>
+
+      <button class="btn-submit-main" onclick="submitClientRegister()">
+        <span>✨ Créer mon Compte Gourmet</span>
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    // Falling Burgers Rain Animation Generator
+    function createFallingBurgers() {
+      const container = document.getElementById('fallingBurgersZone');
+      const emojis = ['🍔', '🍟', '🥤', '🧀', '🍔', '🍗'];
+      for (let i = 0; i < 22; i++) {
+        const span = document.createElement('span');
+        span.className = 'falling-burger';
+        span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        span.style.left = Math.random() * 98 + '%';
+        span.style.animationDuration = (4 + Math.random() * 6) + 's';
+        span.style.animationDelay = (Math.random() * 5) + 's';
+        span.style.fontSize = (18 + Math.random() * 18) + 'px';
+        container.appendChild(span);
+      }
+    }
+    createFallingBurgers();
+
+    // BILINGUAL TRANSLATION
+    const i18n = {
+      fr: {
+        brandSub: "🍔 Espace Client Gourmet",
+        welcomeTitle: "Le Restaurant The Engineer Burger vous souhaite la bienvenue ! 🍔",
+        welcomeSubtitle: "Découvrez nos créations gourmandes et cumulez des points de fidélité ⭐",
+        tabBtnLogin: "🔑 Connexion Rapide",
+        tabBtnRegister: "📝 Créer mon Compte",
+        lblLoginPhone: "📞 Numéro de Téléphone (Algérie)",
+        lblLoginPin: "🔒 Code PIN Secret (6 chiffres)",
+        lblRegName: "👤 Nom & Prénom d'Appel",
+        lblRegPhone: "📞 Numéro de Téléphone",
+        lblRegAge: "🎂 Votre Âge",
+        lblRegPin: "🔒 Créer un Code PIN (6 chiffres)"
+      },
+      ar: {
+        brandSub: "🍔 فضاء العملاء المميز",
+        welcomeTitle: "مطعم المهندس برغر يرحب بكم في فضاء العملاء الفاخر ! 🍔",
+        welcomeSubtitle: "اكتشف أشهى الساندويتشات والبرجر واكسب نقاط الولاء الفورية ⭐",
+        tabBtnLogin: "🔑 تسجيل الدخول السريع",
+        tabBtnRegister: "📝 فتح حساب جديد",
+        lblLoginPhone: "📞 رقم الهاتف (الجزائر)",
+        lblLoginPin: "🔒 الرمز السري PIN (6 أرقام)",
+        lblRegName: "👤 الاسم واللقب للتوصيل",
+        lblRegPhone: "📞 رقم الهاتف للتواصل",
+        lblRegAge: "🎂 العمر",
+        lblRegPin: "🔒 إنشاء رمز PIN (6 أرقام)"
+      }
+    };
+
+    function switchLanguage(lang) {
+      document.getElementById('btnLangFr').classList.toggle('active', lang === 'fr');
+      document.getElementById('btnLangAr').classList.toggle('active', lang === 'ar');
+      document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+      document.body.style.fontFamily = lang === 'ar' ? 'Cairo, sans-serif' : 'Outfit, sans-serif';
+
+      const t = i18n[lang];
+      document.getElementById('brandSub').innerText = t.brandSub;
+      document.getElementById('welcomeTitle').innerText = t.welcomeTitle;
+      document.getElementById('welcomeSubtitle').innerText = t.welcomeSubtitle;
+      document.getElementById('tabBtnLogin').innerText = t.tabBtnLogin;
+      document.getElementById('tabBtnRegister').innerText = t.tabBtnRegister;
+      document.getElementById('lblLoginPhone').innerText = t.lblLoginPhone;
+      document.getElementById('lblLoginPin').innerText = t.lblLoginPin;
+      document.getElementById('lblRegName').innerText = t.lblRegName;
+      document.getElementById('lblRegPhone').innerText = t.lblRegPhone;
+      document.getElementById('lblRegAge').innerText = t.lblRegAge;
+      document.getElementById('lblRegPin').innerText = t.lblRegPin;
+    }
+
+    function switchAuthMode(mode) {
+      document.getElementById('tabBtnLogin').classList.toggle('active', mode === 'login');
+      document.getElementById('tabBtnRegister').classList.toggle('active', mode === 'register');
+      document.getElementById('formClientLogin').style.display = mode === 'login' ? 'block' : 'none';
+      document.getElementById('formClientRegister').style.display = mode === 'register' ? 'block' : 'none';
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('loginToast');
+      document.getElementById('loginToastMsg').innerText = msg;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    function submitClientLogin() {
+      const phone = document.getElementById('login-phone').value;
+      const pin = document.getElementById('login-pin').value;
+      if (!phone || !pin) {
+        alert("Veuillez saisir votre numéro de téléphone et votre code PIN.");
+        return;
+      }
+      showToast("Connexion Client Réussie ! Redirection vers vos burgers... 🍔");
+      setTimeout(() => { window.location.href = '/client'; }, 1000);
+    }
+
+    function submitClientRegister() {
+      const name = document.getElementById('reg-name').value;
+      const phone = document.getElementById('reg-phone').value;
+      const pin = document.getElementById('reg-pin').value;
+      if (!name || !phone || !pin) {
+        alert("Veuillez renseigner tous les champs pour créer votre compte.");
+        return;
+      }
+      showToast(`Bienvenue ${name} ! Votre compte est créé. Redirection... 🎉`);
+      setTimeout(() => { window.location.href = '/client'; }, 1000);
+    }
+
+    // YETI ANIMATION
+    const armL = document.querySelector('.armL');
+    const armR = document.querySelector('.armR');
+    const eyeL = document.querySelector('.eyeL');
+    const eyeR = document.querySelector('.eyeR');
+    const nose = document.querySelector('.nose');
+    const mouth = document.querySelector('.mouth');
+
+    TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
+    TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
+
+    function coverEyes() {
+      TweenMax.to(armL, 0.45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut });
+      TweenMax.to(armR, 0.45, { x: -93, y: 2, rotation: 0, ease: Quad.easeOut, delay: 0.1 });
+    }
+
+    function uncoverEyes() {
+      TweenMax.to(armL, 1.2, { y: 220, rotation: 105, ease: Quad.easeOut });
+      TweenMax.to(armR, 1.2, { y: 220, rotation: -105, ease: Quad.easeOut, delay: 0.1 });
+    }
+
+    function lookAtInput(e) {
+      const val = e.target.value.length;
+      const xOffset = Math.min(12, Math.max(-12, (val - 10) * 1.2));
+      TweenMax.to([eyeL, eyeR], 0.4, { x: xOffset, y: 3, ease: Expo.easeOut });
+      TweenMax.to(nose, 0.4, { x: xOffset * 0.8, y: 2, ease: Expo.easeOut });
+      TweenMax.to(mouth, 0.4, { x: xOffset * 0.6, y: 2, ease: Expo.easeOut });
+    }
+
+    function resetFace() {
+      TweenMax.to([eyeL, eyeR, nose, mouth], 0.6, { x: 0, y: 0, ease: Expo.easeOut });
+    }
+
+    document.querySelectorAll('input[type=password]').forEach(p => {
+      p.addEventListener('focus', coverEyes);
+      p.addEventListener('blur', uncoverEyes);
+    });
+
+    document.querySelectorAll('input[type=text]').forEach(t => {
+      t.addEventListener('input', lookAtInput);
+      t.addEventListener('blur', resetFace);
+    });
+  </script>
+</body>
+</html>

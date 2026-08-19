@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="emerald-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>The Engineer Burger | Application Client Mobile</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #F4F7F6;
+      --surface-card: #FFFFFF;
+      --border-card: #E2E8F0;
+      --primary-accent: #059669;
+      --primary-gold: #F59E0B;
+      --accent-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.04);
+      --font-main: 'Outfit', sans-serif;
+      --font-ar: 'Cairo', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #0F172A;
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+    }
+
+    .app-screen-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      max-height: 920px;
+      background: var(--bg-main);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    }
+
+    @media (min-width: 500px) {
+      .app-screen-container {
+        border-radius: 36px;
+        height: 90vh;
+        border: 2px solid #334155;
+      }
+    }
+
+    /* Top App Header */
+    .app-top-header {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-card);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo-img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 2px solid var(--primary-gold);
+    }
+
+    .brand-info h1 {
+      font-size: 14.5px;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+
+    .brand-info p {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-lang-toggle {
+      background: var(--bg-main);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .loyalty-pill {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      color: #92400E;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 14px;
+    }
+
+    /* Content Area */
+    .app-body-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px 75px;
+    }
+
+    /* Bottom Nav */
+    .app-bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 62px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 500;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+    }
+
+    .nav-tab-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+      position: relative;
+    }
+
+    .nav-tab-btn.active {
+      color: var(--primary-accent);
+      font-weight: 900;
+    }
+
+    .nav-tab-btn .badge-count {
+      position: absolute;
+      top: 2px;
+      right: 22px;
+      background: #EF4444;
+      color: #FFF;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 1px 5px;
+      border-radius: 10px;
+    }
+
+    /* Food Cards */
+    .food-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+    }
+
+    .food-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .food-card-body {
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-choose {
+      background: var(--accent-gradient);
+      color: #FFF;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Profile Card */
+    .profile-header-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .profile-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-gold);
+    }
+
+    .vip-badge {
+      background: var(--gold-gradient);
+      color: #000;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .stat-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-box .num {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--primary-accent);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-screen-container">
+    
+    <!-- Top Header -->
+    <header class="app-top-header">
+      <div class="brand-group">
+        <img src="/logo.png" class="brand-logo-img">
+        <div class="brand-info">
+          <h1 id="appHeaderTitle">The Engineer Burger</h1>
+          <p id="appHeaderSub">Hydra, Alger &bull; 05 50 12 34 56</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-lang-toggle" onclick="toggleLanguage()">
+          <span id="langBtnTxt">🇩🇿 AR</span>
+        </button>
+        <div class="loyalty-pill">
+          ⭐ <span id="headerPointsVal">450</span> Pts
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="app-body-content" id="clientAppBody"></main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="app-bottom-nav">
+      <button class="nav-tab-btn active" id="btnTabMenu" onclick="switchTab('menu')">
+        <span style="font-size:18px;">🍔</span>
+        <span id="tabMenuTxt">Menu</span>
+      </button>
+      <button class="nav-tab-btn" id="btnTabCart" onclick="switchTab('cart')">
+        <span style="font-size:18px;">🛒</span>
+        <span id="tabCartTxt">Panier</span>
+        <span class="badge-count" id="cartBadgeCount" style="display:none;">0</span>
+      </button>
+      <button class="nav-tab-btn" id="btnTabOrders" onclick="switchTab('orders')">
+        <span style="font-size:18px;">📦</span>
+        <span id="tabOrdersTxt">Commandes</span>
+      </button>
+      <button class="nav-tab-btn" id="btnTabProfile" onclick="switchTab('profile')">
+        <span style="font-size:18px;">👤</span>
+        <span id="tabProfileTxt">Mon Profil</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script>
+    let currentLang = 'fr';
+    let currentTab = 'menu';
+    let clientCart = [];
+
+    let clientProfile = {
+      name: "Amine Bouzid",
+      phone: "05 54 88 77 66",
+      age: 26,
+      registeredAt: "15 Janvier 2026",
+      loyaltyPoints: 450,
+      totalOrders: 19,
+      totalSpent: 45000,
+      membershipTier: "VIP Gourmet ⭐",
+      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+      addresses: [
+        { label: "Maison", address: "14 Bd Sidi Yahia, Hydra, Alger", icon: "🏠" },
+        { label: "Bureau", address: "28 Rue Didouche Mourad, Alger Centre", icon: "🏢" }
+      ]
+    };
+
+    let menuItems = [
+      { id: "eb-1", name_fr: "Double Engineer Burger", name_ar: "برجر المهندس دبل", price: 950, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80", prepTime: "15 min" },
+      { id: "eb-2", name_fr: "Architect Smash Burger", name_ar: "برجر المعماري سماش", price: 1100, image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80", prepTime: "12 min" },
+      { id: "eb-3", name_fr: "Crispy Master Chicken", name_ar: "دجاج كريسبي ماستر", price: 900, image: "https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80", prepTime: "14 min" },
+      { id: "eb-4", name_fr: "Frites Maison & Sauce Fromagère", name_ar: "بطاطا مقلية وصلصة الجبن", price: 350, image: "https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=600&q=80", prepTime: "8 min" }
+    ];
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'fr' ? 'ar' : 'fr';
+      document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+      document.body.style.fontFamily = currentLang === 'ar' ? 'Cairo, sans-serif' : 'Outfit, sans-serif';
+      document.getElementById('langBtnTxt').innerText = currentLang === 'fr' ? '🇩🇿 AR' : '🇫🇷 FR';
+      renderView();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btnTab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
+      renderView();
+    }
+
+    function renderView() {
+      const container = document.getElementById('clientAppBody');
+      const isAr = currentLang === 'ar';
+
+      if (currentTab === 'menu') {
+        container.innerHTML = `
+          <div style="margin-bottom:10px;">
+            <h3 style="font-size:15px; font-weight:900; color:var(--text-main);">${isAr ? 'قائمة الطعام الفاخرة' : '🍔 Nos Burgers & Plats Phares'}</h3>
+            <p style="font-size:11px; color:var(--text-muted);">${isAr ? 'اختر وجبتك واستمتع بألذ النكهات' : 'Personnalisez vos sauces et ingrédients de 0 à 15'}</p>
+          </div>
+
+          ${menuItems.map(item => `
+            <div class="food-card" onclick="addToCart('${item.id}')">
+              <img src="${item.image}">
+              <div class="food-card-body">
+                <div>
+                  <strong style="font-size:13.5px; color:var(--text-main); display:block;">${isAr ? item.name_ar : item.name_fr}</strong>
+                  <span style="font-size:12.5px; font-weight:900; color:var(--primary-accent);">${item.price} DA</span>
+                </div>
+                <button class="btn-choose">✨ ${isAr ? 'طلب' : 'Choisir'}</button>
+              </div>
+            </div>
+          `).join('')}
+        `;
+      } else if (currentTab === 'profile') {
+        container.innerHTML = `
+          <!-- Profile Header Box -->
+          <div class="profile-header-box">
+            <img src="${clientProfile.avatarUrl}" class="profile-avatar">
+            <div>
+              <h3 style="font-size:15px; font-weight:900; color:var(--text-main);">${clientProfile.name}</h3>
+              <div style="font-size:11px; color:var(--text-muted);">📞 ${clientProfile.phone} &bull; 🎂 ${clientProfile.age} ans</div>
+              <span class="vip-badge">${clientProfile.membershipTier}</span>
+            </div>
+          </div>
+
+          <!-- Loyalty Progress Card -->
+          <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:16px; padding:14px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <strong style="font-size:12px; color:var(--text-main);">⭐ ${isAr ? 'نقاط الولاء' : 'Solde Points Fidélité'} :</strong>
+              <span style="font-size:16px; font-weight:900; color:#D97706;">${clientProfile.loyaltyPoints} Pts</span>
+            </div>
+            
+            <div style="background:#E2E8F0; height:8px; border-radius:4px; overflow:hidden; margin-bottom:6px;">
+              <div style="background:var(--gold-gradient); width:${(clientProfile.loyaltyPoints / 500) * 100}%; height:100%;"></div>
+            </div>
+            <div style="font-size:10px; color:var(--text-muted); display:flex; justify-content:space-between;">
+              <span>0 Pts</span>
+              <span>Burger Gratuit à 500 Pts (Encore 50 Pts !)</span>
+              <span>500 Pts</span>
+            </div>
+          </div>
+
+          <!-- Customer Stats -->
+          <div class="stat-row-grid">
+            <div class="stat-box">
+              <div style="font-size:11px; color:var(--text-muted);">${isAr ? 'إجمالي الطلبات' : 'Commandes Réalisées'}</div>
+              <div class="num">${clientProfile.totalOrders}</div>
+            </div>
+            <div class="stat-box">
+              <div style="font-size:11px; color:var(--text-muted);">${isAr ? 'إجمالي الإنفاق' : 'Total Dépensé'}</div>
+              <div class="num" style="color:#D97706;">${clientProfile.totalSpent.toLocaleString()} DA</div>
+            </div>
+          </div>
+
+          <!-- Saved Addresses -->
+          <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:16px; padding:14px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <strong style="font-size:12.5px; color:var(--text-main);">${isAr ? 'عناويني المسجلة' : '🏠 Mes Adresses Enregistrées'}</strong>
+              <button style="background:none; border:none; color:var(--primary-accent); font-size:11px; font-weight:800; cursor:pointer;">+ Ajouter</button>
+            </div>
+            ${clientProfile.addresses.map(a => `
+              <div style="background:var(--bg-main); border:1px solid var(--border-card); border-radius:10px; padding:10px; margin-bottom:6px; font-size:11.5px;">
+                <strong>${a.icon} ${a.label} :</strong>
+                <div style="color:var(--text-muted); margin-top:2px;">${a.address}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Google Account Linking Card -->
+          <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:16px; padding:14px; margin-bottom:14px; text-align:center;">
+            <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:4px;">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+              <strong style="font-size:12px; color:var(--text-main);">${isAr ? 'ربط الحساب بـ Google' : 'Liaison Compte Google'}</strong>
+            </div>
+            <p style="font-size:10.5px; color:var(--text-muted); margin-bottom:8px;">${isAr ? 'اربط حسابك لتسجيل الدخول السريع بنقرة واحدة في المرات القادمة' : 'Liez votre compte pour une connexion automatique en 1 clic lors de vos prochaines commandes'}</p>
+            <button style="background:#F8FAFC; border:1px solid #CBD5E1; padding:7px 14px; border-radius:10px; font-size:11px; font-weight:800; color:#0F172A; cursor:pointer;" onclick="alert('Compte Google Amine Bouzid (amine@gmail.com) lié avec succès ! ✅')">
+              🔗 ${isAr ? 'ربط الآن بـ Google' : 'Lier mon compte Google'}
+            </button>
+          </div>
+
+          <!-- Registration Date & Sign Out -->
+          <div style="text-align:center; font-size:11px; color:var(--text-muted); margin-bottom:14px;">
+            Membre fidèle depuis le <strong>${clientProfile.registeredAt}</strong>
+          </div>
+
+          <button style="width:100%; background:#0F172A; color:#FFF; border:none; padding:11px; border-radius:12px; font-size:12px; font-weight:800; cursor:pointer;" onclick="window.location.href='/client/login'">
+            🚪 Se Déconnecter / Changer de Compte
+          </button>
+        `;
+      } else if (currentTab === 'cart') {
+        container.innerHTML = `
+          <div style="text-align:center; padding:40px 10px; color:var(--text-muted);">
+            <div style="font-size:36px; margin-bottom:8px;">🛒</div>
+            <strong style="font-size:13px; color:var(--text-main);">Votre panier est prêt</strong>
+            <p style="font-size:11px; margin-top:4px;">Ajoutez des burgers et boissons depuis le menu pour commander !</p>
+            <button class="btn-choose" style="margin-top:12px;" onclick="switchTab('menu')">Voir le Menu</button>
+          </div>
+        `;
+      } else if (currentTab === 'orders') {
+        container.innerHTML = `
+          <div style="margin-bottom:10px;">
+            <h3 style="font-size:14px; font-weight:900; color:var(--text-main);">📦 Historique de vos Commandes</h3>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:12px; padding:12px; margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="font-size:12px;">Commande #CMD-789</strong>
+              <span style="background:#ECFDF5; color:#059669; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px;">Livrée 🎉</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-muted); margin:4px 0;">Double Engineer Burger + Selecto</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; border-top:1px dashed var(--border-card); padding-top:6px;">
+              <strong style="color:var(--primary-accent);">1 320 DA</strong>
+              <span style="font-size:10px; color:var(--text-muted);">Aujourd'hui à 14:15</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function addToCart(id) {
+      const item = menuItems.find(i => i.id === id);
+      if (item) {
+        clientCart.push(item);
+        document.getElementById('cartBadgeCount').style.display = 'inline-block';
+        document.getElementById('cartBadgeCount').innerText = clientCart.length;
+        alert(`✅ "${item.name_fr}" ajouté au panier !`);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', renderView);
+  </script>
+</body>
+</html>

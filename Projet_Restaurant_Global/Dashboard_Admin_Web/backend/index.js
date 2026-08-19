@@ -1,0 +1,129 @@
+const express = require('express');
+
+// Import Route Handlers (Functions)
+const welcome = require('./functions/welcome');
+const signup = require('./functions/signup');
+const login = require('./functions/login');
+
+// Import Restaurant API Handlers
+const {
+  createRestaurant,
+  getRestaurants,
+  updateRestaurant,
+  deleteRestaurant,
+} = require('./functions/restaurant');
+
+
+
+// Import Menu API Handlers
+const {
+  createMenuItem,
+  getMenuItemsByRestaurant,
+  updateMenuItem,
+  deleteMenuItem
+} = require('./functions/menu');
+
+
+// Import Customer API Handlers
+const {
+  createCustomer,
+  getCustomersByRestaurant,
+  updateCustomer,
+  deleteCustomer
+} = require('./functions/customer');
+
+
+// Import Order API Handlers
+const {
+  createOrder,
+  getOrdersByRestaurantId,
+  updateOrderById
+} = require('./functions/order');
+
+
+//Folder based API Handlers Importedd
+const getCategories = require('./functions/categories/getCategories');
+const loggin = require('./middleware/loggin');
+const getRestaurantsByCategoryId = require('./functions/restaurants/getRestaurantsByCategoryId');
+const getRestaurantById = require('./functions/restaurants/getRestaurantById');
+
+// Initialize Express App
+const app = express();
+const PORT = process.env.PORT || 3000;
+app.use(express.json());
+
+// Basic Route
+app.get('/', loggin, welcome);
+
+// Authentication Routes
+app.post('/signup', loggin, signup);
+app.post('/login', loggin, login);
+
+// Restaurant CRUD APIs
+app.post('/restaurants', loggin, createRestaurant);
+app.get('/restaurants', loggin, getRestaurants);
+app.put('/restaurants/:id', loggin, updateRestaurant);
+app.delete('/restaurants/:id', loggin, deleteRestaurant);
+app.get('/restaurants/:restaurantId', loggin, getRestaurantById);
+
+
+// Menu CRUD APIs
+app.post('/menus', loggin, createMenuItem);
+app.get('/menus/:restaurantId', loggin, getMenuItemsByRestaurant);
+app.put('/menus/:id', loggin, updateMenuItem);
+app.delete('/menus/:id', loggin, deleteMenuItem);
+
+// Customer CRUD APIs // crud means create, read, update, delete
+app.post('/customers', loggin, createCustomer);
+app.get('/customers/:restaurantId', loggin, getCustomersByRestaurant);
+app.put('/customers/:id', loggin, updateCustomer);
+app.delete('/customers/:id', loggin, deleteCustomer);
+
+// Order APIs
+app.post('/orders', loggin, createOrder);
+app.get('/orders/:restaurantId', loggin, getOrdersByRestaurantId);
+app.put('/orders/:id', loggin, updateOrderById);
+
+// Categories
+app.get('/categories', loggin, getCategories);
+app.get('/categories/:categoryId/restaurants', loggin, getRestaurantsByCategoryId);
+
+// Menu Items new
+const getMenuItemById = require('./functions/menu_items/getMenuItemById');
+app.get('/menu-items/:id', loggin, getMenuItemById);
+
+
+//Ratings by customer Id
+const getRatingsByRestaurantId = require('./functions/restaurant_ratings/getRatingsByRestaurantId');
+app.get('/restaurants/:restaurantId/ratings', loggin, getRatingsByRestaurantId);
+
+
+// Cart APIs
+const addItemsToCart = require('./functions/cart/addItemsToCart');
+const getCartItemsByUserId = require('./functions/cart/getCartItemsByUserId');
+const deleteAllCartItemsByUserId = require('./functions/cart/deleteAllCartItemsByUserId');
+const deleteCartItemById = require('./functions/cart/deleteCartItemById');
+
+app.post('/cart', loggin, addItemsToCart);
+app.get('/cart/:userId', loggin, getCartItemsByUserId);
+app.delete('/cart/:userId', loggin, deleteAllCartItemsByUserId);
+app.delete('/cart/item/:cartItemId', loggin, deleteCartItemById);
+
+// Address APIs
+const addAddress = require('./functions/payment_gateway/addAddress');
+const getAddressByUserId = require('./functions/payment_gateway/getAddressByUserId');
+
+app.post('/payment_gateway', loggin, addAddress);
+app.get('/payment_gateway/:userId', loggin, getAddressByUserId);
+
+// Place Order API
+const placeOrder = require('./functions/payment_gateway/placeOrder');
+
+app.post('/payment_gateway', loggin, placeOrder);
+
+
+
+// Start the Server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});

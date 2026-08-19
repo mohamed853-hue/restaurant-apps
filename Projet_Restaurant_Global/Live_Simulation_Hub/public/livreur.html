@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="emerald-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>The Engineer Fleet | Application Coursier Livreur</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root {
+      --bg-main: #0F172A;
+      --surface-card: #1E293B;
+      --border-card: #334155;
+      --primary-accent: #10B981;
+      --primary-gold: #F59E0B;
+      --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      --accent-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      --text-main: #FFFFFF;
+      --text-muted: #94A3B8;
+      --font-main: 'Outfit', sans-serif;
+      --font-ar: 'Cairo', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: #020617;
+      color: var(--text-main);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app-screen-container {
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      max-height: 920px;
+      background: #0F172A;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    }
+
+    @media (min-width: 500px) {
+      .app-screen-container {
+        border-radius: 36px;
+        height: 90vh;
+        border: 2px solid #334155;
+      }
+    }
+
+    .driver-header {
+      background: #1E293B;
+      border-bottom: 1px solid var(--border-card);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .driver-avatar-flex {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .driver-avatar-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-gold);
+    }
+
+    .btn-lang-toggle {
+      background: #0F172A;
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #FFF;
+      cursor: pointer;
+    }
+
+    .app-body-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px 75px;
+    }
+
+    .driver-bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 62px;
+      background: #1E293B;
+      border-top: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 500;
+    }
+
+    .nav-tab-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: #94A3B8;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .nav-tab-btn.active {
+      color: var(--primary-gold);
+      font-weight: 900;
+    }
+
+    .mission-card {
+      background: #1E293B;
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-action-sm {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .btn-green { background: var(--accent-gradient); color: #FFF; }
+    .btn-gold { background: var(--gold-gradient); color: #000; }
+  </style>
+</head>
+<body>
+
+  <div class="app-screen-container">
+    
+    <!-- Driver Top Header -->
+    <header class="driver-header">
+      <div class="driver-avatar-flex">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" class="driver-avatar-img">
+        <div>
+          <h3 style="font-size:13px; font-weight:800;" id="driverNameTxt">Karim Benali</h3>
+          <div style="font-size:10px; color:#94A3B8;">🛵 Moto Yamaha 125 &bull; Alger</div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="btn-lang-toggle" onclick="toggleLanguage()">
+          <span id="langBtnTxt">🇩🇿 AR</span>
+        </button>
+        <span style="background:var(--gold-gradient); color:#000; font-size:11px; font-weight:900; padding:3px 8px; border-radius:6px;">
+          4 500 DA
+        </span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-body-content" id="driverAppBody"></main>
+
+    <!-- Bottom Nav -->
+    <nav class="driver-bottom-nav">
+      <button class="nav-tab-btn active" id="btnTabMissions" onclick="switchTab('missions')">
+        <span style="font-size:18px;">🛵</span>
+        <span id="tabMissionsTxt">Missions</span>
+      </button>
+      <button class="nav-tab-btn" id="btnTabMap" onclick="switchTab('map')">
+        <span style="font-size:18px;">🗺️</span>
+        <span id="tabMapTxt">Carte Maps</span>
+      </button>
+      <button class="nav-tab-btn" id="btnTabClients" onclick="switchTab('clients')">
+        <span style="font-size:18px;">⭐</span>
+        <span id="tabClientsTxt">Mes Clients</span>
+      </button>
+      <button class="nav-tab-btn" id="btnTabProfile" onclick="switchTab('profile')">
+        <span style="font-size:18px;">⚙️</span>
+        <span id="tabProfileTxt">Mon Profil</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <script>
+    let currentLang = 'fr';
+    let currentTab = 'missions';
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'fr' ? 'ar' : 'fr';
+      document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+      document.body.style.fontFamily = currentLang === 'ar' ? 'Cairo, sans-serif' : 'Outfit, sans-serif';
+      document.getElementById('langBtnTxt').innerText = currentLang === 'fr' ? '🇩🇿 AR' : '🇫🇷 FR';
+      renderView();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btnTab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
+      renderView();
+    }
+
+    function renderView() {
+      const container = document.getElementById('driverAppBody');
+      const isAr = currentLang === 'ar';
+
+      if (currentTab === 'missions') {
+        container.innerHTML = `
+          <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size:14px; font-weight:800;">${isAr ? 'المهام الحالية للتوصيل' : '🛵 Missions Actives en Cours'}</h3>
+            <span style="color:#10B981; font-size:11px; font-weight:800;">GPS En Ligne 🟢</span>
+          </div>
+
+          <div class="mission-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <strong style="font-size:13px; color:var(--primary-gold);">Course #CMD-789</strong>
+              <span style="background:#059669; color:#FFF; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px;">+250 DA</span>
+            </div>
+
+            <div style="font-size:11.5px; margin-bottom:6px;">
+              👤 <strong>Amine Bouzid</strong> &bull; 📞 05 54 88 77 66
+            </div>
+
+            <div style="background:#0F172A; border-radius:10px; padding:8px; font-size:11px; color:#94A3B8; margin-bottom:8px;">
+              📍 <strong>14 Boulevard Sidi Yahia, Hydra, Alger</strong>
+              <div style="margin-top:2px; color:#F59E0B;">🍔 Double Engineer Burger + Selecto</div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+              <button class="btn-action-sm btn-green" onclick="alert('Appel en cours...')">📞 Appeler Client</button>
+              <button class="btn-action-sm btn-gold" onclick="alert('Monnaie : 2000 DA reçus - 1320 DA = 680 DA à rendre')">💵 Rendre Monnaie</button>
+            </div>
+
+            <button class="btn-action-sm btn-green" style="width:100%; padding:10px;" onclick="alert('Livraison validée avec succès ! +250 DA ajoutés à vos gains.')">
+              ✅ Valider la Livraison (1 320 DA)
+            </button>
+          </div>
+        `;
+      } else if (currentTab === 'map') {
+        container.innerHTML = `
+          <div style="height:100%; min-height:500px; border-radius:16px; overflow:hidden;" id="driverMapBox"></div>
+        `;
+        setTimeout(() => {
+          const map = L.map('driverMapBox').setView([36.7538, 3.0588], 13);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+          L.marker([36.7538, 3.0588]).addTo(map).bindPopup("<b>🛵 Votre Position (Karim)</b>").openPopup();
+          L.marker([36.7750, 3.0590]).addTo(map).bindPopup("<b>⭐ CLIENT FAVORI : Yasmine (Alger Centre)</b>");
+        }, 150);
+      } else if (currentTab === 'clients') {
+        container.innerHTML = `
+          <h4 style="font-size:13px; font-weight:800; margin-bottom:10px;">⭐ Vos Clients Habituels à Alger</h4>
+          <div class="mission-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong>Amine Bouzid ⭐ Favori</strong>
+                <div style="font-size:10.5px; color:#94A3B8;">📍 Hydra, Alger &bull; Livré 19 fois</div>
+              </div>
+              <button class="btn-action-sm btn-green">📞</button>
+            </div>
+          </div>
+        `;
+      } else if (currentTab === 'profile') {
+        container.innerHTML = `
+          <h4 style="font-size:13px; font-weight:800; margin-bottom:12px;">⚙️ Paramètres Coursier & Véhicule</h4>
+          <div class="mission-card">
+            <div style="margin-bottom:8px; font-size:12px;">👤 Nom : <strong>Karim Benali</strong></div>
+            <div style="margin-bottom:8px; font-size:12px;">📞 Tél : <strong>05 52 11 22 33</strong></div>
+            <div style="margin-bottom:8px; font-size:12px;">🛵 Véhicule : <strong>Moto Yamaha 125</strong></div>
+            <div style="margin-bottom:8px; font-size:12px;">⭐ Note : <strong>4.95 / 5.0 (340 points)</strong></div>
+          </div>
+
+          <!-- Google Account Linking -->
+          <div class="mission-card" style="text-align:center;">
+            <div style="font-size:12px; font-weight:800; margin-bottom:4px;">🔗 Liaison Compte Google Coursier</div>
+            <p style="font-size:10.5px; color:#94A3B8; margin-bottom:8px;">Connectez-vous instantanément sans retaper votre code PIN</p>
+            <button class="btn-action-sm btn-gold" onclick="alert('Compte Google Karim Benali lié avec succès ! ✅')">
+              Lier mon compte Google
+            </button>
+          </div>
+
+          <button class="btn-action-sm" style="width:100%; padding:10px; background:#334155; color:#FFF;" onclick="window.location.href='/livreur/login'">
+            🚪 Déconnexion Coursier
+          </button>
+        `;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', renderView);
+  </script>
+</body>
+</html>

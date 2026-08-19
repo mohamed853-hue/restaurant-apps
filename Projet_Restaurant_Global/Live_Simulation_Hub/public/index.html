@@ -1,0 +1,3891 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="emerald-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Engineer Burger | برجر المهندس • Système Complet Restaurant & Livraison</title>
+  
+  <!-- Google Fonts: Cairo, Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS for Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Chart.js for High-End Interactive Financial & Performance Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* Theme Variables: Gourmet Emerald Fresh (Blanc Pur + Vert Menthe + Or Ambré) */
+    :root, [data-theme="emerald-light"] {
+      --bg-main: #F4F7F6;
+      --bg-sub: #EBF2EE;
+      --surface-card: #FFFFFF;
+      --surface-card-hover: #F8FAF9;
+      --surface-card-alt: #F0F7F4;
+      --surface-glass: rgba(255, 255, 255, 0.95);
+      --border-card: #E2E8F0;
+      --border-accent: rgba(16, 185, 129, 0.35);
+      --border-subtle: #E2E8F0;
+      
+      --primary-accent: #059669;
+      --primary-accent-light: #ECFDF5;
+      --primary-gold: #F59E0B;
+      --primary-gold-dark: #B45309;
+      --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      --accent-gradient: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --text-subtle: #94A3B8;
+      --badge-success: #10B981;
+      --badge-danger: #EF4444;
+      
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 24px rgba(5, 150, 105, 0.08);
+      --shadow-gold: 0 6px 20px rgba(245, 158, 11, 0.25);
+      
+      --font-main: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      --font-ar: 'Cairo', sans-serif;
+    }
+
+    [data-theme="royal-light"] {
+      --bg-main: #F8FAFC;
+      --bg-sub: #EDF2F7;
+      --surface-card: #FFFFFF;
+      --surface-card-hover: #F8FAFC;
+      --surface-card-alt: #EFF6FF;
+      --surface-glass: rgba(255, 255, 255, 0.95);
+      --border-card: #E2E8F0;
+      --border-accent: rgba(37, 99, 235, 0.3);
+      --border-subtle: #E2E8F0;
+      
+      --primary-accent: #1E40AF;
+      --primary-accent-light: #EFF6FF;
+      --primary-gold: #F59E0B;
+      --primary-gold-dark: #B45309;
+      --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      --accent-gradient: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+      
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --text-subtle: #94A3B8;
+      
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 8px 24px rgba(30, 64, 175, 0.08);
+      --shadow-gold: 0 6px 20px rgba(245, 158, 11, 0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    /* Master Header */
+    header.master-header {
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--primary-accent);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 2px solid var(--primary-gold);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .brand-info h1 {
+      font-size: 17.5px;
+      font-weight: 900;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.2px;
+    }
+
+    .brand-info h1 span.ar-txt {
+      font-family: var(--font-ar);
+      color: var(--primary-accent);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .brand-info p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Workspace Switcher */
+    .nav-workspace-pill {
+      display: flex;
+      background: var(--bg-sub);
+      padding: 4px;
+      border-radius: 30px;
+      border: 1px solid var(--border-card);
+      gap: 4px;
+    }
+
+    .nav-pill-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-pill-btn:hover { color: var(--text-main); }
+
+    .nav-pill-btn.active {
+      background: #FFFFFF;
+      color: var(--text-main);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .nav-pill-btn.active.gold-highlight {
+      background: var(--accent-gradient);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+
+    .header-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-theme-switcher {
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-theme-switcher:hover {
+      border-color: var(--primary-accent);
+      transform: scale(1.03);
+    }
+
+    .currency-pill {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .live-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ECFDF5;
+      color: #059669;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid #A7F3D0;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
+    .btn-quick-order-top {
+      background: var(--gold-gradient);
+      color: #000000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      box-shadow: var(--shadow-gold);
+    }
+
+    .btn-quick-order-top:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    /* Main Workspace */
+    main.workspace-body {
+      flex: 1;
+      padding: 16px 20px 24px;
+      max-width: 1920px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 1. ADMIN DUAL CONSOLE */
+    .admin-dual-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+    }
+
+    @media (max-width: 1450px) {
+      .admin-dual-wrapper { grid-template-columns: 1fr; }
+    }
+
+    .admin-panel-container {
+      background: #FFFFFF;
+      border-radius: 18px;
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 880px;
+    }
+
+    .panel-sub-header {
+      background: #FFFFFF;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .panel-brand-flex {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-logo-small {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 2px solid var(--primary-accent);
+      object-fit: cover;
+    }
+
+    .panel-title-block h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .panel-title-block p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .panel-nav-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lang-select-dropdown {
+      background: var(--bg-sub);
+      border: 1px solid var(--border-card);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .admin-badge-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--text-main);
+      color: #FFFFFF;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .admin-badge-pill span.gold-circle {
+      width: 7px;
+      height: 7px;
+      background: var(--primary-gold);
+      border-radius: 50%;
+    }
+
+    .admin-inner-layout {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .admin-sidebar {
+      width: 195px;
+      background: #0F172A;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 8px;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .panel-arabic .admin-sidebar { font-family: var(--font-ar); }
+
+    .sidebar-tab-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94A3B8;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .sidebar-tab-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+    }
+
+    .sidebar-tab-item.active {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34D399;
+      font-weight: 800;
+      border-left: 3px solid #10B981;
+    }
+
+    .panel-arabic .sidebar-tab-item.active {
+      border-left: none;
+      border-right: 3px solid #10B981;
+    }
+
+    .sidebar-tab-item .tab-icon {
+      font-size: 15px;
+      width: 18px;
+      text-align: center;
+    }
+
+    .admin-view-content {
+      flex: 1;
+      padding: 18px;
+      background: var(--bg-main);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 4 Key Stats Cards */
+    .gold-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card-gold-box {
+      background: #FFFFFF;
+      border-radius: 14px;
+      border: 1px solid var(--border-card);
+      padding: 16px;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-top: 4px solid var(--primary-accent);
+      transition: transform 0.15s ease;
+    }
+
+    .stat-card-gold-box:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+    .stat-card-gold-box .stat-lbl {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--text-muted);
+    }
+
+    .stat-card-gold-box .stat-num {
+      font-size: 22px;
+      font-weight: 900;
+      margin-top: 4px;
+      line-height: 1;
+      color: var(--primary-accent);
+    }
+
+    .card-box-module {
+      background: #FFFFFF;
+      border-radius: 14px;
+      border: 1px solid var(--border-card);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-box-header h4 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .report-period-pills {
+      display: flex;
+      background: var(--bg-sub);
+      padding: 3px;
+      border-radius: 20px;
+      border: 1px solid var(--border-card);
+      gap: 4px;
+    }
+
+    .report-pill-btn {
+      background: transparent;
+      border: none;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 4px 12px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .report-pill-btn.active {
+      background: #FFFFFF;
+      color: var(--primary-accent);
+      font-weight: 800;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .export-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .table-modern {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+    }
+
+    .table-modern thead tr {
+      background: #0F172A;
+      color: #FFFFFF;
+    }
+
+    .table-modern th {
+      padding: 10px 12px;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .table-modern th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+    .table-modern th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+
+    .table-modern tbody tr {
+      border-bottom: 1px solid var(--border-card);
+      transition: background 0.1s ease;
+    }
+
+    .table-modern tbody tr:hover { background: var(--bg-sub); }
+
+    .table-modern td {
+      padding: 10px 12px;
+      vertical-align: middle;
+      color: var(--text-main);
+    }
+
+    /* Badges */
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    .badge-pending {
+      background: #FEF3C7;
+      color: #D97706;
+      border: 1px solid #FDE68A;
+    }
+    .badge-pending .dot { width: 6px; height: 6px; background: #F59E0B; border-radius: 50%; animation: pulse 1s infinite; }
+
+    .badge-preparing {
+      background: #EFF6FF;
+      color: #1D4ED8;
+      border: 1px solid #BFDBFE;
+    }
+    .badge-preparing .dot { width: 6px; height: 6px; background: #3B82F6; border-radius: 50%; }
+
+    .badge-out_for_delivery {
+      background: #F3E8FF;
+      color: #7E22CE;
+      border: 1px solid #E9D5FF;
+    }
+    .badge-out_for_delivery .dot { width: 6px; height: 6px; background: #9333EA; border-radius: 50%; }
+
+    .badge-delivered {
+      background: #ECFDF5;
+      color: #047857;
+      border: 1px solid #A7F3D0;
+    }
+    .badge-delivered .dot { width: 6px; height: 6px; background: #10B981; border-radius: 50%; }
+
+    .badge-suspended {
+      background: #FEE2E2;
+      color: #B91C1C;
+      border: 1px solid #FCA5A5;
+    }
+    .badge-suspended .dot { width: 6px; height: 6px; background: #EF4444; border-radius: 50%; }
+
+    /* Buttons */
+    .btn-action-sm {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action-black { background: #0F172A; color: #FFFFFF; }
+    .btn-action-black:hover { background: #334155; }
+
+    .btn-action-gold { background: var(--gold-gradient); color: #000000; }
+    .btn-action-gold:hover { filter: brightness(1.05); }
+
+    .btn-action-green { background: var(--accent-gradient); color: #FFFFFF; }
+    .btn-action-green:hover { filter: brightness(1.05); }
+
+    .btn-action-excel { background: #166534; color: #FFFFFF; }
+    .btn-action-word { background: #1E40AF; color: #FFFFFF; }
+    .btn-action-call { background: #10B981; color: #FFFFFF; }
+    .btn-action-receipt { background: #475569; color: #FFFFFF; }
+    .btn-action-danger { background: #EF4444; color: #FFFFFF; }
+    .btn-action-danger:hover { background: #dc2626; }
+
+    /* Social Login Buttons */
+    .btn-social-oauth {
+      width: 100%;
+      border: 1px solid var(--border-card);
+      background: #FFFFFF;
+      color: var(--text-main);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s;
+    }
+    .btn-social-oauth:hover {
+      border-color: var(--primary-accent);
+      transform: translateY(-1px);
+    }
+
+    .panel-arabic { direction: rtl; font-family: var(--font-ar); }
+    .panel-arabic .table-modern { text-align: right; }
+
+    /* 2. LIVE SIMULATOR 3-EN-1 */
+    .live-suite-grid {
+      display: none;
+      grid-template-columns: 380px 380px 1fr;
+      gap: 20px;
+      width: 100%;
+      align-items: start;
+    }
+
+    .mobile-phone-frame {
+      width: 375px;
+      height: 810px;
+      background: #0F172A;
+      border-radius: 44px;
+      padding: 10px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25), 0 0 0 2px #E2E8F0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .mobile-screen-inner {
+      flex: 1;
+      background: var(--bg-main);
+      border-radius: 36px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-notch-bar {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 20px;
+      background: #000;
+      border-radius: 10px;
+      z-index: 500;
+    }
+
+    .mobile-status-header {
+      height: 36px;
+      padding: 6px 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      z-index: 400;
+      flex-shrink: 0;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .client-app-content-body {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 68px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .client-bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 900;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    .client-nav-tab-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      flex: 1;
+    }
+
+    .client-nav-tab-btn span.tab-emoji { font-size: 18px; }
+    .client-nav-tab-btn.active { color: var(--primary-accent); font-weight: 800; transform: translateY(-1px); }
+
+    .client-nav-tab-btn .cart-badge-dot {
+      position: absolute;
+      top: 2px;
+      right: 20px;
+      background: #EF4444;
+      color: #FFFFFF;
+      border-radius: 10px;
+      font-size: 9px;
+      font-weight: 900;
+      padding: 1px 5px;
+    }
+
+    .driver-bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      background: #0F172A;
+      border-top: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 900;
+    }
+
+    .driver-nav-tab-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: #94A3B8;
+      font-size: 9.5px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+    }
+    .driver-nav-tab-btn.active { color: var(--primary-gold); font-weight: 800; }
+
+    .toast-cart-alert {
+      position: absolute;
+      top: 45px;
+      left: 12px;
+      right: 12px;
+      background: #0F172A;
+      color: #FFFFFF;
+      border-left: 4px solid var(--primary-gold);
+      padding: 10px 14px;
+      border-radius: 12px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 1500;
+      animation: slideDownToast 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideDownToast {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Food Cards */
+    .gourmet-food-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      margin: 6px 12px 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+    }
+    .gourmet-food-card:hover {
+      border-color: var(--primary-accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .gourmet-food-img-header {
+      width: 100%;
+      height: 130px;
+      position: relative;
+      overflow: hidden;
+    }
+    .gourmet-food-img-header img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .gourmet-food-card:hover .gourmet-food-img-header img { transform: scale(1.04); }
+
+    .gourmet-badge-price {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      background: var(--gold-gradient);
+      color: #000000;
+      font-weight: 900;
+      font-size: 12.5px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .gourmet-badge-time {
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+    }
+
+    .gourmet-fav-btn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+    }
+    .gourmet-fav-btn:hover { transform: scale(1.1); }
+
+    .gourmet-card-body {
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .gourmet-card-body h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+    }
+
+    .gourmet-card-body p {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      line-height: 1.3;
+      margin-top: 2px;
+    }
+
+    .btn-gourmet-action {
+      background: var(--accent-gradient);
+      color: #FFFFFF;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .modal-gourmet-hero-img {
+      width: 100%;
+      height: 150px;
+      border-radius: 14px;
+      object-fit: cover;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-card);
+    }
+
+    .slider-container-row {
+      background: var(--surface-card-alt);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+
+    .slider-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .slider-header-flex strong { font-size: 12px; color: var(--text-main); }
+
+    .slider-level-badge {
+      background: var(--accent-gradient);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .slider-input-range {
+      width: 100%;
+      accent-color: var(--primary-accent);
+      cursor: pointer;
+    }
+
+    .slider-ticks-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .modal-drinks-scroll-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 6px 2px;
+      margin-bottom: 12px;
+    }
+
+    .modal-drink-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 130px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .modal-drink-card img {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-bottom: 4px;
+    }
+
+    .counter-flex-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .btn-counter-sm {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 1px solid var(--border-card);
+      background: #FFFFFF;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-counter-sm:hover { background: var(--primary-accent); color: #FFF; }
+
+    /* Custom Modals */
+    .modal-backdrop-custom {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 2500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeInModal 0.2s ease-out;
+    }
+
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-box-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 540px;
+      padding: 20px 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      border: 2px solid var(--primary-accent);
+      max-height: 92vh;
+      overflow-y: auto;
+      color: var(--text-main);
+      animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes slideUpModal {
+      from { transform: translateY(20px) scale(0.97); }
+      to { transform: translateY(0) scale(1); }
+    }
+
+    .receipt-paper {
+      background: #FFFFFF;
+      color: #000000;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      line-height: 1.4;
+      padding: 16px;
+      border: 1px dashed #666;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .form-group-row { margin-bottom: 12px; }
+    .form-group-row label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .form-group-row input, .form-group-row select, .form-group-row textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-card);
+      background: #FFFFFF;
+      color: var(--text-main);
+      font-size: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .custom-star-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gold-gradient);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
+      font-size: 16px;
+      color: #000;
+      animation: pulseStar 1.8s infinite;
+    }
+
+    @keyframes pulseStar {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8); }
+      70% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Master Top Header -->
+  <header class="master-header">
+    <div class="brand-group">
+      <img src="/logo.png" alt="The Engineer Burger" class="brand-logo-img" id="master-top-logo">
+      <div class="brand-info">
+        <h1>The Engineer Burger &bull; <span class="ar-txt">المهندس برغر</span></h1>
+        <p id="master-top-address">14 Bd Sidi Yahia, Hydra, Alger &bull; 05 50 12 34 56</p>
+      </div>
+    </div>
+
+    <!-- Workspace Switcher -->
+    <div class="nav-workspace-pill">
+      <button class="nav-pill-btn active" id="btn-mode-admin" onclick="switchWorkspace('admin')">
+        💻 Console Admin (Bilingue FR / AR)
+      </button>
+      <button class="nav-pill-btn gold-highlight" id="btn-mode-suite" onclick="switchWorkspace('suite')">
+        🔀 Simulateur Live 3-en-1 (Client • Livreur • Admin)
+      </button>
+    </div>
+
+    <!-- Tools -->
+    <div class="header-tools">
+      <!-- Theme Switcher -->
+      <button class="btn-theme-switcher" onclick="toggleColorTheme()">
+        <span id="themeEmojiIcon">🌿</span>
+        <span id="themeNameLabel">Émeraude & Menthe</span>
+      </button>
+
+      <!-- Auth Modal Button -->
+      <button class="btn-theme-switcher" style="border-color:var(--primary-accent);" onclick="openAuthModal()">
+        <span>🔐</span>
+        <span id="currentAuthUserRole">Espace Connexion</span>
+      </button>
+
+      <div class="currency-pill">
+        🇩🇿 <span>Dinar Algérien (DA / د.ج)</span>
+      </div>
+      <div class="live-status-badge">
+        <div class="pulse-dot"></div>
+        <span>Live Sync Actif</span>
+      </div>
+      <button class="btn-quick-order-top" onclick="triggerClientSampleOrder()">
+        ⚡ + Commande Express
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace Body -->
+  <main class="workspace-body">
+
+    <!-- 1. CONSOLE ADMIN BILINGUE (FR & AR) -->
+    <div class="admin-dual-wrapper" id="adminDualLayout">
+
+      <!-- A. PANNEAU ADMIN FRANÇAIS (LTR) -->
+      <div class="admin-panel-container panel-french" id="frAdminPanel">
+        <div class="panel-sub-header">
+          <div class="panel-brand-flex">
+            <img src="/logo.png" alt="Logo" class="panel-logo-small" id="fr-panel-logo">
+            <div class="panel-title-block">
+              <h3>The Engineer Burger</h3>
+              <p>Console de Gestion & Cuisine</p>
+            </div>
+          </div>
+
+          <div class="panel-nav-tools">
+            <select class="lang-select-dropdown" onchange="toggleDualLanguage(this.value)">
+              <option value="dual" selected>FR | AR (Bilingue)</option>
+              <option value="fr">FR Seul</option>
+              <option value="ar">AR Seul</option>
+            </select>
+            <div class="admin-badge-pill" onclick="openAuthModal()">
+              <span class="gold-circle"></span>
+              <span>Admin &bull; Déconnexion</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-inner-layout">
+          <aside class="admin-sidebar">
+            <a href="javascript:void(0)" class="sidebar-tab-item active" onclick="switchFrTab('dashboard', this)">
+              <span class="tab-icon">📊</span>
+              <span>Tableau de bord</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchFrTab('orders', this)">
+              <span class="tab-icon">📋</span>
+              <span>Commandes Live</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchFrTab('menu', this)">
+              <span class="tab-icon">🍔</span>
+              <span>Menu & Plats</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchFrTab('ingredients', this)">
+              <span class="tab-icon">📦</span>
+              <span>Stock Ingrédients</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchFrTab('drivers', this)">
+              <span class="tab-icon">🛵</span>
+              <span>Livreurs & Validation</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchFrTab('customers', this)">
+              <span class="tab-icon">👥</span>
+              <span>Clients & Points</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchFrTab('reports', this)">
+              <span class="tab-icon">📈</span>
+              <span>Rapports Financiers</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchFrTab('settings', this)">
+              <span class="tab-icon">⚙️</span>
+              <span>Paramètres</span>
+            </a>
+          </aside>
+
+          <div class="admin-view-content" id="fr-view-container"></div>
+        </div>
+      </div>
+
+      <!-- B. PANNEAU ADMIN ARABE (RTL) -->
+      <div class="admin-panel-container panel-arabic" id="arAdminPanel">
+        <div class="panel-sub-header">
+          <div class="panel-brand-flex">
+            <img src="/logo.png" alt="Logo" class="panel-logo-small" id="ar-panel-logo">
+            <div class="panel-title-block">
+              <h3>المهندس برغر</h3>
+              <p>لوحة التحكم وإدارة المطعم</p>
+            </div>
+          </div>
+
+          <div class="panel-nav-tools">
+            <select class="lang-select-dropdown" onchange="toggleDualLanguage(this.value)">
+              <option value="dual" selected>AR | FR (ثنائي اللغة)</option>
+              <option value="ar">AR فقط</option>
+              <option value="fr">FR فقط</option>
+            </select>
+            <div class="admin-badge-pill" onclick="openAuthModal()">
+              <span class="gold-circle"></span>
+              <span>المدير &bull; خروج</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-inner-layout">
+          <aside class="admin-sidebar">
+            <a href="javascript:void(0)" class="sidebar-tab-item active" onclick="switchArTab('dashboard', this)">
+              <span class="tab-icon">📊</span>
+              <span>لوحة التحكم</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchArTab('orders', this)">
+              <span class="tab-icon">📋</span>
+              <span>الطلبات المباشرة</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchArTab('menu', this)">
+              <span class="tab-icon">🍔</span>
+              <span>القائمة والعروض</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchArTab('ingredients', this)">
+              <span class="tab-icon">📦</span>
+              <span>مخزون المكونات</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchArTab('drivers', this)">
+              <span class="tab-icon">🛵</span>
+              <span>السائقين والاعتماد</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchArTab('customers', this)">
+              <span class="tab-icon">👥</span>
+              <span>العملاء والنقاط</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchArTab('reports', this)">
+              <span class="tab-icon">📈</span>
+              <span>التقارير المالية</span>
+            </a>
+            <a href="javascript:void(0)" class="sidebar-tab-item" onclick="switchArTab('settings', this)">
+              <span class="tab-icon">⚙️</span>
+              <span>الإعدادات</span>
+            </a>
+          </aside>
+
+          <div class="admin-view-content" id="ar-view-container"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2. VUE LIVE SIMULATEUR 3-EN-1 -->
+    <div class="live-suite-grid" id="liveSuiteLayout">
+
+      <!-- A. Application Client Mobile -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="font-size:13px; font-weight:800; margin-bottom:8px; color:var(--primary-accent);">
+          📱 Application Client (The Engineer Burger)
+        </div>
+        <div class="mobile-phone-frame">
+          <div class="mobile-notch-bar"></div>
+          <div class="mobile-screen-inner">
+            <div class="mobile-status-header">
+              <span>14:30</span>
+              <span>📶 5G 100% 🔋</span>
+            </div>
+
+            <!-- Animated Toast Cart Alert -->
+            <div class="toast-cart-alert" id="clientCartToast">
+              <span style="font-size:16px;">✅</span>
+              <span id="clientCartToastMsg">Plat ajouté au panier !</span>
+            </div>
+
+            <!-- Client Content Body -->
+            <div class="client-app-content-body" id="clientAppContentArea"></div>
+
+            <!-- FIXED Client Bottom Navigation Bar -->
+            <nav class="client-bottom-nav">
+              <button class="client-nav-tab-btn active" id="cnav-menu" onclick="switchClientTab('menu')">
+                <span class="tab-emoji">🍔</span>
+                <span>Menu</span>
+              </button>
+              <button class="client-nav-tab-btn" id="cnav-cart" onclick="switchClientTab('cart')">
+                <span class="tab-emoji">🛒</span>
+                <span>Panier</span>
+                <span class="cart-badge-dot" id="clientNavCartDot" style="display:none;">0</span>
+              </button>
+              <button class="client-nav-tab-btn" id="cnav-favs" onclick="switchClientTab('favs')">
+                <span class="tab-emoji">❤️</span>
+                <span>Favoris</span>
+              </button>
+              <button class="client-nav-tab-btn" id="cnav-orders" onclick="switchClientTab('orders')">
+                <span class="tab-emoji">📦</span>
+                <span>Commandes</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- B. Application Livreur Mobile -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="font-size:13px; font-weight:800; margin-bottom:8px; color:var(--primary-accent);">
+          🛵 Application Livreur (The Engineer Fleet)
+        </div>
+        <div class="mobile-phone-frame">
+          <div class="mobile-notch-bar"></div>
+          <div class="mobile-screen-inner">
+            <div class="mobile-status-header" style="background:#0F172A; color:#FFFFFF;">
+              <span>14:30</span>
+              <span>📶 GPS Actif 🔋</span>
+            </div>
+
+            <!-- Driver Top Profile Bar -->
+            <div style="background:#0F172A; color:#FFFFFF; padding:10px 14px; border-bottom:1px solid #334155; flex-shrink:0;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" id="driverTopAvatar" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-gold);">
+                  <div>
+                    <h4 style="font-size:12.5px; font-weight:800;" id="driverCurrentName">Karim Benali</h4>
+                    <p style="font-size:10px; color:#94A3B8;" id="driverCurrentVehicle">🛵 Moto Yamaha 125 &bull; Alger</p>
+                  </div>
+                </div>
+                <div style="text-align:right;">
+                  <span style="background:var(--gold-gradient); color:#000; font-size:11px; font-weight:900; padding:2px 8px; border-radius:6px;">
+                    4 500 DA
+                  </span>
+                  <div style="font-size:9.5px; color:#CBD5E1; margin-top:2px;">⭐ 4.95 &bull; 340 pts</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Driver Content Area -->
+            <div style="flex:1; overflow-y:auto; padding-bottom:60px; display:flex; flex-direction:column; position:relative;" id="driverAppContentArea"></div>
+
+            <!-- FIXED Driver Bottom Nav -->
+            <nav class="driver-bottom-nav">
+              <button class="driver-nav-tab-btn active" id="dnav-missions" onclick="switchDriverTab('missions')">
+                <span style="font-size:16px;">🛵</span>
+                <span>Missions</span>
+              </button>
+              <button class="driver-nav-tab-btn" id="dnav-map" onclick="switchDriverTab('map')">
+                <span style="font-size:16px;">🗺️</span>
+                <span>Carte Maps</span>
+              </button>
+              <button class="driver-nav-tab-btn" id="dnav-clients" onclick="switchDriverTab('clients')">
+                <span style="font-size:16px;">⭐</span>
+                <span>Mes Clients</span>
+              </button>
+              <button class="driver-nav-tab-btn" id="dnav-profile" onclick="switchDriverTab('profile')">
+                <span style="font-size:16px;">⚙️</span>
+                <span>Mon Profil</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- C. Panneau de Contrôle Interactif Live -->
+      <div style="background:#FFFFFF; border-radius:18px; border:1px solid var(--border-card); padding:20px; box-shadow:var(--shadow-md); display:flex; flex-direction:column; gap:14px;">
+        <h3 style="font-size:15px; font-weight:800; color:var(--primary-accent);">
+          🚀 Contrôle Total : Authentification & Validation
+        </h3>
+        
+        <div style="font-size:12px; line-height:1.6; color:var(--text-main);">
+          <strong style="color:var(--primary-accent);">🔐 Connexion Google & Téléphone (3 Espaces) :</strong>
+          <br>&bull; <strong>Client</strong> : Connexion en 1 clic avec <strong>Google</strong> ou formulaire direct avec <strong>Âge (5 à 90 ans)</strong> et Téléphone !
+          <br>&bull; <strong>Livreur</strong> : Inscription avec verrouillage automatique en <strong>attente d'approbation</strong>.
+          <br>&bull; <strong>Admin</strong> : Validation, rejet et suspension en direct.
+          <br><br>
+          <strong style="color:var(--primary-accent);">📊 Base de Données Supabase Connectée :</strong>
+          <br>&bull; Script complet généré dans <code>supabase_schema.sql</code> avec toutes les tables et politiques RLS !
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action-sm btn-action-green" style="flex:1; justify-content:center; padding:10px;" onclick="openAddMenuModal()">
+            ➕ Ajouter un Plat
+          </button>
+          <button class="btn-action-sm btn-action-gold" style="flex:1; justify-content:center; padding:10px;" onclick="openDriverRegistrationModal()">
+            🛵 Inscription Livreur
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL : ALERTES & CONFIRMATIONS SUR-MESURE (ZÉRO ALERT NAVIGATEUR) -->
+  <div class="modal-backdrop-custom" id="modalCustomConfirm">
+    <div class="modal-box-card" style="max-width:380px; text-align:center;">
+      <div style="font-size:42px; margin-bottom:8px;" id="customConfirmIcon">⚠️</div>
+      <h3 style="font-size:16px; font-weight:800; margin-bottom:6px; color:var(--text-main);" id="customConfirmTitle">Confirmation</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:16px; line-height:1.4;" id="customConfirmMessage">Êtes-vous sûr de vouloir effectuer cette action ?</p>
+      <div style="display:flex; gap:8px;" id="customConfirmButtonsGroup">
+        <button class="btn-action-sm btn-action-green" style="flex:1; justify-content:center; padding:10px; font-size:12px;" id="btnCustomConfirmAction">
+          Valider
+        </button>
+        <button class="btn-action-sm btn-action-black" style="flex:1; justify-content:center; padding:10px; font-size:12px;" onclick="closeModal('modalCustomConfirm')">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : ESPACE DE CONNEXION (GOOGLE OAUTH, TELEPHONE & AGE) -->
+  <div class="modal-backdrop-custom" id="modalAuthLogin">
+    <div class="modal-box-card" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-card); padding-bottom:8px;">
+        <h3 style="font-size:15px; font-weight:800; color:var(--text-main);">🔐 Espace Connexion & Authentification</h3>
+        <button onclick="closeModal('modalAuthLogin')" style="background:none; border:none; font-size:18px; color:var(--text-main); cursor:pointer;">✕</button>
+      </div>
+
+      <!-- Role Tabs -->
+      <div style="display:flex; background:var(--bg-sub); border:1px solid var(--border-card); border-radius:12px; padding:3px; gap:4px; margin-bottom:14px;">
+        <button class="report-pill-btn active" id="tabAuthClient" style="flex:1;" onclick="switchAuthTab('client')">📱 Client</button>
+        <button class="report-pill-btn" id="tabAuthDriver" style="flex:1;" onclick="switchAuthTab('driver')">🛵 Livreur</button>
+        <button class="report-pill-btn" id="tabAuthAdmin" style="flex:1;" onclick="switchAuthTab('admin')">🛡️ Admin</button>
+      </div>
+
+      <!-- 1. Auth Form: Client (Google + Phone & Age Slider) -->
+      <div id="authFormClient">
+        
+        <!-- Google & Social Logins -->
+        <button class="btn-social-oauth" style="margin-bottom:10px;" onclick="handleGoogleSignIn()">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+          Continuer avec Google (1 Clic)
+        </button>
+
+        <button class="btn-social-oauth" style="background:#1877F2; color:#FFF; border:none; margin-bottom:14px;" onclick="handleFacebookSignIn()">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Continuer avec Facebook
+        </button>
+
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <div style="flex:1; height:1px; background:var(--border-card);"></div>
+          <span style="font-size:11px; color:var(--text-muted); font-weight:700;">OU PAR NUMÉRO DIRECT</span>
+          <div style="flex:1; height:1px; background:var(--border-card);"></div>
+        </div>
+
+        <div class="form-group-row">
+          <label>👤 Nom & Prénom d'Appel</label>
+          <input type="text" id="auth-client-name" placeholder="Ex: Amine Bouzid" value="Amine Bouzid">
+        </div>
+        <div class="form-group-row">
+          <label>📞 Numéro de Téléphone (05 / 06 / 07)</label>
+          <input type="text" id="auth-client-phone" placeholder="Ex: 05 54 88 77 66" value="05 54 88 77 66">
+        </div>
+
+        <!-- Age Selector Slider (5 to 90 years) -->
+        <div class="slider-container-row" style="margin-bottom:14px;">
+          <div class="slider-header-flex">
+            <strong style="font-size:11.5px;">🎂 Votre Âge</strong>
+            <span class="slider-level-badge" id="clientAgeBadge">26 ans</span>
+          </div>
+          <input type="range" class="slider-input-range" min="5" max="90" value="26" oninput="document.getElementById('clientAgeBadge').innerText = this.value + ' ans'">
+          <div class="slider-ticks-row">
+            <span>5 ans</span>
+            <span>25 ans</span>
+            <span>50 ans</span>
+            <span>90 ans</span>
+          </div>
+        </div>
+
+        <button class="btn-action-sm btn-action-green" style="width:100%; padding:11px; justify-content:center; font-size:12.5px;" onclick="submitClientLogin()">
+          🚀 Se Connecter / Commander
+        </button>
+      </div>
+
+      <!-- 2. Auth Form: Driver -->
+      <div id="authFormDriver" style="display:none;">
+        <div class="form-group-row">
+          <label>📞 Numéro de Téléphone du Coursier</label>
+          <input type="text" id="auth-driver-phone" value="05 52 11 22 33">
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action-sm btn-action-black" style="flex:1; padding:10px; justify-content:center;" onclick="submitDriverLogin()">
+            🛵 Connexion
+          </button>
+          <button class="btn-action-sm btn-action-green" style="flex:1; padding:10px; justify-content:center;" onclick="openDriverRegistrationModal()">
+            ➕ Créer un Compte
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Auth Form: Admin -->
+      <div id="authFormAdmin" style="display:none;">
+        <div class="form-group-row">
+          <label>Identifiant Administrateur</label>
+          <input type="text" id="auth-admin-user" value="admin@theengineerburger.dz">
+        </div>
+        <div class="form-group-row">
+          <label>Code PIN / Mot de Passe</label>
+          <input type="password" id="auth-admin-pass" value="1234">
+        </div>
+        <button class="btn-action-sm btn-action-green" style="width:100%; padding:10px; justify-content:center; font-size:12.5px;" onclick="submitAdminLogin()">
+          ✅ Connexion Console Admin
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL : INSCRIPTION NOUVEAU LIVREUR -->
+  <div class="modal-backdrop-custom" id="modalDriverRegistration">
+    <div class="modal-box-card" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-card); padding-bottom:8px;">
+        <h3 style="font-size:15px; font-weight:800; color:var(--text-main);">🛵 Inscription Nouveau Coursier Livreur</h3>
+        <button onclick="closeModal('modalDriverRegistration')" style="background:none; border:none; font-size:18px; color:var(--text-main); cursor:pointer;">✕</button>
+      </div>
+      <div style="background:#FEF3C7; border:1px solid #FDE68A; border-radius:10px; padding:10px; font-size:11px; color:#92400E; margin-bottom:12px; line-height:1.4;">
+        ⏳ <strong>Validation requise :</strong> Votre candidature sera examinée par l'administration du restaurant. Vous ne pourrez pas recevoir de livraisons tant que votre compte n'est pas validé.
+      </div>
+      <div class="form-group-row">
+        <label>Nom & Prénom</label>
+        <input type="text" id="reg-driver-name" placeholder="Ex: Walid Hadj">
+      </div>
+      <div class="form-group-row">
+        <label>Numéro de Téléphone</label>
+        <input type="text" id="reg-driver-phone" placeholder="05 55 12 34 56">
+      </div>
+      <div class="form-group-row">
+        <label>Type de Véhicule</label>
+        <select id="reg-driver-vehicle">
+          <option value="Moto Yamaha 125">Moto Yamaha 125</option>
+          <option value="Scooter Sym 150">Scooter Sym 150</option>
+          <option value="Vélo Électrique">Vélo Électrique</option>
+          <option value="Voiture Légère">Voiture Légère</option>
+        </select>
+      </div>
+      <button class="btn-action-sm btn-action-green" style="width:100%; padding:10px; justify-content:center; font-size:12.5px; margin-top:8px;" onclick="submitNewDriverRegistration()">
+        📝 Envoyer ma Candidature Livreur
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL : AJOUT DE PLAT AU MENU -->
+  <div class="modal-backdrop-custom" id="modalAddMenu">
+    <div class="modal-box-card" style="max-width:460px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-card); padding-bottom:8px;">
+        <h3 style="font-size:15px; font-weight:800; color:var(--text-main);">➕ Ajouter un Nouveau Plat / Burger</h3>
+        <button onclick="closeModal('modalAddMenu')" style="background:none; border:none; font-size:18px; color:var(--text-main); cursor:pointer;">✕</button>
+      </div>
+      <div class="form-group-row">
+        <label>Nom du Plat (Français)</label>
+        <input type="text" id="inp-menu-name-fr" placeholder="Ex: Gourmet Truffle Smash Burger">
+      </div>
+      <div class="form-group-row">
+        <label>Nom du Plat (Arabe / بالعربية)</label>
+        <input type="text" id="inp-menu-name-ar" placeholder="مثال: برجر الترفل الفاخر">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="form-group-row">
+          <label>Prix en Dinar (DA)</label>
+          <input type="number" id="inp-menu-price" placeholder="1150" value="1150">
+        </div>
+        <div class="form-group-row">
+          <label>Catégorie</label>
+          <select id="inp-menu-cat">
+            <option value="Burgers">Burgers</option>
+            <option value="Menus">Menus</option>
+            <option value="Sides">Sides</option>
+            <option value="Boissons">Boissons</option>
+            <option value="Desserts">Desserts</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group-row">
+        <label>Temps de Préparation Estimé</label>
+        <input type="text" id="inp-menu-preptime" value="12 min">
+      </div>
+      <div class="form-group-row">
+        <label>Lien Image (URL)</label>
+        <input type="text" id="inp-menu-img" value="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80">
+      </div>
+      <button class="btn-action-sm btn-action-green" style="width:100%; padding:10px; justify-content:center; font-size:13px; margin-top:8px;" onclick="submitNewMenuItem()">
+        ✅ Enregistrer et Mettre en Ligne Immédiatement
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL : GESTIONNAIRE D'INGRÉDIENT (AJOUT) -->
+  <div class="modal-backdrop-custom" id="modalAddIngredient">
+    <div class="modal-box-card" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-card); padding-bottom:8px;">
+        <h3 style="font-size:15px; font-weight:800; color:var(--text-main);">➕ Ajouter un Ingrédient / Sauce</h3>
+        <button onclick="closeModal('modalAddIngredient')" style="background:none; border:none; font-size:18px; color:var(--text-main); cursor:pointer;">✕</button>
+      </div>
+      <div class="form-group-row">
+        <label>Nom en Français</label>
+        <input type="text" id="inp-ing-name-fr" placeholder="Ex: Sauce Barbecue Fumée">
+      </div>
+      <div class="form-group-row">
+        <label>Nom en Arabe (بالعربية)</label>
+        <input type="text" id="inp-ing-name-ar" placeholder="مثال: صلصة الباربيكيو المدخنة">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="form-group-row">
+          <label>Icône / Emoji</label>
+          <input type="text" id="inp-ing-icon" placeholder="Ex: 🥫, 🌶️, 🧀" value="🥫">
+        </div>
+        <div class="form-group-row">
+          <label>Surcoût en DA (Optionnel)</label>
+          <input type="number" id="inp-ing-cost" placeholder="0" value="0">
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div class="form-group-row">
+          <label>Jauge Max</label>
+          <input type="number" id="inp-ing-max" value="15">
+        </div>
+        <div class="form-group-row">
+          <label>Valeur par défaut</label>
+          <input type="number" id="inp-ing-default" value="7">
+        </div>
+      </div>
+      <button class="btn-action-sm btn-action-green" style="width:100%; padding:10px; justify-content:center; font-size:13px; margin-top:8px;" onclick="submitNewIngredient()">
+        ✅ Enregistrer et Ajouter au Menu Client
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL : ASSIGNATION LIVREUR -->
+  <div class="modal-backdrop-custom" id="modalAssignDriverSelect">
+    <div class="modal-box-card" style="max-width:440px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border-card); padding-bottom:8px;">
+        <h3 style="font-size:15px; font-weight:800; color:var(--text-main);">🛵 Assigner un Livreur à la Commande</h3>
+        <button onclick="closeModal('modalAssignDriverSelect')" style="background:none; border:none; font-size:18px; color:var(--text-main); cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:10px;" id="assignOrderMetaLabel">
+        Sélectionnez le coursier disponible :
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;" id="driverSelectionListContainer"></div>
+    </div>
+  </div>
+
+  <!-- MODAL : GOURMET ALL-IN-ONE BUILDER -->
+  <div class="modal-backdrop-custom" id="modalGourmetBuilder">
+    <div class="modal-box-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; border-bottom:1px solid var(--border-card); padding-bottom:8px;">
+        <div>
+          <h3 style="font-size:15px; font-weight:800; color:var(--text-main);" id="builderDishTitle">Double Engineer Burger</h3>
+          <span style="font-size:11px; color:var(--primary-accent); font-weight:800;" id="builderBurgerIndexLabel">Plat #1</span>
+        </div>
+        
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button class="btn-action-sm btn-action-black" style="padding:4px 8px; font-size:10.5px;" onclick="addAnotherDifferentDishFromTop()">
+            ➕ Autre plat au menu
+          </button>
+          <button onclick="closeModal('modalGourmetBuilder')" style="background:none; border:none; font-size:18px; color:var(--text-main); cursor:pointer;">✕</button>
+        </div>
+      </div>
+
+      <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" id="builderHeroImg" class="modal-gourmet-hero-img">
+
+      <div style="display:flex; justify-content:space-between; align-items:center; background:var(--surface-card-alt); border:1px solid var(--border-card); padding:10px 14px; border-radius:12px; margin-bottom:12px;">
+        <div>
+          <strong style="font-size:13px; color:var(--text-main);" id="builderDishQtyTextLabel">Quantité de ce plat :</strong>
+          <div style="font-size:11px; color:var(--text-muted);" id="builderBasePriceLabel">950 DA l'unité</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button class="btn-counter-sm" onclick="changeBuilderDishQty(-1)">-</button>
+          <span style="font-size:15px; font-weight:900; color:var(--primary-accent);" id="builderDishQtyVal">1</span>
+          <button class="btn-counter-sm" onclick="promptSmartPlusOption()">+</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <strong style="font-size:12px; display:block; margin-bottom:6px; color:var(--text-main);">
+          🥤 Ajouter une ou plusieurs Boisson(s) fraîche(s) :
+        </strong>
+        <div class="modal-drinks-scroll-row" id="builderDrinksScrollArea"></div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <strong style="font-size:12px; color:var(--text-main);">
+            🎚️ Dosage des Sauces & Ingrédients (De 0 à 15 - MAX 🔥) :
+          </strong>
+          <button style="background:none; border:none; color:#EF4444; font-size:10.5px; font-weight:800; cursor:pointer;" onclick="setBuilderAllZero()">
+            🚫 Tout mettre à zéro (Nature)
+          </button>
+        </div>
+        <div id="builderSlidersContainer"></div>
+      </div>
+
+      <div class="form-group-row">
+        <label>📝 Note spéciale pour ce plat</label>
+        <input type="text" id="builderSpecialNote" placeholder="Ex: Bien cuit, sans sel...">
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; border-top:1px solid var(--border-card); padding-top:10px;">
+        <div>
+          <span style="font-size:11px; color:var(--text-muted);">Sous-total :</span>
+          <div style="font-size:17px; font-weight:900; color:var(--primary-accent);" id="builderFinalTotalLabel">950 DA</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action-sm btn-action-black" style="padding:9px 14px;" id="btnDynamicAddToCartText" onclick="addGourmetConfigToCart(false)">
+            🛒 Ajouter au Panier
+          </button>
+          <button class="btn-action-sm btn-action-gold" style="padding:9px 16px;" onclick="expressDirectOrderFromBuilder()">
+            ⚡ Commander Direct
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : Smart Plus Option -->
+  <div class="modal-backdrop-custom" id="modalSmartPlusChoice">
+    <div class="modal-box-card" style="max-width:380px; text-align:center;">
+      <h3 style="font-size:15px; font-weight:800; margin-bottom:6px; color:var(--text-main);" id="smartPlusDishTitle">Ajouter un Autre Plat</h3>
+      <p style="font-size:11.5px; color:var(--text-muted); margin-bottom:14px;">Comment souhaitez-vous configurer cette portion supplémentaire ?</p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-action-sm btn-action-gold" style="padding:10px; justify-content:center; font-size:12px;" onclick="applySmartPlusDuplicate()">
+          ✨ Même Recette Identique (Garder les mêmes sauces)
+        </button>
+        <button class="btn-action-sm btn-action-black" style="padding:10px; justify-content:center; font-size:12px;" onclick="applySmartPlusCustomizeNew()">
+          🎚️ Modifier & Personnaliser ce 2ème Plat (Autres sauces)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL : Calculateur de Monnaie Livreur -->
+  <div class="modal-backdrop-custom" id="modalDriverChangeCalc">
+    <div class="modal-box-card" style="max-width:360px; text-align:center;">
+      <h3 style="font-size:15px; font-weight:800; margin-bottom:8px; color:var(--text-main);">💰 Calculateur de Monnaie à Rendre</h3>
+      <div style="background:var(--surface-card-alt); border:1px solid var(--border-card); border-radius:10px; padding:10px; margin-bottom:10px;">
+        <div style="font-size:11.5px; color:var(--text-muted);">Montant Commande :</div>
+        <div style="font-size:18px; font-weight:900; color:var(--primary-accent);" id="calcOrderTotalVal">1 550 DA</div>
+      </div>
+      <div class="form-group-row" style="text-align:left;">
+        <label>💵 Montant Reçu du Client (en DA) :</label>
+        <input type="number" id="calcCashGivenInput" value="2000" oninput="calculateChangeAmount()">
+      </div>
+      <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:10px; padding:12px; margin-bottom:12px;">
+        <div style="font-size:11.5px; color:#047857;">Monnaie à Rendre :</div>
+        <div style="font-size:22px; font-weight:900; color:#047857;" id="calcChangeResult">450 DA</div>
+      </div>
+      <button class="btn-action-sm btn-action-black" style="width:100%; padding:8px; justify-content:center;" onclick="closeModal('modalDriverChangeCalc')">Fermer</button>
+    </div>
+  </div>
+
+  <!-- MODAL : Reçu Thermique ESC/POS -->
+  <div class="modal-backdrop-custom" id="modalReceiptView">
+    <div class="modal-box-card" style="max-width:380px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="font-size:14px; font-weight:800; color:var(--text-main);">🧾 Reçu de Commande / Ticket Caisse</h3>
+        <button onclick="closeModal('modalReceiptView')" style="background:none; border:none; font-size:18px; color:var(--text-main); cursor:pointer;">✕</button>
+      </div>
+      <div class="receipt-paper" id="receiptPaperContent"></div>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button class="btn-action-sm btn-action-green" style="flex:1; justify-content:center;" onclick="window.print()">🖨️ Imprimer</button>
+        <button class="btn-action-sm btn-action-black" style="flex:1; justify-content:center;" onclick="closeModal('modalReceiptView')">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let appData = {
+      restaurantConfig: {
+        name_fr: "The Engineer Burger",
+        name_ar: "المهندس برغر",
+        currency_fr: "DA",
+        currency_ar: "د.ج",
+        deliveryFee: 250,
+        address_fr: "14 Boulevard Sidi Yahia, Hydra, Alger",
+        phone: "05 50 12 34 56",
+        mapsUrl: "https://maps.google.com/?q=Hydra,Alger",
+        logoUrl: "/logo.png"
+      },
+      stats: { todayOrders: 58, activeDeliveries: 4, newCustomers: 18, todayRevenue: 182400, onlineDrivers: 6, satisfactionRate: "98.5%" },
+      categories: ["Burgers", "Menus", "Boissons", "Sides", "Desserts", "Sauces"],
+      ingredientsStock: [],
+      drinksList: [],
+      menuItems: [],
+      orders: [],
+      drivers: [],
+      customers: [],
+      clientCart: [],
+      clientFavorites: ["eb-1", "eb-2"],
+      currentClientTab: 'menu',
+      currentDriverTab: 'missions',
+      currentActiveFrTab: 'dashboard',
+      currentActiveArTab: 'dashboard',
+      selectedGourmetDish: null,
+      builderDishQty: 1,
+      builderPortionIndex: 1,
+      builderSelectedDrinks: {},
+      builderSliderLevels: {},
+      currentCalcOrderAmount: 1550,
+      itemPendingRemoveFavId: null,
+      isOrderingForSomeoneElse: false,
+      uploadedDriverAvatarBase64: null,
+      currentTheme: 'emerald-light',
+      orderPendingAssignmentId: null,
+      currentReportPeriod: 'day',
+      chartFinancialInstance: null,
+      chartTopDishesInstance: null,
+      chartArFinancialInstance: null,
+      chartArTopDishesInstance: null
+    };
+
+    let ws;
+    let driverMapInstance = null;
+
+    function initWS() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      ws = new WebSocket(`${protocol}//${window.location.host}`);
+
+      ws.onopen = () => console.log('✅ Connecté au serveur WebSocket The Engineer Burger');
+
+      ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        handleIncomingMessage(msg);
+      };
+
+      ws.onclose = () => setTimeout(initWS, 2000);
+    }
+
+    function handleIncomingMessage(msg) {
+      const { type, payload } = msg;
+
+      switch (type) {
+        case 'INIT_STATE':
+          appData.restaurantConfig = payload.restaurantConfig;
+          appData.stats = payload.stats;
+          appData.categories = payload.categories || ["Burgers", "Menus", "Boissons", "Sides", "Desserts"];
+          appData.ingredientsStock = payload.ingredientsStock || [];
+          appData.drinksList = payload.drinksList || [];
+          appData.menuItems = payload.menuItems || [];
+          appData.orders = payload.orders || [];
+          appData.drivers = payload.drivers || [];
+          appData.customers = payload.customers || [];
+          renderAllViews();
+          break;
+
+        case 'ORDER_CREATED':
+          appData.orders.unshift(payload.order);
+          appData.stats = payload.stats;
+          renderAllViews();
+          break;
+
+        case 'ORDER_UPDATED':
+        case 'ORDER_ASSIGNED_DRIVER':
+        case 'ORDER_DELIVERED':
+          if (payload.orders) appData.orders = payload.orders;
+          if (payload.drivers) appData.drivers = payload.drivers;
+          if (payload.stats) appData.stats = payload.stats;
+          renderAllViews();
+          break;
+
+        case 'DRIVERS_UPDATED':
+          appData.drivers = payload;
+          renderAllViews();
+          break;
+
+        case 'INGREDIENTS_UPDATED':
+          appData.ingredientsStock = payload;
+          renderAllViews();
+          if (document.getElementById('modalGourmetBuilder').style.display === 'flex') {
+            renderBuilderSliders();
+          }
+          break;
+
+        case 'MENU_UPDATED':
+          if (payload.menuItems) appData.menuItems = payload.menuItems;
+          if (payload.categories) appData.categories = payload.categories;
+          renderAllViews();
+          break;
+
+        case 'CONFIG_UPDATED':
+          appData.restaurantConfig = payload;
+          renderAllViews();
+          break;
+      }
+    }
+
+    function renderAllViews() {
+      renderFrCurrentTab();
+      renderArCurrentTab();
+      renderMobileClientApp();
+      renderMobileDriverApp();
+    }
+
+    // CUSTOM MODAL ALERTS
+    function showCustomAlert(title, message, icon = 'ℹ️') {
+      document.getElementById('customConfirmIcon').innerText = icon;
+      document.getElementById('customConfirmTitle').innerText = title;
+      document.getElementById('customConfirmMessage').innerText = message;
+      document.getElementById('customConfirmButtonsGroup').innerHTML = `
+        <button class="btn-action-sm btn-action-green" style="width:100%; justify-content:center; padding:10px; font-size:12.5px;" onclick="closeModal('modalCustomConfirm')">
+          Compris ✅
+        </button>
+      `;
+      openModal('modalCustomConfirm');
+    }
+
+    function showCustomConfirm(title, message, onConfirmCallback, icon = '⚠️') {
+      document.getElementById('customConfirmIcon').innerText = icon;
+      document.getElementById('customConfirmTitle').innerText = title;
+      document.getElementById('customConfirmMessage').innerText = message;
+      document.getElementById('customConfirmButtonsGroup').innerHTML = `
+        <button class="btn-action-sm btn-action-green" style="flex:1; justify-content:center; padding:10px; font-size:12px;" id="btnConfirmYes">
+          Confirmer ✅
+        </button>
+        <button class="btn-action-sm btn-action-black" style="flex:1; justify-content:center; padding:10px; font-size:12px;" onclick="closeModal('modalCustomConfirm')">
+          Annuler ✕
+        </button>
+      `;
+      document.getElementById('btnConfirmYes').onclick = () => {
+        closeModal('modalCustomConfirm');
+        if (typeof onConfirmCallback === 'function') onConfirmCallback();
+      };
+      openModal('modalCustomConfirm');
+    }
+
+    function toggleColorTheme() {
+      if (appData.currentTheme === 'emerald-light') {
+        appData.currentTheme = 'royal-light';
+        document.documentElement.setAttribute('data-theme', 'royal-light');
+        document.getElementById('themeEmojiIcon').innerText = '👑';
+        document.getElementById('themeNameLabel').innerText = 'Royal Navy & Blanc';
+      } else {
+        appData.currentTheme = 'emerald-light';
+        document.documentElement.setAttribute('data-theme', 'emerald-light');
+        document.getElementById('themeEmojiIcon').innerText = '🌿';
+        document.getElementById('themeNameLabel').innerText = 'Émeraude & Menthe';
+      }
+    }
+
+    // AUTHENTICATION & LOGIN LOGIC
+    function openAuthModal() {
+      openModal('modalAuthLogin');
+    }
+
+    function switchAuthTab(tab) {
+      document.querySelectorAll('#modalAuthLogin .report-pill-btn').forEach(b => b.classList.remove('active'));
+      const activeEl = document.getElementById(`tabAuth${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+      if (activeEl) activeEl.classList.add('active');
+
+      document.getElementById('authFormAdmin').style.display = tab === 'admin' ? 'block' : 'none';
+      document.getElementById('authFormClient').style.display = tab === 'client' ? 'block' : 'none';
+      document.getElementById('authFormDriver').style.display = tab === 'driver' ? 'block' : 'none';
+    }
+
+    function handleGoogleSignIn() {
+      closeModal('modalAuthLogin');
+      document.getElementById('currentAuthUserRole').innerText = "Amine B. (Google)";
+      showCustomAlert("Connexion Google Réussie 🎉", "Bienvenue Amine ! Vos coordonnées et adresses ont été synchronisées.", "✅");
+      switchWorkspace('suite');
+      switchClientTab('menu');
+    }
+
+    function handleFacebookSignIn() {
+      closeModal('modalAuthLogin');
+      document.getElementById('currentAuthUserRole').innerText = "Amine B. (Facebook)";
+      showCustomAlert("Connexion Facebook Réussie 🎉", "Bienvenue ! Vous pouvez maintenant passer commande.", "✅");
+      switchWorkspace('suite');
+      switchClientTab('menu');
+    }
+
+    function submitAdminLogin() {
+      const pass = document.getElementById('auth-admin-pass').value;
+      if (pass === '1234' || pass.length > 0) {
+        closeModal('modalAuthLogin');
+        document.getElementById('currentAuthUserRole').innerText = "Admin (Connecté)";
+        showCartToast("✅ Connecté en tant qu'Administrateur !");
+        switchWorkspace('admin');
+      } else {
+        showCustomAlert("Code Invalide", "Veuillez saisir le code PIN administrateur.", "🔒");
+      }
+    }
+
+    function submitClientLogin() {
+      const phone = document.getElementById('auth-client-phone').value.trim();
+      const name = document.getElementById('auth-client-name').value.trim();
+      if (phone && name) {
+        closeModal('modalAuthLogin');
+        document.getElementById('currentAuthUserRole').innerText = `${name} (Client)`;
+        showCartToast(`👋 Bienvenue ${name} !`);
+        switchWorkspace('suite');
+        switchClientTab('menu');
+      } else {
+        showCustomAlert("Champs requis", "Veuillez saisir votre nom et numéro de téléphone.", "📱");
+      }
+    }
+
+    function submitDriverLogin() {
+      const phone = document.getElementById('auth-driver-phone').value.trim();
+      const found = appData.drivers.find(d => d.phone.includes(phone) || phone.includes(d.phone));
+      if (found) {
+        if (found.status === 'suspended') {
+          showCustomAlert("Compte Suspendu", "⚠️ Votre compte livreur est actuellement suspendu par l'administration du restaurant. Veuillez contacter le support.", "🚫");
+          return;
+        }
+        if (found.status === 'pending_approval') {
+          showCustomAlert("En Attente de Validation", "⏳ Votre compte coursier est en cours d'examen par l'administration du restaurant.", "🟡");
+          return;
+        }
+        closeModal('modalAuthLogin');
+        document.getElementById('currentAuthUserRole').innerText = `${found.name_fr} (Livreur)`;
+        showCartToast(`🛵 Session coursier ouverte : ${found.name_fr}`);
+        switchWorkspace('suite');
+        switchDriverTab('missions');
+      } else {
+        showCustomAlert("Livreur non trouvé", "Ce numéro n'est pas encore enregistré. Vous pouvez créer votre compte coursier en 1 clic.", "🛵");
+      }
+    }
+
+    function openDriverRegistrationModal() {
+      closeModal('modalAuthLogin');
+      openModal('modalDriverRegistration');
+    }
+
+    function submitNewDriverRegistration() {
+      const name = document.getElementById('reg-driver-name').value.trim();
+      const phone = document.getElementById('reg-driver-phone').value.trim();
+      const vehicle = document.getElementById('reg-driver-vehicle').value;
+
+      if (!name || !phone) {
+        showCustomAlert("Champs manquants", "Veuillez renseigner votre nom et votre numéro de téléphone.", "⚠️");
+        return;
+      }
+
+      ws.send(JSON.stringify({
+        type: 'REGISTER_DRIVER',
+        payload: {
+          name_fr: name,
+          name_ar: name,
+          phone: phone,
+          vehicle_fr: vehicle,
+          vehicle_ar: vehicle,
+          photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"
+        }
+      }));
+
+      closeModal('modalDriverRegistration');
+      showCustomAlert("Inscription Enregistrée 🎉", `Merci ${name} ! Votre demande a été transmise à l'administrateur du restaurant. Vous recevrez l'approbation dans l'onglet Livreurs.`, "🛵");
+    }
+
+    // DRIVER APPROVAL, REJECTION & SUSPENSION (ADMIN)
+    function approveDriver(driverId, driverName) {
+      showCustomConfirm("Approuver ce Livreur ?", `Voulez-vous valider le compte de ${driverName} et l'autoriser à effectuer des livraisons ?`, () => {
+        ws.send(JSON.stringify({ type: 'APPROVE_DRIVER', payload: { driverId } }));
+        showCartToast(`✅ ${driverName} est désormais un livreur actif !`);
+      }, "🛵");
+    }
+
+    function rejectDriver(driverId, driverName) {
+      showCustomConfirm("Rejeter la Demande ?", `Voulez-vous rejeter l'inscription de ${driverName} ?`, () => {
+        ws.send(JSON.stringify({ type: 'REJECT_DRIVER', payload: { driverId } }));
+        showCartToast(`Demande de ${driverName} rejetée.`);
+      }, "❌");
+    }
+
+    function suspendDriver(driverId, driverName) {
+      showCustomConfirm("Suspendre ce Livreur ?", `⚠️ En suspendant ${driverName}, il ne pourra plus recevoir de commandes et n'apparaîtra plus dans la liste d'assignation.`, () => {
+        ws.send(JSON.stringify({ type: 'SUSPEND_DRIVER', payload: { driverId } }));
+        showCartToast(`🚫 ${driverName} a été suspendu.`);
+      }, "⏸️");
+    }
+
+    function reactivateDriver(driverId, driverName) {
+      showCustomConfirm("Réactiver ce Livreur ?", `Voulez-vous lever la suspension et réactiver ${driverName} ?`, () => {
+        ws.send(JSON.stringify({ type: 'REACTIVATE_DRIVER', payload: { driverId } }));
+        showCartToast(`🟢 ${driverName} est de nouveau actif !`);
+      }, "▶️");
+    }
+
+    // ADD DISH TO MENU DYNAMICALLY
+    function openAddMenuModal() {
+      openModal('modalAddMenu');
+    }
+
+    function submitNewMenuItem() {
+      const name_fr = document.getElementById('inp-menu-name-fr').value.trim();
+      const name_ar = document.getElementById('inp-menu-name-ar').value.trim();
+      const price = Number(document.getElementById('inp-menu-price').value) || 950;
+      const category = document.getElementById('inp-menu-cat').value;
+      const prepTime = document.getElementById('inp-menu-preptime').value.trim() || "15 min";
+      const image = document.getElementById('inp-menu-img').value.trim();
+
+      if (!name_fr) {
+        showCustomAlert("Nom requis", "Veuillez renseigner au moins le nom du plat en français.", "🍔");
+        return;
+      }
+
+      ws.send(JSON.stringify({
+        type: 'ADD_MENU_ITEM',
+        payload: { name_fr, name_ar, price, category, prepTime, image }
+      }));
+
+      closeModal('modalAddMenu');
+      showCustomAlert("Plat Ajouté 🎉", `Le plat "${name_fr}" a été ajouté au menu, aux statistiques et au classement des ventes !`, "✨");
+    }
+
+    // INGREDIENT & SAUCE STOCK
+    function submitNewIngredient() {
+      const name_fr = document.getElementById('inp-ing-name-fr').value.trim();
+      const name_ar = document.getElementById('inp-ing-name-ar').value.trim();
+      const icon = document.getElementById('inp-ing-icon').value.trim() || '🥫';
+      const extraCost = Number(document.getElementById('inp-ing-cost').value) || 0;
+      const max = Number(document.getElementById('inp-ing-max').value) || 15;
+      const defaultVal = Number(document.getElementById('inp-ing-default').value) || 7;
+
+      if (!name_fr) {
+        showCustomAlert("Nom requis", "Veuillez saisir au moins le nom de l'ingrédient en français.", "🥫");
+        return;
+      }
+
+      ws.send(JSON.stringify({
+        type: 'ADD_INGREDIENT',
+        payload: { name_fr, name_ar, icon, extraCost, max, defaultVal }
+      }));
+
+      closeModal('modalAddIngredient');
+      showCustomAlert("Ingrédient Ajouté 🎉", `L'ingrédient "${name_fr}" est maintenant actif sur les curseurs des clients !`, "✅");
+    }
+
+    function deleteIngredientCompletely(ingId, ingName) {
+      showCustomConfirm("Supprimer Définitivement ?", `⚠️ Voulez-vous supprimer définitivement "${ingName}" du stock ? Il disparaîtra complètement du choix des clients.`, () => {
+        ws.send(JSON.stringify({
+          type: 'DELETE_INGREDIENT',
+          payload: { id: ingId }
+        }));
+      }, "🗑️");
+    }
+
+    function toggleIngredientStock(ingId, isAvailable) {
+      ws.send(JSON.stringify({ type: 'TOGGLE_INGREDIENT', payload: { id: ingId, isAvailable } }));
+    }
+
+    // DRIVER ASSIGNMENT
+    function promptDriverAssignment(orderId) {
+      appData.orderPendingAssignmentId = orderId;
+      document.getElementById('assignOrderMetaLabel').innerText = `Affecter un livreur pour la commande ${orderId} :`;
+
+      const listContainer = document.getElementById('driverSelectionListContainer');
+      const assignableDrivers = appData.drivers.filter(d => d.status !== 'suspended' && d.status !== 'pending_approval');
+
+      if (assignableDrivers.length === 0) {
+        listContainer.innerHTML = `
+          <div style="text-align:center; padding:20px; color:var(--text-muted);">
+            <div style="font-size:32px; margin-bottom:6px;">🛵</div>
+            <strong style="color:var(--text-main);">Aucun coursier actif disponible</strong>
+            <p style="font-size:11px; margin-top:4px;">Tous les livreurs sont actuellement suspendus ou en attente d'approbation.</p>
+          </div>
+        `;
+      } else {
+        listContainer.innerHTML = assignableDrivers.map(d => `
+          <div style="background:var(--surface-card-alt); border:1px solid var(--border-card); border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <img src="${d.photoUrl}" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-accent);">
+              <div>
+                <strong style="font-size:12.5px; color:var(--text-main);">${d.name_fr}</strong>
+                <div style="font-size:10px; color:var(--text-muted);">🛵 ${d.vehicle_fr} &bull; ⭐ ${d.rating}</div>
+                <div style="font-size:9.5px; color:#059669; font-weight:700;">${d.deliveriesCount} courses aujourd'hui &bull; Statut : ${d.status === 'online' ? '🟢 Disponible' : '🟡 En course'}</div>
+              </div>
+            </div>
+            <button class="btn-action-sm btn-action-green" onclick="confirmDriverAssignment('${d.id}')">
+              🛵 Choisir
+            </button>
+          </div>
+        `).join('');
+      }
+
+      openModal('modalAssignDriverSelect');
+    }
+
+    function confirmDriverAssignment(driverId) {
+      if (appData.orderPendingAssignmentId && driverId) {
+        ws.send(JSON.stringify({
+          type: 'ASSIGN_DRIVER',
+          payload: { orderId: appData.orderPendingAssignmentId, driverId }
+        }));
+        closeModal('modalAssignDriverSelect');
+        appData.orderPendingAssignmentId = null;
+        showCartToast("🛵 Livreur assigné avec succès !");
+      }
+    }
+
+    // GOURMET BUILDER
+    function openGourmetBuilderModal(dishId, customIndex = 1) {
+      const dish = appData.menuItems.find(i => i.id === dishId);
+      if (!dish) return;
+
+      appData.selectedGourmetDish = dish;
+      appData.builderDishQty = 1;
+      appData.builderPortionIndex = customIndex || (appData.clientCart.length + 1);
+      appData.builderSelectedDrinks = {};
+      appData.builderSliderLevels = {};
+
+      appData.ingredientsStock.forEach(ing => {
+        appData.builderSliderLevels[ing.id] = ing.isAvailable ? ing.defaultVal : 0;
+      });
+
+      document.getElementById('builderDishTitle').innerText = dish.name_fr;
+      document.getElementById('builderHeroImg').src = dish.image;
+      document.getElementById('builderBurgerIndexLabel').innerText = `Plat #${appData.builderPortionIndex} : ${dish.name_fr}`;
+      document.getElementById('builderBasePriceLabel').innerText = `${dish.price} DA l'unité &bull; ⏱️ ${dish.prepTime || '15 min'}`;
+      document.getElementById('builderDishQtyVal').innerText = '1';
+      document.getElementById('smartPlusDishTitle').innerText = `Ajouter un(e) autre : ${dish.name_fr}`;
+      document.getElementById('btnDynamicAddToCartText').innerText = `🛒 Ajouter ${dish.name_fr} au Panier`;
+
+      const drinksContainer = document.getElementById('builderDrinksScrollArea');
+      drinksContainer.innerHTML = appData.drinksList.map(drk => `
+        <div class="modal-drink-card">
+          <img src="${drk.image}">
+          <strong style="font-size:11px; line-height:1.2; color:var(--text-main);">${drk.name_fr}</strong>
+          <span style="font-size:10.5px; font-weight:800; color:var(--primary-accent); margin:2px 0;">+${drk.price} DA</span>
+          <div class="counter-flex-row">
+            <button class="btn-counter-sm" onclick="changeBuilderDrinkQty('${drk.id}', -1)">-</button>
+            <span style="font-size:12px; font-weight:800; color:var(--primary-accent);" id="drk-qty-${drk.id}">0</span>
+            <button class="btn-counter-sm" onclick="changeBuilderDrinkQty('${drk.id}', 1)">+</button>
+          </div>
+        </div>
+      `).join('');
+
+      renderBuilderSliders();
+      calculateBuilderTotal();
+      openModal('modalGourmetBuilder');
+    }
+
+    function renderBuilderSliders() {
+      const container = document.getElementById('builderSlidersContainer');
+      container.innerHTML = appData.ingredientsStock.map(ing => {
+        const isAvailable = ing.isAvailable;
+        const currentVal = isAvailable ? (appData.builderSliderLevels[ing.id] !== undefined ? appData.builderSliderLevels[ing.id] : ing.defaultVal) : 0;
+
+        return `
+          <div class="slider-container-row" style="${!isAvailable ? 'opacity:0.6; background:#F1F5F9;' : ''}">
+            <div class="slider-header-flex">
+              <div>
+                <strong>${ing.icon} ${ing.name_fr}</strong>
+                ${!isAvailable ? '<span style="color:#EF4444; font-size:10px; font-weight:800; margin-left:6px;">[RUPTURE]</span>' : ''}
+              </div>
+              <span class="slider-level-badge" id="slider-badge-${ing.id}">
+                ${getSliderLevelLabel(currentVal, isAvailable)}
+              </span>
+            </div>
+
+            <input type="range" class="slider-input-range" min="0" max="${ing.max || 15}" value="${currentVal}" 
+              ${!isAvailable ? 'disabled' : ''}
+              oninput="updateBuilderSliderVal('${ing.id}', this.value)">
+
+            <div class="slider-ticks-row">
+              <span>0 (Sans)</span>
+              <span>${Math.floor((ing.max || 15)/3)} (Léger)</span>
+              <span>${Math.floor((ing.max || 15)*2/3)} (Normal)</span>
+              <span>${ing.max || 15} (MAX 🔥)</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getSliderLevelLabel(val, isAvail) {
+      if (!isAvail) return "Indisponible";
+      const v = Number(val);
+      if (v === 0) return "Aucun (0/15)";
+      if (v <= 4) return `Léger (${v}/15)`;
+      if (v <= 9) return `Équilibré (${v}/15)`;
+      if (v <= 14) return `Généreux (${v}/15)`;
+      return `MAX 🔥 (15/15)`;
+    }
+
+    function updateBuilderSliderVal(ingId, val) {
+      appData.builderSliderLevels[ingId] = Number(val);
+      const ing = appData.ingredientsStock.find(i => i.id === ingId);
+      const badge = document.getElementById(`slider-badge-${ingId}`);
+      if (badge && ing) {
+        badge.innerText = getSliderLevelLabel(val, ing.isAvailable);
+      }
+      calculateBuilderTotal();
+    }
+
+    function setBuilderAllZero() {
+      appData.ingredientsStock.forEach(ing => {
+        appData.builderSliderLevels[ing.id] = 0;
+      });
+      renderBuilderSliders();
+      calculateBuilderTotal();
+    }
+
+    function promptSmartPlusOption() {
+      openModal('modalSmartPlusChoice');
+    }
+
+    function applySmartPlusDuplicate() {
+      appData.builderDishQty += 1;
+      document.getElementById('builderDishQtyVal').innerText = appData.builderDishQty;
+      calculateBuilderTotal();
+      closeModal('modalSmartPlusChoice');
+    }
+
+    function applySmartPlusCustomizeNew() {
+      closeModal('modalSmartPlusChoice');
+      addGourmetConfigToCart(true);
+    }
+
+    function addAnotherDifferentDishFromTop() {
+      addGourmetConfigToCart(false);
+      switchClientTab('menu');
+    }
+
+    function changeBuilderDishQty(delta) {
+      appData.builderDishQty = Math.max(1, appData.builderDishQty + delta);
+      document.getElementById('builderDishQtyVal').innerText = appData.builderDishQty;
+      calculateBuilderTotal();
+    }
+
+    function changeBuilderDrinkQty(drkId, delta) {
+      const current = appData.builderSelectedDrinks[drkId] || 0;
+      const next = Math.max(0, current + delta);
+      appData.builderSelectedDrinks[drkId] = next;
+
+      const qtyEl = document.getElementById(`drk-qty-${drkId}`);
+      if (qtyEl) qtyEl.innerText = next;
+      calculateBuilderTotal();
+    }
+
+    function calculateBuilderTotal() {
+      if (!appData.selectedGourmetDish) return;
+      const baseDishPrice = appData.selectedGourmetDish.price * appData.builderDishQty;
+
+      let drinksTotal = 0;
+      Object.keys(appData.builderSelectedDrinks).forEach(drkId => {
+        const qty = appData.builderSelectedDrinks[drkId];
+        const drk = appData.drinksList.find(d => d.id === drkId);
+        if (drk && qty > 0) drinksTotal += drk.price * qty;
+      });
+
+      const grandTotal = baseDishPrice + drinksTotal;
+      document.getElementById('builderFinalTotalLabel').innerText = `${grandTotal.toLocaleString()} DA`;
+      return grandTotal;
+    }
+
+    function showCartToast(msg) {
+      const toast = document.getElementById('clientCartToast');
+      const text = document.getElementById('clientCartToastMsg');
+      if (toast && text) {
+        text.innerText = msg;
+        toast.style.display = 'flex';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+      }
+    }
+
+    function addGourmetConfigToCart(continueCustomizingNextPortion = false) {
+      const dish = appData.selectedGourmetDish;
+      if (!dish) return;
+
+      let customNotes = [];
+      let allZero = true;
+
+      appData.ingredientsStock.forEach(ing => {
+        if (ing.isAvailable) {
+          const lvl = appData.builderSliderLevels[ing.id];
+          if (lvl !== undefined && lvl > 0) {
+            allZero = false;
+            customNotes.push(`${ing.name_fr}: ${lvl}/${ing.max || 15}`);
+          }
+        }
+      });
+
+      if (allZero) customNotes.push("Nature / Sans sauces");
+
+      const note = document.getElementById('builderSpecialNote').value.trim();
+      if (note) customNotes.push(`Note: ${note}`);
+
+      let chosenDrinks = [];
+      Object.keys(appData.builderSelectedDrinks).forEach(drkId => {
+        const qty = appData.builderSelectedDrinks[drkId];
+        const drk = appData.drinksList.find(d => d.id === drkId);
+        if (drk && qty > 0) chosenDrinks.push({ name: drk.name_fr, quantity: qty, price: drk.price });
+      });
+
+      const totalItemCost = calculateBuilderTotal();
+
+      const cartEntry = {
+        id: dish.id,
+        name_fr: `${dish.name_fr} (Plat #${appData.builderPortionIndex})`,
+        name_ar: `${dish.name_ar} (رقم ${appData.builderPortionIndex})`,
+        image: dish.image,
+        price: totalItemCost / appData.builderDishQty,
+        quantity: appData.builderDishQty,
+        customizations: customNotes.join(' | '),
+        drinks: chosenDrinks
+      };
+
+      appData.clientCart.push(cartEntry);
+      closeModal('modalGourmetBuilder');
+
+      showCartToast(`Ajouté au Panier : ${dish.name_fr} ${chosenDrinks.length > 0 ? '+ Boisson(s)' : ''}`);
+
+      if (continueCustomizingNextPortion) {
+        openGourmetBuilderModal(dish.id, appData.clientCart.length + 1);
+      } else {
+        renderMobileClientApp();
+      }
+    }
+
+    function expressDirectOrderFromBuilder() {
+      addGourmetConfigToCart(false);
+      submitClientFullCartOrder();
+    }
+
+    // CLIENT APP TABS
+    function switchClientTab(tabName) {
+      appData.currentClientTab = tabName;
+      document.querySelectorAll('.client-bottom-nav .client-nav-tab-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`cnav-${tabName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      renderMobileClientApp();
+    }
+
+    function renderMobileClientApp() {
+      const container = document.getElementById('clientAppContentArea');
+      if (!container) return;
+
+      const tab = appData.currentClientTab;
+
+      const totalCount = appData.clientCart.reduce((sum, i) => sum + i.quantity, 0);
+      const badgeDot = document.getElementById('clientNavCartDot');
+      if (badgeDot) {
+        if (totalCount > 0) {
+          badgeDot.style.display = 'inline-block';
+          badgeDot.innerText = totalCount;
+        } else {
+          badgeDot.style.display = 'none';
+        }
+      }
+
+      if (tab === 'menu') {
+        container.innerHTML = `
+          <div style="padding:8px 12px; border-bottom:1px solid var(--border-card); background:#FFFFFF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="/logo.png" style="width:30px; height:30px; border-radius:8px; object-fit:cover; border:1px solid var(--primary-accent);">
+                <strong style="font-size:12.5px; color:var(--text-main);">The Engineer Burger</strong>
+              </div>
+              <div style="background:#ECFDF5; border:1px solid #A7F3D0; color:#059669; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:800;">
+                ⭐ 450 Pts
+              </div>
+            </div>
+            <div style="display:flex; gap:6px; margin-top:6px; overflow-x:auto;">
+              <button style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:3px 8px; border-radius:6px; font-size:9.5px; font-weight:700; cursor:pointer;" onclick="showCustomAlert('Adresse Sélectionnée', 'Livraison à domicile : Hydra, Alger', '🏠')">
+                🏠 Maison (Hydra)
+              </button>
+              <button style="background:var(--bg-main); border:1px solid var(--border-card); color:var(--text-main); padding:3px 8px; border-radius:6px; font-size:9.5px; font-weight:700; cursor:pointer;" onclick="showCustomAlert('Adresse Sélectionnée', 'Livraison au bureau : Alger Centre', '🏢')">
+                🏢 Bureau (Alger)
+              </button>
+              <button style="background:#ECFDF5; border:1px solid #A7F3D0; color:#059669; padding:3px 8px; border-radius:6px; font-size:9.5px; font-weight:800; cursor:pointer;" onclick="showCartToast('📍 Position GPS actualisée !')">
+                📍 GPS Actif
+              </button>
+            </div>
+          </div>
+
+          <div style="padding:8px 0;">
+            ${appData.menuItems.map(item => {
+              const isFav = appData.clientFavorites.includes(item.id);
+              return `
+                <div class="gourmet-food-card" onclick="openGourmetBuilderModal('${item.id}')">
+                  <div class="gourmet-food-img-header">
+                    <img src="${item.image}">
+                    <span class="gourmet-badge-time">⏱️ ${item.prepTime || '15 min'}</span>
+                    <span class="gourmet-badge-price">${item.price} DA</span>
+                    <div class="gourmet-fav-btn" onclick="event.stopPropagation(); toggleFavorite('${item.id}')">
+                      ${isFav ? '❤️' : '🤍'}
+                    </div>
+                  </div>
+                  <div class="gourmet-card-body">
+                    <div>
+                      <h4>${item.name_fr}</h4>
+                      <p>${(item.description_fr || '').substring(0, 55)}...</p>
+                    </div>
+                    <button class="btn-gourmet-action" onclick="event.stopPropagation(); openGourmetBuilderModal('${item.id}')">
+                      ✨ Choisir
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+
+      } else if (tab === 'cart') {
+        const subtotal = appData.clientCart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+        const total = subtotal > 0 ? subtotal + 250 : 0;
+
+        container.innerHTML = `
+          <div style="padding:10px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h3 style="font-size:14px; font-weight:800; color:var(--text-main);">🛒 Mon Panier (${appData.clientCart.length})</h3>
+              <button class="btn-action-sm btn-action-green" onclick="switchClientTab('menu')">➕ Découvrir d'autres plats</button>
+            </div>
+
+            ${appData.clientCart.length === 0 ? `
+              <div style="text-align:center; padding:40px 10px; color:var(--text-muted);">
+                <div style="font-size:36px; margin-bottom:8px;">🛒</div>
+                <strong style="font-size:13px; color:var(--text-main);">Votre panier est vide</strong>
+                <p style="font-size:11px; margin-top:4px;">Choisissez un plat dans le menu pour le personnaliser !</p>
+                <button class="btn-action-sm btn-action-green" style="margin-top:12px;" onclick="switchClientTab('menu')">Voir le Menu</button>
+              </div>
+            ` : `
+              <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+                ${appData.clientCart.map((i, idx) => `
+                  <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:14px; padding:12px; box-shadow:var(--shadow-sm); display:flex; gap:10px; align-items:flex-start;">
+                    <img src="${i.image || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80'}" style="width:55px; height:55px; border-radius:10px; object-fit:cover; border:1px solid var(--border-card);">
+                    
+                    <div style="flex:1;">
+                      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <strong style="font-size:12.5px; color:var(--text-main);">${i.name_fr}</strong>
+                        <button class="btn-action-sm btn-action-danger" style="padding:2px 6px; font-size:10px;" onclick="removeCartItem(${idx})">🗑️</button>
+                      </div>
+                      
+                      <div style="font-size:10px; color:var(--primary-accent); font-weight:700; margin:2px 0;">
+                        ${i.customizations || 'Standard'}
+                      </div>
+                      
+                      ${(i.drinks && i.drinks.length > 0) ? `
+                        <div style="font-size:10px; color:#059669; font-weight:700;">
+                          🥤 ${i.drinks.map(d => `${d.quantity}x ${d.name}`).join(' + ')}
+                        </div>
+                      ` : ''}
+
+                      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; border-top:1px dashed var(--border-card); padding-top:4px;">
+                        <span style="font-size:10.5px; color:var(--text-muted);">Quantité : <strong>${i.quantity}</strong></span>
+                        <strong style="font-size:12.5px; color:var(--primary-accent);">${i.price * i.quantity} DA</strong>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+
+              <!-- Option : Commander pour un proche -->
+              <div style="background:var(--surface-card-alt); border:1px solid var(--border-card); border-radius:14px; padding:12px; margin-bottom:12px;">
+                <label style="display:flex; align-items:center; gap:8px; font-weight:800; font-size:11.5px; cursor:pointer; color:var(--primary-accent);">
+                  <input type="checkbox" id="chkOrderForSomeoneElse" ${appData.isOrderingForSomeoneElse ? 'checked' : ''} onchange="toggleOrderForSomeoneElse(this.checked)" style="width:auto;">
+                  🎁 Commander pour un proche (Livraison à distance)
+                </label>
+
+                <div id="remoteRecipientForm" style="display:${appData.isOrderingForSomeoneElse ? 'block' : 'none'}; margin-top:10px;">
+                  <div class="form-group-row">
+                    <label>👤 Nom du destinataire</label>
+                    <input type="text" id="inp-recip-name" value="Sarah Bouzid (Épouse)">
+                  </div>
+                  <div class="form-group-row">
+                    <label>📞 Numéro de téléphone du destinataire</label>
+                    <input type="text" id="inp-recip-phone" value="05 50 99 88 77">
+                  </div>
+                  <div class="form-group-row">
+                    <label>📍 Adresse exacte où livrer</label>
+                    <input type="text" id="inp-recip-addr" value="Cité 106 Logements, Bat B, Hydra, Alger">
+                  </div>
+                  <div class="form-group-row">
+                    <label>💵 Mode de paiement</label>
+                    <select id="inp-recip-payer">
+                      <option value="recipient_cash">💵 Le destinataire paiera en espèces au livreur</option>
+                      <option value="sender_paid">💳 Déjà payé par moi-même</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Card -->
+              <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:14px; padding:12px; font-size:12px; margin-bottom:12px; box-shadow:var(--shadow-sm);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--text-muted);">
+                  <span>Sous-total plats :</span>
+                  <strong style="color:var(--text-main);">${subtotal} DA</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px; color:var(--text-muted);">
+                  <span>Frais de livraison Alger :</span>
+                  <strong style="color:var(--text-main);">250 DA</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:14.5px; font-weight:900; color:var(--primary-accent); border-top:1px solid var(--border-card); padding-top:6px;">
+                  <span>TOTAL :</span>
+                  <span>${total} DA</span>
+                </div>
+              </div>
+
+              <button class="btn-action-sm btn-action-green" style="width:100%; padding:12px; justify-content:center; font-size:13px; box-shadow:0 4px 14px rgba(16,185,129,0.3);" onclick="submitClientFullCartOrder()">
+                🚀 Confirmer et Commander Maintenant
+              </button>
+            `}
+          </div>
+        `;
+
+      } else if (tab === 'favs') {
+        const favItems = appData.menuItems.filter(i => appData.clientFavorites.includes(i.id));
+
+        container.innerHTML = `
+          <div style="padding:10px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h3 style="font-size:14px; font-weight:800; color:var(--text-main);">❤️ Mes Plats Favoris (${favItems.length})</h3>
+              <button class="btn-action-sm btn-action-green" onclick="switchClientTab('menu')">➕ Découvrir d'autres plats</button>
+            </div>
+
+            ${favItems.length === 0 ? `
+              <div style="text-align:center; padding:40px 10px; color:var(--text-muted); font-size:12px;">
+                <div style="font-size:32px; margin-bottom:6px;">💔</div>
+                <strong style="color:var(--text-main);">Aucun plat favori</strong>
+                <p style="font-size:11px; margin-top:4px;">Cliquez sur le cœur ❤️ sur vos plats préférés du menu !</p>
+                <button class="btn-action-sm btn-action-green" style="margin-top:10px;" onclick="switchClientTab('menu')">Explorer le Menu</button>
+              </div>
+            ` : `
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                ${favItems.map(item => `
+                  <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:14px; padding:10px; display:flex; gap:10px; align-items:center;">
+                    <img src="${item.image}" style="width:60px; height:60px; border-radius:10px; object-fit:cover; border:1px solid var(--border-card);">
+                    <div style="flex:1;">
+                      <strong style="font-size:12.5px; color:var(--text-main);">${item.name_fr}</strong>
+                      <div style="font-weight:800; color:var(--primary-accent); font-size:12px;">${item.price} DA</div>
+                      <div style="display:flex; gap:6px; margin-top:6px;">
+                        <button class="btn-action-sm btn-action-green" onclick="openGourmetBuilderModal('${item.id}')">
+                          ⚡ Personnaliser
+                        </button>
+                        <button class="btn-action-sm btn-action-danger" onclick="promptRemoveFavorite('${item.id}', '${item.name_fr}')">
+                          💔 Retirer
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            `}
+          </div>
+        `;
+
+      } else if (tab === 'orders') {
+        container.innerHTML = `
+          <div style="padding:10px 14px;">
+            <h3 style="font-size:14px; font-weight:800; margin-bottom:10px; color:var(--text-main);">📦 Mes Commandes & Livreurs Récents</h3>
+            
+            <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:14px; padding:10px; margin-bottom:12px;">
+              <strong style="font-size:11.5px; color:var(--primary-accent); display:block; margin-bottom:6px;">🛵 Vos Livreurs The Engineer Fleet :</strong>
+              <div style="display:flex; gap:8px;">
+                ${appData.drivers.filter(d => d.status !== 'suspended').map(d => `
+                  <div style="background:var(--bg-main); border:1px solid var(--border-card); border-radius:10px; padding:6px 8px; display:flex; align-items:center; gap:6px; font-size:10.5px;">
+                    <img src="${d.photoUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid var(--primary-accent);">
+                    <div>
+                      <strong style="color:var(--text-main);">${d.name_fr}</strong>
+                      <div style="color:var(--text-muted);">⭐ ${d.rating}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              ${appData.orders.map(o => `
+                <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:12px; padding:10px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="font-size:12px; color:var(--text-main);">Commande #${o.id}</strong>
+                    <span class="badge-status badge-${o.status}"><span class="dot"></span>${o.status_fr}</span>
+                  </div>
+                  <div style="font-size:11px; color:var(--text-muted); margin:4px 0;">${o.items_fr}</div>
+                  ${o.isForSomeoneElse ? `<div style="font-size:10px; color:#D97706; font-weight:700;">🎁 Destinataire : ${o.recipientName} (${o.recipientPhone})</div>` : ''}
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; border-top:1px dashed var(--border-card); padding-top:6px;">
+                    <span style="font-weight:800; color:var(--primary-accent);">${o.total} DA</span>
+                    <button class="btn-action-sm btn-action-receipt" onclick="showReceiptModal('${o.id}')">🧾 Reçu</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function toggleFavorite(itemId) {
+      if (appData.clientFavorites.includes(itemId)) {
+        appData.clientFavorites = appData.clientFavorites.filter(id => id !== itemId);
+      } else {
+        appData.clientFavorites.push(itemId);
+      }
+      renderMobileClientApp();
+    }
+
+    function promptRemoveFavorite(itemId, itemName) {
+      appData.itemPendingRemoveFavId = itemId;
+      showCustomConfirm("Retirer des Favoris ?", `Voulez-vous retirer "${itemName}" de vos favoris ?`, () => {
+        appData.clientFavorites = appData.clientFavorites.filter(id => id !== itemId);
+        renderMobileClientApp();
+        showCartToast(`💔 "${itemName}" retiré des favoris`);
+      }, "💔");
+    }
+
+    function toggleOrderForSomeoneElse(checked) {
+      appData.isOrderingForSomeoneElse = checked;
+      const form = document.getElementById('remoteRecipientForm');
+      if (form) form.style.display = checked ? 'block' : 'none';
+    }
+
+    function removeCartItem(idx) {
+      appData.clientCart.splice(idx, 1);
+      renderMobileClientApp();
+    }
+
+    function submitClientFullCartOrder() {
+      if (appData.clientCart.length === 0) return;
+
+      const subtotal = appData.clientCart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const total = subtotal + 250;
+
+      const isRemote = appData.isOrderingForSomeoneElse;
+      const recipName = isRemote ? document.getElementById('inp-recip-name').value : null;
+      const recipPhone = isRemote ? document.getElementById('inp-recip-phone').value : null;
+      const recipAddr = isRemote ? document.getElementById('inp-recip-addr').value : "14 Boulevard Sidi Yahia, Hydra, Alger";
+      const payerType = isRemote ? document.getElementById('inp-recip-payer').value : "client_cash";
+
+      const orderPayload = {
+        customer_fr: isRemote ? `Amine Bouzid (Pour ${recipName})` : "Amine Bouzid",
+        customer_ar: isRemote ? `أمين بوزيد (لصالح ${recipName})` : "أمين بوزيد",
+        phone: isRemote ? recipPhone : "05 54 88 77 66",
+        address_fr: isRemote ? recipAddr : "14 Boulevard Sidi Yahia, Hydra, Alger",
+        isForSomeoneElse: isRemote,
+        recipientName: recipName,
+        recipientPhone: recipPhone,
+        recipientAddress: recipAddr,
+        payerType: payerType,
+        items_fr: appData.clientCart.map(i => `${i.quantity}x ${i.name_fr}`).join(' + '),
+        itemsList: [...appData.clientCart],
+        subtotal: subtotal,
+        total: total
+      };
+
+      ws.send(JSON.stringify({ type: 'CREATE_ORDER', payload: orderPayload }));
+      appData.clientCart = [];
+      appData.isOrderingForSomeoneElse = false;
+      showCustomAlert("Commande Confirmée 🎉", "Votre commande a été transmise en direct à la cuisine !", "🍔");
+      switchClientTab('orders');
+    }
+
+    // DRIVER APP
+    function switchDriverTab(tabName) {
+      appData.currentDriverTab = tabName;
+      document.querySelectorAll('.driver-bottom-nav .driver-nav-tab-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`dnav-${tabName}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      renderMobileDriverApp();
+    }
+
+    function renderMobileDriverApp() {
+      const container = document.getElementById('driverAppContentArea');
+      if (!container) return;
+
+      const currentDriver = appData.drivers[0] || {
+        name_fr: "Karim Benali",
+        phone: "05 52 11 22 33",
+        vehicle_fr: "Moto Yamaha 125",
+        photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+        favoriteClients: ["c-1", "c-2"]
+      };
+
+      document.getElementById('driverCurrentName').innerText = currentDriver.name_fr;
+      document.getElementById('driverCurrentVehicle').innerText = `🛵 ${currentDriver.vehicle_fr} • Alger`;
+      document.getElementById('driverTopAvatar').src = currentDriver.photoUrl;
+
+      const tab = appData.currentDriverTab;
+
+      if (tab === 'missions') {
+        const activeOrders = appData.orders.filter(o => o.status === 'out_for_delivery' || o.status === 'preparing');
+
+        if (activeOrders.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center; padding:40px 10px; color:var(--text-muted); font-size:12px;">
+              <div style="font-size:36px; margin-bottom:8px;">🛵</div>
+              <strong style="color:var(--text-main);">En attente d'une mission...</strong>
+              <p style="font-size:11px; margin-top:4px;">Les prochaines commandes apparaîtront ici.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = activeOrders.map(o => `
+          <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:14px; margin:8px 12px; padding:12px; box-shadow:var(--shadow-sm);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-weight:800; font-size:12px; color:var(--text-main);">Course #${o.id}</span>
+              <span style="background:#ECFDF5; color:#059669; font-weight:800; font-size:11px; padding:2px 8px; border-radius:6px; border:1px solid #A7F3D0;">+250 DA</span>
+            </div>
+
+            ${o.isForSomeoneElse ? `
+              <div style="background:var(--surface-card-alt); border:1px solid var(--border-card); border-radius:8px; padding:8px; margin-bottom:6px; font-size:11px;">
+                <strong style="color:var(--primary-accent);">🎁 Destinataire : ${o.recipientName}</strong>
+                <div>📞 Tél : <strong>${o.recipientPhone}</strong></div>
+                <div style="font-size:10px; color:var(--text-muted);">Paiement : ${o.payerType==='recipient_cash' ? '💵 Encaisser chez le destinataire' : '💳 Déjà payé'}</div>
+              </div>
+            ` : `
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">
+                👤 <strong style="color:var(--text-main);">${o.customer_fr}</strong> &bull; 📞 ${o.phone}
+              </div>
+            `}
+
+            <div style="font-size:11px; font-weight:700; color:var(--text-main); margin-bottom:6px;">
+              📍 ${o.address_fr}
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:6px;">
+              <button class="btn-action-sm btn-action-call" style="justify-content:center;" onclick="showCustomAlert('Appel Coursier', 'Composition du numéro : ${o.phone}...', '📞')">
+                📞 Appeler
+              </button>
+              <button class="btn-action-sm btn-action-gold" style="justify-content:center;" onclick="openChangeCalculator(${o.total})">
+                💵 Rendre Monnaie
+              </button>
+            </div>
+
+            <button style="width:100%; background:var(--accent-gradient); color:#FFFFFF; font-weight:800; font-size:11.5px; border:none; padding:9px; border-radius:8px; cursor:pointer;" onclick="markOrderDelivered('${o.id}')">
+              ✅ Valider la Livraison (${o.total} DA)
+            </button>
+          </div>
+        `).join('');
+
+      } else if (tab === 'map') {
+        container.innerHTML = `
+          <div style="position:relative; width:100%; height:100%; min-height:640px; display:flex; flex-direction:column;">
+            <div id="driverInteractiveMapContainer" style="flex:1; width:100%; z-index:10;"></div>
+            
+            <div style="position:absolute; top:10px; left:12px; right:12px; background:#FFFFFF; border:1px solid var(--border-card); border-radius:12px; padding:8px 12px; z-index:500; box-shadow:0 4px 15px rgba(0,0,0,0.1); display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-size:11px; font-weight:800; color:var(--primary-accent);">
+                🗺️ Carte Alger &bull; ⭐ Clients Favoris Repérés
+              </div>
+              <span style="font-size:10px; color:#059669; font-weight:800;">GPS En Ligne 🟢</span>
+            </div>
+          </div>
+        `;
+        setTimeout(initDriverMap, 150);
+
+      } else if (tab === 'clients') {
+        const favIds = currentDriver.favoriteClients || [];
+
+        container.innerHTML = `
+          <div style="padding:12px;">
+            <h4 style="font-size:13px; font-weight:800; margin-bottom:8px; color:var(--text-main);">👥 Mes Clients & Clients Favoris ⭐</h4>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              ${appData.customers.map(c => {
+                const isFav = favIds.includes(c.id);
+                return `
+                  <div style="background:#FFFFFF; border:1px solid ${isFav ? 'var(--primary-accent)' : 'var(--border-card)'}; border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                      <div style="display:flex; align-items:center; gap:6px;">
+                        <strong style="font-size:12px; color:var(--text-main);">${c.name}</strong>
+                        ${isFav ? '<span style="background:#ECFDF5; color:#059669; font-size:9.5px; font-weight:800; padding:1px 6px; border-radius:4px; border:1px solid #A7F3D0;">⭐ Favori</span>' : ''}
+                      </div>
+                      <div style="font-size:10px; color:var(--text-muted);">📍 ${c.address}</div>
+                      <div style="font-size:10px; color:#059669; font-weight:700;">Livré 4 fois &bull; 📞 ${c.phone}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                      <button style="background:none; border:none; font-size:20px; cursor:pointer;" title="Basculer Favori" onclick="toggleDriverFavoriteClient('${c.id}')">
+                        ${isFav ? '⭐' : '☆'}
+                      </button>
+                      <button class="btn-action-sm btn-action-call" onclick="showCustomAlert('Appel Client', 'Composition du numéro : ${c.phone}...', '📞')">
+                        📞
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+
+      } else if (tab === 'profile') {
+        container.innerHTML = `
+          <div style="padding:12px;">
+            <h4 style="font-size:13.5px; font-weight:800; margin-bottom:12px; color:var(--text-main);">⚙️ Mon Profil & Paramètres Livreur</h4>
+            
+            <div style="text-align:center; margin-bottom:12px;">
+              <img src="${currentDriver.photoUrl}" id="driverEditPhotoPreview" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:3px solid var(--primary-accent); margin-bottom:6px;">
+              <div>
+                <label style="background:var(--text-main); color:#FFFFFF; font-size:10.5px; font-weight:700; padding:5px 12px; border-radius:8px; cursor:pointer; display:inline-block;">
+                  📷 Changer Photo (Tél/PC)
+                  <input type="file" accept="image/*" style="display:none;" onchange="previewDriverAvatar(this)">
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <label>Nom & Prénom</label>
+              <input type="text" id="drv-edit-name" value="${currentDriver.name_fr}">
+            </div>
+            <div class="form-group-row">
+              <label>Numéro de Téléphone</label>
+              <input type="text" id="drv-edit-phone" value="${currentDriver.phone}">
+            </div>
+            <div class="form-group-row">
+              <label>Véhicule de Livraison</label>
+              <select id="drv-edit-vehicle">
+                <option value="Moto Yamaha 125" ${currentDriver.vehicle_fr==='Moto Yamaha 125'?'selected':''}>Moto Yamaha 125</option>
+                <option value="Scooter Sym 150" ${currentDriver.vehicle_fr==='Scooter Sym 150'?'selected':''}>Scooter Sym 150</option>
+                <option value="Vélo Électrique" ${currentDriver.vehicle_fr==='Vélo Électrique'?'selected':''}>Vélo Électrique</option>
+              </select>
+            </div>
+
+            <button class="btn-action-sm btn-action-green" style="width:100%; padding:10px; justify-content:center; font-size:12px;" onclick="saveDriverProfileSettings()">
+              💾 Enregistrer mon Profil Livreur
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function initDriverMap() {
+      const el = document.getElementById('driverInteractiveMapContainer');
+      if (!el) return;
+      if (driverMapInstance) { driverMapInstance.remove(); driverMapInstance = null; }
+
+      driverMapInstance = L.map('driverInteractiveMapContainer', { zoomControl: false }).setView([36.7538, 3.0588], 13);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(driverMapInstance);
+
+      L.marker([36.7538, 3.0588]).addTo(driverMapInstance).bindPopup("<b>🛵 Votre Position (Karim)</b>");
+
+      const currentDriver = appData.drivers[0] || {};
+      const favIds = currentDriver.favoriteClients || ['c-1', 'c-2'];
+
+      appData.customers.forEach(c => {
+        if (c.lat && c.lng) {
+          const isFav = favIds.includes(c.id);
+
+          if (isFav) {
+            const starIcon = L.divIcon({
+              className: 'custom-star-marker',
+              html: '⭐',
+              iconSize: [34, 34],
+              iconAnchor: [17, 17]
+            });
+            L.marker([c.lat, c.lng], { icon: starIcon }).addTo(driverMapInstance)
+              .bindPopup(`<b>⭐ CLIENT FAVORI : ${c.name}</b><br>📞 ${c.phone}<br>📍 ${c.address}`);
+          } else {
+            L.marker([c.lat, c.lng]).addTo(driverMapInstance)
+              .bindPopup(`<b>👤 Client : ${c.name}</b><br>📞 ${c.phone}<br>📍 ${c.address}`);
+          }
+        }
+      });
+    }
+
+    function toggleDriverFavoriteClient(clientId) {
+      ws.send(JSON.stringify({
+        type: 'TOGGLE_DRIVER_FAVORITE_CLIENT',
+        payload: { driverId: 'drv-1', clientId }
+      }));
+    }
+
+    function previewDriverAvatar(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('driverEditPhotoPreview').src = e.target.result;
+          appData.uploadedDriverAvatarBase64 = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function saveDriverProfileSettings() {
+      const name = document.getElementById('drv-edit-name').value.trim();
+      const phone = document.getElementById('drv-edit-phone').value.trim();
+      const vehicle = document.getElementById('drv-edit-vehicle').value;
+      const photo = appData.uploadedDriverAvatarBase64 || appData.drivers[0].photoUrl;
+
+      ws.send(JSON.stringify({
+        type: 'UPDATE_DRIVER_PROFILE',
+        payload: { driverId: 'drv-1', name_fr: name, phone: phone, vehicle_fr: vehicle, photoUrl: photo }
+      }));
+      showCustomAlert("Profil Enregistré 🎉", "Vos informations de coursier ont été mises à jour avec succès !", "🛵");
+    }
+
+    // 6. ADMIN FINANCIAL REPORTS & CHARTS (DYNAMIC FROM DISHES)
+    function setReportPeriod(period) {
+      appData.currentReportPeriod = period;
+      renderFrCurrentTab();
+      renderArCurrentTab();
+    }
+
+    function getReportData(period) {
+      const totalDishesCount = appData.menuItems.length || 4;
+      const baseDishes = appData.menuItems.map((item, index) => {
+        const multiplier = Math.max(1, 15 - (index * 2));
+        const periodMul = period === 'day' ? 1 : (period === 'week' ? 6.5 : 27);
+        const qty = Math.round(multiplier * periodMul);
+        const revenue = qty * item.price;
+        return {
+          id: item.id,
+          name: item.name_fr,
+          name_ar: item.name_ar,
+          qty: qty,
+          revenue: revenue
+        };
+      });
+
+      const totalSoldUnits = baseDishes.reduce((sum, d) => sum + d.qty, 0) || 1;
+      const totalGeneratedRevenue = baseDishes.reduce((sum, d) => sum + d.revenue, 0);
+
+      const dynamicTopDishes = baseDishes.map(d => ({
+        ...d,
+        percent: Math.round((d.qty / totalSoldUnits) * 100)
+      })).sort((a, b) => b.qty - a.qty);
+
+      const profit = Math.round(totalGeneratedRevenue * 0.47);
+      const ordersCount = Math.round(totalSoldUnits / 1.8);
+      const avgTicket = ordersCount > 0 ? Math.round(totalGeneratedRevenue / ordersCount) : 3100;
+      const deliveryFees = ordersCount * 250;
+
+      if (period === 'day') {
+        return {
+          title_fr: "Rapport d'Aujourd'hui (Heure par Heure)",
+          title_ar: "تقرير اليوم (ساعة بساعة)",
+          periodLabel: "Aujourd'hui",
+          revenue: totalGeneratedRevenue,
+          profit: profit,
+          ordersCount: ordersCount,
+          avgTicket: avgTicket,
+          deliveryFeesCollected: deliveryFees,
+          labels: ['11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h'],
+          revenueData: [8500, 24500, 31000, 19200, 7800, 9400, 14200, 22600, 29800, 32400, 21500, 12000, 4500],
+          profitData: [4000, 11500, 14570, 9020, 3660, 4420, 6670, 10620, 14000, 15230, 10100, 5640, 2110],
+          topDishes: dynamicTopDishes
+        };
+      } else if (period === 'week') {
+        return {
+          title_fr: "Rapport de la Semaine en Cours (7 Jours)",
+          title_ar: "تقرير الأسبوع الحالي (7 أيام)",
+          periodLabel: "Cette Semaine",
+          revenue: totalGeneratedRevenue,
+          profit: profit,
+          ordersCount: ordersCount,
+          avgTicket: avgTicket,
+          deliveryFeesCollected: deliveryFees,
+          labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven (Pique 🔥)', 'Sam', 'Dim'],
+          revenueData: [135000, 142000, 158000, 178000, 225000, 184000, 123600],
+          profitData: [63450, 66740, 74260, 83660, 105750, 86480, 58090],
+          topDishes: dynamicTopDishes
+        };
+      } else {
+        return {
+          title_fr: "Rapport Mensuel Consolidé (Ce Mois-ci)",
+          title_ar: "التقرير الشهري المجمع (هذا الشهر)",
+          periodLabel: "Ce Mois",
+          revenue: totalGeneratedRevenue,
+          profit: profit,
+          ordersCount: ordersCount,
+          avgTicket: avgTicket,
+          deliveryFeesCollected: deliveryFees,
+          labels: ['Semaine 1', 'Semaine 2', 'Semaine 3', 'Semaine 4'],
+          revenueData: [1150000, 1220000, 1340000, 1182000],
+          profitData: [540500, 573400, 629800, 555540],
+          topDishes: dynamicTopDishes
+        };
+      }
+    }
+
+    // EXPORTS
+    function exportReportPDF() { window.print(); }
+
+    function exportReportExcel() {
+      const data = getReportData(appData.currentReportPeriod);
+      let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+      csvContent += `RAPPORT FINANCIER THE ENGINEER BURGER - ${data.title_fr}\r\n`;
+      csvContent += `Période;${data.periodLabel}\r\n`;
+      csvContent += `Chiffre d'Affaires Brut (DA);${data.revenue}\r\n`;
+      csvContent += `Bénéfice Net Réel (DA);${data.profit}\r\n`;
+      csvContent += `Nombre de Commandes;${data.ordersCount}\r\n`;
+      csvContent += `Panier Moyen (DA);${data.avgTicket}\r\n\r\n`;
+
+      csvContent += `EVOLUTION PERIODIQUE\r\nPériode / Heure;Chiffre d'Affaires (DA);Bénéfice Net (DA)\r\n`;
+      data.labels.forEach((lbl, i) => {
+        csvContent += `${lbl};${data.revenueData[i]};${data.profitData[i]}\r\n`;
+      });
+
+      csvContent += `\r\nCLASSEMENT DYNAMIQUE DES VENTES PAR PLAT\r\nPlat / Burger;Quantité Vendue;Part de Vente (%);Total Recettes (DA)\r\n`;
+      data.topDishes.forEach(d => {
+        csvContent += `${d.name};${d.qty};${d.percent}%;${d.revenue}\r\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Rapport_TheEngineerBurger_${appData.currentReportPeriod}_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showCartToast("📊 Rapport Excel téléchargé !");
+    }
+
+    function exportReportWord() {
+      const data = getReportData(appData.currentReportPeriod);
+      const docHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><title>Rapport Financier The Engineer Burger</title>
+        <style>
+          body { font-family: Arial, sans-serif; }
+          h1 { color: #059669; }
+          table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+          th, td { border: 1px solid #ccc; padding: 8px; font-size: 12px; }
+          th { background: #0F172A; color: #fff; }
+        </style>
+        </head>
+        <body>
+          <h1>🍔 THE ENGINEER BURGER - RAPPORT D'ACTIVITÉ</h1>
+          <p><strong>${data.title_fr}</strong> &bull; Date : ${new Date().toLocaleDateString('fr-FR')}</p>
+          <hr>
+          <h3>📊 Synthèse Financière :</h3>
+          <ul>
+            <li><strong>Chiffre d'Affaires Brut :</strong> ${data.revenue.toLocaleString()} DA</li>
+            <li><strong>Bénéfice Net Estimé (47%) :</strong> ${data.profit.toLocaleString()} DA</li>
+            <li><strong>Nombre Total de Commandes :</strong> ${data.ordersCount}</li>
+            <li><strong>Panier Moyen :</strong> ${data.avgTicket} DA</li>
+          </ul>
+
+          <h3>🏆 Classement des Ventes par Plat :</h3>
+          <table>
+            <thead><tr><th>Plat</th><th>Quantité</th><th>Part</th><th>Total (DA)</th></tr></thead>
+            <tbody>
+              ${data.topDishes.map(d => `<tr><td>${d.name}</td><td>${d.qty}</td><td>${d.percent}%</td><td>${d.revenue.toLocaleString()} DA</td></tr>`).join('')}
+            </tbody>
+          </table>
+        </body></html>
+      `;
+
+      const blob = new Blob(['\ufeff' + docHtml], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Rapport_TheEngineerBurger_${appData.currentReportPeriod}_${new Date().toISOString().slice(0,10)}.doc`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showCartToast("📝 Rapport Word téléchargé !");
+    }
+
+    function initFinancialCharts(prefix = 'fr') {
+      const rep = getReportData(appData.currentReportPeriod);
+
+      const ctxFin = document.getElementById(`${prefix}-chart-revenue`);
+      if (ctxFin) {
+        if (prefix === 'fr' && appData.chartFinancialInstance) { appData.chartFinancialInstance.destroy(); }
+        if (prefix === 'ar' && appData.chartArFinancialInstance) { appData.chartArFinancialInstance.destroy(); }
+
+        const chartInstance = new Chart(ctxFin, {
+          type: 'bar',
+          data: {
+            labels: rep.labels,
+            datasets: [
+              {
+                label: prefix === 'fr' ? "Chiffre d'Affaires (DA)" : "الإيرادات (د.ج)",
+                data: rep.revenueData,
+                backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                borderColor: '#059669',
+                borderWidth: 1.5,
+                borderRadius: 6
+              },
+              {
+                label: prefix === 'fr' ? "Bénéfice Net (DA)" : "صافي الأرباح (د.ج)",
+                data: rep.profitData,
+                type: 'line',
+                borderColor: '#F59E0B',
+                backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.35,
+                pointRadius: 4,
+                pointBackgroundColor: '#F59E0B'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'top', labels: { font: { family: prefix==='fr'?'Outfit':'Cairo', size: 11, weight: 'bold' } } }
+            },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#E2E8F0' }, ticks: { font: { size: 10 } } },
+              x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+            }
+          }
+        });
+
+        if (prefix === 'fr') appData.chartFinancialInstance = chartInstance;
+        else appData.chartArFinancialInstance = chartInstance;
+      }
+
+      const ctxDishes = document.getElementById(`${prefix}-chart-top-dishes`);
+      if (ctxDishes) {
+        if (prefix === 'fr' && appData.chartTopDishesInstance) { appData.chartTopDishesInstance.destroy(); }
+        if (prefix === 'ar' && appData.chartArTopDishesInstance) { appData.chartArTopDishesInstance.destroy(); }
+
+        const colorsPalette = ['#059669', '#F59E0B', '#3B82F6', '#9333EA', '#EC4899', '#14B8A6', '#EAB308', '#6366F1'];
+
+        const dishChartInstance = new Chart(ctxDishes, {
+          type: 'doughnut',
+          data: {
+            labels: rep.topDishes.map(d => prefix === 'fr' ? d.name : (d.name_ar || d.name)),
+            datasets: [{
+              data: rep.topDishes.map(d => d.qty),
+              backgroundColor: rep.topDishes.map((_, i) => colorsPalette[i % colorsPalette.length]),
+              borderWidth: 2,
+              borderColor: '#FFFFFF'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom', labels: { font: { family: prefix==='fr'?'Outfit':'Cairo', size: 10, weight: 'bold' }, boxWidth: 12 } }
+            },
+            cutout: '62%'
+          }
+        });
+
+        if (prefix === 'fr') appData.chartTopDishesInstance = dishChartInstance;
+        else appData.chartArTopDishesInstance = dishChartInstance;
+      }
+    }
+
+    // ADMIN DASHBOARD
+    function switchFrTab(tabName, el) {
+      document.querySelectorAll('#frAdminPanel .sidebar-tab-item').forEach(i => i.classList.remove('active'));
+      if (el) el.classList.add('active');
+      appData.currentActiveFrTab = tabName;
+      renderFrCurrentTab();
+    }
+
+    function renderFrCurrentTab() {
+      const container = document.getElementById('fr-view-container');
+      if (!container) return;
+      const tab = appData.currentActiveFrTab;
+
+      if (tab === 'dashboard') {
+        container.innerHTML = `
+          <div class="gold-stats-grid">
+            <div class="stat-card-gold-box">
+              <div class="stat-lbl">Commandes du Jour</div>
+              <div class="stat-num">${appData.stats.todayOrders}</div>
+              <div style="font-size:10px; margin-top:4px; color:#059669; font-weight:700;">+14% vs hier</div>
+            </div>
+            <div class="stat-card-gold-box">
+              <div class="stat-lbl">En Livraison 🛵</div>
+              <div class="stat-num">${appData.stats.activeDeliveries || 4}</div>
+              <div style="font-size:10px; margin-top:4px; color:#3B82F6; font-weight:700;">Temps moyen: 14 min</div>
+            </div>
+            <div class="stat-card-gold-box">
+              <div class="stat-lbl">Chiffre d'Affaires</div>
+              <div class="stat-num">${appData.stats.todayRevenue.toLocaleString()} DA</div>
+              <div style="font-size:10px; margin-top:4px; color:#D97706; font-weight:700;">98.5% Satisfaction ⭐</div>
+            </div>
+            <div class="stat-card-gold-box">
+              <div class="stat-lbl">Livreurs Actifs</div>
+              <div class="stat-num">${appData.drivers.filter(d => d.status === 'online').length}</div>
+              <div style="font-size:10px; margin-top:4px; color:var(--text-muted); font-weight:700;">Alger & Environs</div>
+            </div>
+          </div>
+          <div class="card-box-module">
+            <div class="card-box-header"><h4>📋 Commandes Récentes & Actions Rapides</h4></div>
+            ${renderOrdersTableHTML('fr', 4)}
+          </div>
+        `;
+      } else if (tab === 'orders') {
+        container.innerHTML = `
+          <div class="card-box-module">
+            <div class="card-box-header"><h4>📋 Gestion Complète des Commandes</h4><button class="btn-action-sm btn-action-green" onclick="triggerClientSampleOrder()">+ Commande Test</button></div>
+            ${renderOrdersTableHTML('fr', 100)}
+          </div>
+        `;
+      } else if (tab === 'ingredients') {
+        container.innerHTML = `
+          <div class="card-box-module">
+            <div class="card-box-header">
+              <h4>📦 Gestionnaire du Stock Ingrédients & Sauces (${appData.ingredientsStock.length})</h4>
+              <button class="btn-action-sm btn-action-green" onclick="openModal('modalAddIngredient')">
+                ➕ Ajouter un Ingrédient / Sauce
+              </button>
+            </div>
+            <table class="table-modern">
+              <thead><tr><th>Ingrédient</th><th>Jauge Max</th><th>Statut</th><th>Actions Gestion</th></tr></thead>
+              <tbody>
+                ${appData.ingredientsStock.map(ing => `
+                  <tr>
+                    <td><strong>${ing.icon} ${ing.name_fr}</strong></td>
+                    <td>0 à ${ing.max || 15} ${ing.extraCost ? `(+${ing.extraCost} DA)` : ''}</td>
+                    <td><span class="badge-status ${ing.isAvailable ? 'badge-delivered' : 'badge-pending'}">${ing.isAvailable ? 'Disponible 🟢' : 'En Rupture 🔴'}</span></td>
+                    <td>
+                      <div style="display:flex; gap:6px;">
+                        <button class="btn-action-sm ${ing.isAvailable ? 'btn-action-black' : 'btn-action-gold'}" onclick="toggleIngredientStock('${ing.id}', ${!ing.isAvailable})">
+                          ${ing.isAvailable ? '🔴 Rupture' : '🟢 Rétablir'}
+                        </button>
+                        <button class="btn-action-sm btn-action-danger" onclick="deleteIngredientCompletely('${ing.id}', '${ing.name_fr}')">
+                          🗑️ Retirer du Menu
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (tab === 'reports') {
+        const rep = getReportData(appData.currentReportPeriod);
+
+        container.innerHTML = `
+          <div class="card-box-module" style="padding:12px 16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <h4 style="margin:0; font-size:14.5px; font-weight:900; color:var(--text-main);">📈 ${rep.title_fr}</h4>
+                <div class="report-period-pills">
+                  <button class="report-pill-btn ${appData.currentReportPeriod==='day'?'active':''}" onclick="setReportPeriod('day')">📅 Aujourd'hui</button>
+                  <button class="report-pill-btn ${appData.currentReportPeriod==='week'?'active':''}" onclick="setReportPeriod('week')">📆 Semaine</button>
+                  <button class="report-pill-btn ${appData.currentReportPeriod==='month'?'active':''}" onclick="setReportPeriod('month')">📊 Mois</button>
+                </div>
+              </div>
+              <div class="export-actions-group">
+                <button class="btn-action-sm btn-action-green" onclick="exportReportPDF()">🖨️ PDF</button>
+                <button class="btn-action-sm btn-action-excel" onclick="exportReportExcel()">📊 Excel (.xlsx)</button>
+                <button class="btn-action-sm btn-action-word" onclick="exportReportWord()">📝 Word (.doc)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="gold-stats-grid">
+            <div class="stat-card-gold-box">
+              <div class="stat-lbl">Chiffre d'Affaires Brut</div>
+              <div class="stat-num" style="color:var(--primary-accent);">${rep.revenue.toLocaleString()} DA</div>
+            </div>
+            <div class="stat-card-gold-box" style="border-top-color:#F59E0B;">
+              <div class="stat-lbl">Bénéfice Net Réel (~47%)</div>
+              <div class="stat-num" style="color:#D97706;">${rep.profit.toLocaleString()} DA</div>
+            </div>
+            <div class="stat-card-gold-box" style="border-top-color:#3B82F6;">
+              <div class="stat-lbl">Nombre de Commandes</div>
+              <div class="stat-num" style="color:#2563EB;">${rep.ordersCount}</div>
+            </div>
+            <div class="stat-card-gold-box" style="border-top-color:#8B5CF6;">
+              <div class="stat-lbl">Frais Livraison Encaissés</div>
+              <div class="stat-num" style="color:#7C3AED;">${rep.deliveryFeesCollected.toLocaleString()} DA</div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:14px;">
+            <div class="card-box-module">
+              <div class="card-box-header">
+                <h4>📊 Évolution Financière (${rep.periodLabel})</h4>
+                <span style="font-size:10.5px; color:var(--text-muted); font-weight:700;">En Dinars (DA)</span>
+              </div>
+              <div style="position:relative; height:240px; width:100%;">
+                <canvas id="fr-chart-revenue"></canvas>
+              </div>
+            </div>
+            <div class="card-box-module">
+              <div class="card-box-header">
+                <h4>🍔 Plats & Burgers les Plus Demandés</h4>
+                <span style="font-size:10.5px; color:#059669; font-weight:800;">${rep.topDishes.length} Plats Listés</span>
+              </div>
+              <div style="position:relative; height:240px; width:100%;">
+                <canvas id="fr-chart-top-dishes"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-box-module">
+            <div class="card-box-header">
+              <h4>🏆 Classement Dynamique des Ventes par Plat (${rep.topDishes.length} au menu)</h4>
+              <button class="btn-action-sm btn-action-green" onclick="openAddMenuModal()">➕ Nouveau Plat</button>
+            </div>
+            <table class="table-modern">
+              <thead><tr><th>Plat / Burger</th><th>Portions Vendues</th><th>Part de Marché</th><th>Recettes Générées</th><th>Rentabilité</th></tr></thead>
+              <tbody>
+                ${rep.topDishes.map(d => `
+                  <tr>
+                    <td><strong>${d.name}</strong></td>
+                    <td><strong style="color:var(--text-main);">${d.qty} unités</strong></td>
+                    <td>
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <div style="flex:1; background:#E2E8F0; height:6px; border-radius:3px; overflow:hidden;">
+                          <div style="background:var(--accent-gradient); width:${d.percent}%; height:100%;"></div>
+                        </div>
+                        <span style="font-weight:800; font-size:10.5px;">${d.percent}%</span>
+                      </div>
+                    </td>
+                    <td><strong style="color:var(--primary-accent);">${d.revenue.toLocaleString()} DA</strong></td>
+                    <td><span class="badge-status badge-delivered">Excellente (⭐⭐⭐⭐⭐)</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        setTimeout(() => initFinancialCharts('fr'), 80);
+
+      } else if (tab === 'menu') {
+        container.innerHTML = `
+          <div class="card-box-module">
+            <div class="card-box-header">
+              <h4>🍔 Gestion du Menu & Plats (${appData.menuItems.length})</h4>
+              <button class="btn-action-sm btn-action-green" onclick="openAddMenuModal()">➕ Ajouter un Nouveau Plat</button>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:12px;">
+              ${appData.menuItems.map(item => `
+                <div style="background:#FFFFFF; border:1px solid var(--border-card); border-radius:12px; overflow:hidden; box-shadow:var(--shadow-sm);">
+                  <img src="${item.image}" style="width:100%; height:110px; object-fit:cover;">
+                  <div style="padding:10px;">
+                    <strong style="font-size:12.5px; color:var(--text-main); display:block;">${item.name_fr}</strong>
+                    <div style="font-weight:900; color:var(--primary-accent); font-size:13px; margin:4px 0;">${item.price} DA</div>
+                    <p style="font-size:10.5px; color:var(--text-muted); line-height:1.3;">${(item.description_fr || '').substring(0, 50)}...</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; border-top:1px solid var(--border-card); padding-top:6px;">
+                      <span style="font-size:10px; color:#059669; font-weight:700;">⏱️ ${item.prepTime || '15 min'}</span>
+                      <button class="btn-action-sm btn-action-gold" style="padding:3px 8px; font-size:10px;" onclick="openGourmetBuilderModal('${item.id}')">Tester</button>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (tab === 'drivers') {
+        const pendingDrivers = appData.drivers.filter(d => d.status === 'pending_approval');
+
+        container.innerHTML = `
+          <div class="card-box-module">
+            <div class="card-box-header">
+              <h4>🛵 Gestion Complète de la Flotte Livreurs (${appData.drivers.length})</h4>
+              <button class="btn-action-sm btn-action-green" onclick="openDriverRegistrationModal()">➕ Nouveau Livreur</button>
+            </div>
+
+            ${pendingDrivers.length > 0 ? `
+              <div style="background:#FEF3C7; border:1px solid #FDE68A; border-radius:12px; padding:12px; margin-bottom:14px;">
+                <strong style="font-size:12.5px; color:#92400E; display:flex; align-items:center; gap:6px;">
+                  ⏳ Demandes d'Inscription en Attente de Validation (${pendingDrivers.length}) :
+                </strong>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                  ${pendingDrivers.map(d => `
+                    <div style="background:#FFFFFF; border:1px solid #FDE68A; border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+                      <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="${d.photoUrl}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid #F59E0B;">
+                        <div>
+                          <strong style="color:var(--text-main); font-size:12px;">${d.name_fr}</strong>
+                          <div style="font-size:10px; color:var(--text-muted);">📞 ${d.phone} &bull; 🛵 ${d.vehicle_fr}</div>
+                        </div>
+                      </div>
+                      <div style="display:flex; gap:6px;">
+                        <button class="btn-action-sm btn-action-green" onclick="approveDriver('${d.id}', '${d.name_fr}')">✅ Valider & Activer</button>
+                        <button class="btn-action-sm btn-action-danger" onclick="rejectDriver('${d.id}', '${d.name_fr}')">❌ Rejeter</button>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            <table class="table-modern">
+              <thead><tr><th>Livreur</th><th>Véhicule & Tél</th><th>Courses & Gains</th><th>Statut</th><th>Actions Administration</th></tr></thead>
+              <tbody>
+                ${appData.drivers.map(d => {
+                  const isSuspended = d.status === 'suspended';
+                  const isPending = d.status === 'pending_approval';
+                  return `
+                    <tr style="${isSuspended ? 'background:#FEF2F2;' : ''}">
+                      <td>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <img src="${d.photoUrl}" style="width:32px; height:32px; border-radius:50%; object-fit:cover; border:2px solid ${isSuspended ? '#EF4444' : 'var(--primary-accent)'};">
+                          <div>
+                            <strong style="color:var(--text-main);">${d.name_fr}</strong>
+                            <div style="font-size:10px; color:var(--text-muted);">⭐ ${d.rating} &bull; ${d.points} pts</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div>🛵 ${d.vehicle_fr}</div>
+                        <div style="font-size:10px; color:var(--text-muted);">📞 ${d.phone}</div>
+                      </td>
+                      <td>
+                        <div><strong>${d.deliveriesCount}</strong> livraisons</div>
+                        <strong style="color:var(--primary-accent); font-size:11px;">${d.todayEarnings} DA</strong>
+                      </td>
+                      <td>
+                        ${isSuspended ? `
+                          <span class="badge-status badge-suspended"><span class="dot"></span>🔴 Suspendu</span>
+                        ` : isPending ? `
+                          <span class="badge-status badge-pending"><span class="dot"></span>🟡 En Attente</span>
+                        ` : `
+                          <span class="badge-status badge-delivered"><span class="dot"></span>🟢 Actif (${d.status === 'online' ? 'Disponible' : 'En Course'})</span>
+                        `}
+                      </td>
+                      <td>
+                        <div style="display:flex; gap:4px;">
+                          ${isPending ? `
+                            <button class="btn-action-sm btn-action-green" onclick="approveDriver('${d.id}', '${d.name_fr}')">✅ Valider</button>
+                            <button class="btn-action-sm btn-action-danger" onclick="rejectDriver('${d.id}', '${d.name_fr}')">❌ Rejeter</button>
+                          ` : isSuspended ? `
+                            <button class="btn-action-sm btn-action-green" onclick="reactivateDriver('${d.id}', '${d.name_fr}')">▶️ Réactiver</button>
+                          ` : `
+                            <button class="btn-action-sm btn-action-danger" onclick="suspendDriver('${d.id}', '${d.name_fr}')">⏸️ Suspendre</button>
+                          `}
+                        </div>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (tab === 'customers') {
+        container.innerHTML = `
+          <div class="card-box-module">
+            <div class="card-box-header"><h4>👥 Clients & Fidélité</h4></div>
+            <table class="table-modern">
+              <thead><tr><th>Client</th><th>Téléphone</th><th>Points</th></tr></thead>
+              <tbody>
+                ${appData.customers.map(c => `<tr><td>${c.name}</td><td>${c.phone}</td><td>⭐ ${c.loyaltyPoints} pts</td></tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (tab === 'settings') {
+        container.innerHTML = `
+          <div class="card-box-module">
+            <div class="card-box-header"><h4>⚙️ Paramètres Restaurant</h4></div>
+            <div class="form-group-row"><label>Adresse</label><input type="text" value="${appData.restaurantConfig.address_fr}"></div>
+            <button class="btn-action-sm btn-action-green" onclick="showCustomAlert('Paramètres Enregistrés', 'Vos modifications ont été sauvegardées !', '💾')">💾 Enregistrer</button>
+          </div>
+        `;
+      }
+    }
+
+    function switchArTab(tabName, el) {
+      document.querySelectorAll('#arAdminPanel .sidebar-tab-item').forEach(i => i.classList.remove('active'));
+      if (el) el.classList.add('active');
+      appData.currentActiveArTab = tabName;
+      renderArCurrentTab();
+    }
+
+    function renderArCurrentTab() {
+      const container = document.getElementById('ar-view-container');
+      if (!container) return;
+      const tab = appData.currentActiveArTab;
+
+      if (tab === 'reports') {
+        const rep = getReportData(appData.currentReportPeriod);
+
+        container.innerHTML = `
+          <div class="card-box-module" style="padding:12px 16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <h4 style="margin:0; font-size:14.5px; font-weight:900; color:var(--text-main);">📈 ${rep.title_ar}</h4>
+                <div class="report-period-pills">
+                  <button class="report-pill-btn ${appData.currentReportPeriod==='day'?'active':''}" onclick="setReportPeriod('day')">📅 اليوم</button>
+                  <button class="report-pill-btn ${appData.currentReportPeriod==='week'?'active':''}" onclick="setReportPeriod('week')">📆 الأسبوع</button>
+                  <button class="report-pill-btn ${appData.currentReportPeriod==='month'?'active':''}" onclick="setReportPeriod('month')">📊 الشهر</button>
+                </div>
+              </div>
+              <div class="export-actions-group">
+                <button class="btn-action-sm btn-action-green" onclick="exportReportPDF()">🖨️ PDF</button>
+                <button class="btn-action-sm btn-action-excel" onclick="exportReportExcel()">📊 Excel</button>
+                <button class="btn-action-sm btn-action-word" onclick="exportReportWord()">📝 Word</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="gold-stats-grid">
+            <div class="stat-card-gold-box"><div class="stat-lbl">إجمالي الإيرادات</div><div class="stat-num" style="color:var(--primary-accent);">${rep.revenue.toLocaleString('ar-DZ')} د.ج</div></div>
+            <div class="stat-card-gold-box" style="border-top-color:#F59E0B;"><div class="stat-lbl">صافي الأرباح (~47%)</div><div class="stat-num" style="color:#D97706;">${rep.profit.toLocaleString('ar-DZ')} د.ج</div></div>
+            <div class="stat-card-gold-box" style="border-top-color:#3B82F6;"><div class="stat-lbl">عدد الطلبات</div><div class="stat-num" style="color:#2563EB;">${rep.ordersCount}</div></div>
+            <div class="stat-card-gold-box" style="border-top-color:#8B5CF6;"><div class="stat-lbl">رسوم التوصيل</div><div class="stat-num" style="color:#7C3AED;">${rep.deliveryFeesCollected.toLocaleString('ar-DZ')} د.ج</div></div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:14px;">
+            <div class="card-box-module">
+              <div class="card-box-header"><h4>📊 تطور الإيرادات وصافي الأرباح</h4></div>
+              <div style="position:relative; height:240px; width:100%;"><canvas id="ar-chart-revenue"></canvas></div>
+            </div>
+            <div class="card-box-module">
+              <div class="card-box-header"><h4>🍔 الأطباق الأكثر طلباً (${rep.topDishes.length})</h4></div>
+              <div style="position:relative; height:240px; width:100%;"><canvas id="ar-chart-top-dishes"></canvas></div>
+            </div>
+          </div>
+        `;
+
+        setTimeout(() => initFinancialCharts('ar'), 80);
+        return;
+      }
+
+      if (tab === 'drivers') {
+        container.innerHTML = `
+          <div class="card-box-module">
+            <div class="card-box-header">
+              <h4>🛵 إدارة السائقين والاعتماد</h4>
+              <button class="btn-action-sm btn-action-green" onclick="openDriverRegistrationModal()">➕ تسجيل سائق جديد</button>
+            </div>
+            <table class="table-modern">
+              <thead><tr><th>السائق</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
+              <tbody>
+                ${appData.drivers.map(d => `
+                  <tr>
+                    <td><strong>${d.name_ar || d.name_fr}</strong> (${d.vehicle_ar || d.vehicle_fr})</td>
+                    <td><span class="badge-status ${d.status === 'suspended' ? 'badge-suspended' : (d.status==='pending_approval'?'badge-pending':'badge-delivered')}">${d.status === 'suspended' ? '🔴 معلق' : (d.status==='pending_approval'?'🟡 في الانتظار':'🟢 نشط')}</span></td>
+                    <td>
+                      ${d.status === 'suspended' ? `
+                        <button class="btn-action-sm btn-action-green" onclick="reactivateDriver('${d.id}', '${d.name_fr}')">▶️ إعادة التفعيل</button>
+                      ` : d.status === 'pending_approval' ? `
+                        <button class="btn-action-sm btn-action-green" onclick="approveDriver('${d.id}', '${d.name_fr}')">✅ قبول</button>
+                      ` : `
+                        <button class="btn-action-sm btn-action-danger" onclick="suspendDriver('${d.id}', '${d.name_fr}')">⏸️ تعليق</button>
+                      `}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="gold-stats-grid">
+          <div class="stat-card-gold-box"><div class="stat-lbl">الطلبات</div><div class="stat-num">${appData.stats.todayOrders}</div></div>
+          <div class="stat-card-gold-box"><div class="stat-lbl">الإيرادات</div><div class="stat-num">${appData.stats.todayRevenue.toLocaleString('ar-DZ')} د.ج</div></div>
+        </div>
+        <div class="card-box-module">
+          <div class="card-box-header"><h4>📋 أحدث الطلبات</h4></div>
+          ${renderOrdersTableHTML('ar', 4)}
+        </div>
+      `;
+    }
+
+    function renderOrdersTableHTML(lang, limit = 100) {
+      const list = appData.orders.slice(0, limit);
+      const isFr = lang === 'fr';
+
+      return `
+        <table class="table-modern">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>${isFr ? 'Client & Destinataire' : 'العميل'}</th>
+              <th>${isFr ? 'Détail Plats' : 'العناصر'}</th>
+              <th>${isFr ? 'Total' : 'المجموع'}</th>
+              <th>${isFr ? 'Statut' : 'الحالة'}</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(o => `
+              <tr>
+                <td style="font-weight:800; color:var(--text-main);">${o.id}</td>
+                <td>
+                  <strong>${isFr ? o.customer_fr : o.customer_ar}</strong>
+                  ${o.isForSomeoneElse ? `<div style="color:#D97706; font-weight:700; font-size:10px;">🎁 Pour : ${o.recipientName} (${o.recipientPhone})</div>` : ''}
+                </td>
+                <td style="font-size:11px;">
+                  ${isFr ? o.items_fr : o.items_ar}
+                </td>
+                <td style="font-weight:800; color:var(--primary-accent);">${o.total} ${isFr ? 'DA' : 'د.ج'}</td>
+                <td><span class="badge-status badge-${o.status}"><span class="dot"></span>${isFr ? o.status_fr : o.status_ar}</span></td>
+                <td>
+                  <div style="display:flex; gap:4px;">
+                    <button class="btn-action-sm btn-action-receipt" onclick="showReceiptModal('${o.id}')">🧾 Reçu</button>
+                    ${o.status === 'pending' ? `<button class="btn-action-sm btn-action-call" onclick="confirmOrder('${o.id}', true)">✅ Valider</button>` : ''}
+                    ${o.status === 'preparing' ? `<button class="btn-action-sm btn-action-green" onclick="promptDriverAssignment('${o.id}')">🛵 Assigner</button>` : ''}
+                    ${o.status === 'out_for_delivery' ? `<button class="btn-action-sm btn-action-black" onclick="markOrderDelivered('${o.id}')">🎉 Livrée</button>` : ''}
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function showReceiptModal(orderId) {
+      const order = appData.orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      document.getElementById('receiptPaperContent').innerHTML = `
+        <div style="text-align:center; margin-bottom:8px;">
+          <strong style="font-size:13px;">THE ENGINEER BURGER</strong><br>
+          <span>${appData.restaurantConfig.address_fr}</span><br>
+          --------------------------------
+        </div>
+        <div>
+          <strong>COMMANDE : ${order.id}</strong><br>
+          Commandé par : ${order.customer_fr}<br>
+          ${order.isForSomeoneElse ? `<strong>DESTINATAIRE : ${order.recipientName}</strong><br>Tél : ${order.recipientPhone}<br>Adresse : ${order.recipientAddress}<br>` : `Adresse : ${order.address_fr}<br>`}
+          --------------------------------
+        </div>
+        <div style="margin:6px 0;">
+          ${(order.itemsList && order.itemsList.length > 0) ? order.itemsList.map(i => `
+            <div><strong>${i.quantity}x ${i.name_fr}</strong> (${i.price * i.quantity} DA)</div>
+            ${i.customizations ? `<div style="font-size:9px; color:#444;">↳ ${i.customizations}</div>` : ''}
+          `).join('') : order.items_fr}
+          --------------------------------
+        </div>
+        <div style="font-size:13px; font-weight:bold; display:flex; justify-content:space-between;">
+          <span>TOTAL :</span>
+          <span>${order.total} DA</span>
+        </div>
+      `;
+      openModal('modalReceiptView');
+    }
+
+    function openChangeCalculator(total) {
+      appData.currentCalcOrderAmount = total;
+      document.getElementById('calcOrderTotalVal').innerText = `${total.toLocaleString()} DA`;
+      document.getElementById('calcCashGivenInput').value = Math.ceil(total / 500) * 500 || 2000;
+      calculateChangeAmount();
+      openModal('modalDriverChangeCalc');
+    }
+
+    function calculateChangeAmount() {
+      const given = Number(document.getElementById('calcCashGivenInput').value) || 0;
+      const change = Math.max(0, given - appData.currentCalcOrderAmount);
+      document.getElementById('calcChangeResult').innerText = `${change.toLocaleString()} DA`;
+    }
+
+    function confirmOrder(orderId, isAvailable) {
+      ws.send(JSON.stringify({ type: 'CONFIRM_ORDER_AVAILABILITY', payload: { orderId, isAvailable } }));
+      showCartToast("✅ Commande validée en cuisine !");
+    }
+
+    function markOrderDelivered(orderId) {
+      ws.send(JSON.stringify({ type: 'MARK_DELIVERED', payload: { orderId } }));
+      showCustomAlert("Livraison Confirmée 🎉", `La commande #${orderId} a été marquée comme livrée avec succès.`, "✅");
+    }
+
+    function triggerClientSampleOrder() {
+      const sample = {
+        customer_fr: "Amine Bouzid",
+        phone: "05 54 88 77 66",
+        address_fr: "Hydra, Alger",
+        items_fr: "Double Engineer Burger (Plat #1) + Frites Maison",
+        itemsList: [
+          { name_fr: "Double Engineer Burger (Plat #1)", price: 950, quantity: 1, customizations: "Harissa: 12/15 MAX 🔥" },
+          { name_fr: "Frites Maison & Sauce Fromagère (Plat #2)", price: 350, quantity: 1, customizations: "Sauce fromagère dorée" }
+        ],
+        subtotal: 1300,
+        total: 1550
+      };
+      ws.send(JSON.stringify({ type: 'CREATE_ORDER', payload: sample }));
+      showCartToast("🚀 Nouvelle commande express envoyée en direct !");
+    }
+
+    function switchWorkspace(mode) {
+      const adminLayout = document.getElementById('adminDualLayout');
+      const liveLayout = document.getElementById('liveSuiteLayout');
+      const btnAdmin = document.getElementById('btn-mode-admin');
+      const btnSuite = document.getElementById('btn-mode-suite');
+
+      if (mode === 'admin') {
+        adminLayout.style.display = 'grid';
+        liveLayout.style.display = 'none';
+        btnAdmin.classList.add('active');
+        btnSuite.classList.remove('active');
+      } else {
+        adminLayout.style.display = 'none';
+        liveLayout.style.display = 'grid';
+        btnSuite.classList.add('active');
+        btnAdmin.classList.remove('active');
+      }
+    }
+
+    function toggleDualLanguage(val) {
+      const fr = document.getElementById('frAdminPanel');
+      const ar = document.getElementById('arAdminPanel');
+      const grid = document.getElementById('adminDualLayout');
+
+      if (val === 'dual') {
+        grid.style.gridTemplateColumns = '1fr 1fr';
+        fr.style.display = 'flex';
+        ar.style.display = 'flex';
+      } else if (val === 'fr') {
+        grid.style.gridTemplateColumns = '1fr';
+        fr.style.display = 'flex';
+        ar.style.display = 'none';
+      } else if (val === 'ar') {
+        grid.style.gridTemplateColumns = '1fr';
+        fr.style.display = 'none';
+        ar.style.display = 'flex';
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initWS();
+      switchClientTab('menu');
+      switchDriverTab('missions');
+    });
+  </script>
+</body>
+</html>
