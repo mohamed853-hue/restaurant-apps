@@ -89,7 +89,7 @@ export const Home: React.FC<HomeProps> = ({
                 <span><i className="bi bi-scooter text-primary fs-4"></i></span>
                 <div className="text-start">
                   <b>{isRTL ? 'توصيل سريع' : 'Livraison Express'}</b>
-                  <small>{isRTL ? 'الجزائر وضواحيها (20-30 د)' : 'Alger & Environs (20-30 min)'}</small>
+                  <small>{isRTL ? 'ورقلة وضواحيها (15-25 د)' : 'Ouargla & Environs (15-25 min)'}</small>
                 </div>
               </div>
 

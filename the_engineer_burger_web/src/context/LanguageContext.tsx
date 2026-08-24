@@ -26,16 +26,16 @@ export const translations = {
   freeDeliveryAnnounce: { fr: 'Livraison offerte dès 2500 DA | Utilisez WELCOME300 pour 300 DA offerts', ar: 'توصيل مجاني للطلبات فوق 2500 د.ج | استخدم كود WELCOME300 لخصم 300 د.ج' },
   
   // Hero
-  heroEyebrow: { fr: '🔥 LE NUMÉRO 1 DU SMASH BURGER À ALGER', ar: '🔥 الرقم 1 في السماش برجر في الجزائر العاصمة' },
+  heroEyebrow: { fr: '🔥 LE NUMÉRO 1 DU SMASH BURGER À OUARGLA', ar: '🔥 الرقم 1 في السماش برجر في ورقلة' },
   heroTitle1: { fr: 'L\'Ingénierie du', ar: 'هندسة' },
   heroTitle2: { fr: 'Vrai Burger Gourmet', ar: 'البرجر الفاخر الحقيقي' },
   heroDesc: {
-    fr: 'Découvrez nos smash burgers pur bœuf croustillants aux bords dorés, nos pains briochés toastés au beurre et nos sauces secrètes.',
-    ar: 'اكتشف أشهى برجر سماش بلحم بقري طازج 100%، خبز بريوش محمص بالزبدة وصلصات المهندس السرية الخاصة.'
+    fr: 'Découvrez nos smash burgers pur bœuf croustillants aux bords dorés, nos pains briochés toastés au beurre et nos sauces secrètes à Ouargla.',
+    ar: 'اكتشف أشهى برجر سماش بلحم بقري طازج 100%، خبز بريوش محمص بالزبدة وصلصات المهندس السرية الخاصة في ورقلة.'
   },
   orderNow: { fr: 'Commander Maintenant', ar: 'اطلب الآن' },
   viewFullMenu: { fr: 'Découvrir le Menu', ar: 'استكشف القائمة' },
-  servingsCount: { fr: '+12 500 burgers smash servis avec passion', ar: '+12,500 برجر تم تحضيرها بكل إتقان' },
+  servingsCount: { fr: '+12 500 burgers smash servis avec passion à Ouargla', ar: '+12,500 برجر تم تحضيرها بكل إتقان في ورقلة' },
 
   // Perks
   perk1Title: { fr: '100% Bœuf Frais', ar: 'لحم بقري طازج 100%' },
@@ -51,7 +51,7 @@ export const translations = {
   categoriesTitle: { fr: 'Nos Catégories', ar: 'أقسام القائمة' },
   categoriesDesc: { fr: 'Du smash burger gourmet aux desserts maison', ar: 'من السماش برجر الفاخر إلى التحليات اللذيذة' },
   bestsellersTitle: { fr: 'Nos Plats Phares ⭐', ar: 'الأطباق الأكثر طلباً ⭐' },
-  bestsellersDesc: { fr: 'Les favoris plébiscités par nos clients à Hydra & Alger', ar: 'المفضلة لدى زبائننا في حيدرة والجزائر' },
+  bestsellersDesc: { fr: 'Les favoris plébiscités par nos clients à Ouargla', ar: 'المفضلة لدى زبائننا في ورقلة' },
   allDishes: { fr: 'Tous les Plats', ar: 'جميع الأطباق' },
   vegOnly: { fr: 'Végétarien uniquement', ar: 'أطباق نباتية فقط' },
   searchPlaceholder: { fr: 'Rechercher burgers, smash, frites, sauces...', ar: 'ابحث عن برجر، سماش، بطاطا، صلصات...' },

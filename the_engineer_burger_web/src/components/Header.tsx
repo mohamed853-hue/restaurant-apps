@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   setSearchQuery
 }) => {
   const { user, unreadCount, notifications, markNotificationsAsRead, logout } = useAuth();
-  const { cartCount } = useCart();
+  const { cartCount, favorites } = useCart();
   const { language, setLanguage, t, isRTL } = useLanguage();
   const [showNotifs, setShowNotifs] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -325,6 +325,25 @@ export const Header: React.FC<HeaderProps> = ({
                   </button>
                 </li>
               )}
+
+              {/* Favorites Button in Navbar */}
+              <li className="nav-item">
+                <button
+                  className={`btn btn-sm rounded-pill px-3 fw-bold d-flex align-items-center gap-1 ${
+                    currentPage === 'favorites' ? 'btn-danger text-white' : 'btn-outline-danger'
+                  }`}
+                  onClick={() => setCurrentPage('favorites')}
+                  title="Mes Plats Favoris"
+                >
+                  <i className="bi bi-heart-fill text-danger text-white-hover"></i>
+                  <span>{t('favorites')}</span>
+                  {favorites.length > 0 && (
+                    <span className="badge rounded-pill bg-danger text-white ms-1">
+                      {favorites.length}
+                    </span>
+                  )}
+                </button>
+              </li>
 
               {/* Cart Button */}
               <li className="nav-item">

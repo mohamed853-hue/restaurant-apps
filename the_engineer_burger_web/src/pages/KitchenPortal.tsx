@@ -37,13 +37,7 @@ export const KitchenPortal: React.FC<KitchenPortalProps> = ({ setCurrentPage }) 
 
         <div className="d-flex align-items-center gap-2">
           <button
-            className="btn btn-outline-warning btn-sm rounded-pill px-3"
-            onClick={() => setCurrentPage('admin-dashboard')}
-          >
-            <i className="bi bi-speedometer2 me-1"></i> {isRTL ? 'لوحة التحكم الإدارية' : 'Vue Gérant Complète'}
-          </button>
-          <button
-            className="btn btn-warning btn-sm rounded-pill fw-bold px-3 text-dark"
+            className="btn btn-outline-light btn-sm rounded-pill px-3"
             onClick={() => setCurrentPage('home')}
           >
             <i className="bi bi-shop me-1"></i> {isRTL ? 'المتجر' : 'Boutique'}

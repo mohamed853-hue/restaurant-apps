@@ -224,7 +224,7 @@ CREATE POLICY "Accès public total settings" ON settings FOR ALL USING (true) WI
 INSERT INTO settings (setting_key, setting_value) VALUES
 ('restaurant_name', 'The Engineer Burger'),
 ('restaurant_phone', '+213 550 12 34 56'),
-('restaurant_address', '14 Boulevard Sidi Yahia, Hydra, Alger'),
+('restaurant_address', 'Boulevard 1er Novembre (En face Université), Centre-Ville, Ouargla'),
 ('currency', 'DA'),
 ('delivery_fee', '250'),
 ('tax_rate', '0'),
@@ -244,7 +244,7 @@ INSERT INTO users (id, name, email, password, phone, role) VALUES
 
 -- Adresse client démo
 INSERT INTO addresses (id, user_id, label, address_line, city, pincode, is_default) VALUES
-('40000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 'Maison', 'Résidence Les Palmiers, Hydra', 'Alger', '16035', true);
+('40000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 'Maison', 'Résidence En-Nasr, Centre-Ville', 'Ouargla', '30000', true);
 
 -- Catégories de Démonstration (UUIDs valides 10000000-0000-0000-0000-00000000000X)
 INSERT INTO categories (id, name, icon, image, sort_order) VALUES
@@ -275,9 +275,9 @@ INSERT INTO coupons (id, code, type, value, minimum_order, max_discount, valid_u
 
 -- Commandes Démo (UUIDs valides 30000000-0000-0000-0000-00000000000X)
 INSERT INTO orders (id, order_number, user_id, customer_name, customer_phone, delivery_address, subtotal, discount, delivery_fee, tax, total, payment_method, payment_status, status, estimated_minutes, created_at) VALUES
-('30000000-0000-0000-0000-000000000001', 'EB260801A1', '00000000-0000-0000-0000-000000000001', 'Amine Khelifi', '0550000001', 'Résidence Les Palmiers, Hydra, Alger', 2050, 300, 0, 0, 1750, 'baridimob', 'paid', 'delivered', 25, now() - INTERVAL '2 days'),
-('30000000-0000-0000-0000-000000000002', 'EB260824B2', '00000000-0000-0000-0000-000000000001', 'Amine Khelifi', '0550000001', 'Résidence Les Palmiers, Hydra, Alger', 1450, 0, 250, 0, 1700, 'cod', 'pending', 'preparing', 20, now() - INTERVAL '15 minutes'),
-('30000000-0000-0000-0000-000000000003', 'EB260824C3', NULL, 'Nadia Bensalem', '0661234567', '4 Boulevard Colonel Amirouche, Alger', 950, 0, 250, 0, 1200, 'cod', 'pending', 'confirmed', 25, now() - INTERVAL '5 minutes');
+('30000000-0000-0000-0000-000000000001', 'EB260801A1', '00000000-0000-0000-0000-000000000001', 'Amine Khelifi', '0550000001', 'Cité En-Nasr, Centre-Ville, Ouargla', 2050, 300, 0, 0, 1750, 'baridimob', 'paid', 'delivered', 25, now() - INTERVAL '2 days'),
+('30000000-0000-0000-0000-000000000002', 'EB260824B2', '00000000-0000-0000-0000-000000000001', 'Amine Khelifi', '0550000001', 'Cité En-Nasr, Centre-Ville, Ouargla', 1450, 0, 250, 0, 1700, 'cod', 'pending', 'preparing', 20, now() - INTERVAL '15 minutes'),
+('30000000-0000-0000-0000-000000000003', 'EB260824C3', NULL, 'Nadia Bensalem', '0661234567', 'Boulevard 1er Novembre, Ouargla', 950, 0, 250, 0, 1200, 'cod', 'pending', 'confirmed', 25, now() - INTERVAL '5 minutes');
 
 -- Articles des Commandes
 INSERT INTO order_items (order_id, menu_item_id, item_name, item_price, quantity) VALUES

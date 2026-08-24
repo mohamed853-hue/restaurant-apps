@@ -8,7 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const DEFAULT_SETTINGS = {
   restaurant_name: 'The Engineer Burger',
   restaurant_phone: '+213 550 12 34 56',
-  restaurant_address: '14 Boulevard Sidi Yahia, Hydra, Alger',
+  restaurant_address: 'Boulevard 1er Novembre (En face Université), Centre-Ville, Ouargla',
   currency: 'DA',
   delivery_fee: 250,
   tax_rate: 0,

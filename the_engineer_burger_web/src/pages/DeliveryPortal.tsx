@@ -28,7 +28,7 @@ export const DeliveryPortal: React.FC<DeliveryPortalProps> = ({ setCurrentPage }
               <h1 className="fs-5 fw-extrabold text-info mb-0">
                 {isRTL ? 'تطبيق رجل التوصيل (Sofiane)' : 'Espace Livreur (Sofiane Express)'}
               </h1>
-              <span className="badge bg-success px-2 py-1">En Ligne (Alger)</span>
+              <span className="badge bg-success px-2 py-1">En Ligne (Ouargla)</span>
             </div>
             <small className="text-secondary">
               {isRTL ? 'الطلبات الجاهزة للتوصيل :' : 'Courses à livrer :'} <strong>{deliveryOrders.length}</strong> · {isRTL ? 'المكتملة اليوم :' : 'Livrées aujourd\'hui :'} <strong>{deliveredToday.length}</strong>
@@ -38,13 +38,7 @@ export const DeliveryPortal: React.FC<DeliveryPortalProps> = ({ setCurrentPage }
 
         <div className="d-flex align-items-center gap-2">
           <button
-            className="btn btn-outline-info btn-sm rounded-pill px-3"
-            onClick={() => setCurrentPage('admin-dashboard')}
-          >
-            <i className="bi bi-speedometer2 me-1"></i> {isRTL ? 'لوحة التحكم' : 'Dashboard'}
-          </button>
-          <button
-            className="btn btn-warning btn-sm rounded-pill fw-bold px-3 text-dark"
+            className="btn btn-outline-light btn-sm rounded-pill px-3"
             onClick={() => setCurrentPage('home')}
           >
             <i className="bi bi-shop me-1"></i> {isRTL ? 'المتجر' : 'Boutique'}
