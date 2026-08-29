@@ -1,8 +1,11 @@
 {
+  "buildCommand": "cd the_engineer_burger_web && npm install && npm run build",
+  "outputDirectory": "the_engineer_burger_web/dist",
+  "framework": "vite",
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/the_engineer_burger_web/index.html"
+      "destination": "/index.html"
     }
   ]
 }

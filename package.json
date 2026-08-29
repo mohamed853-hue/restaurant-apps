@@ -1,0 +1,11 @@
+{
+  "name": "restaurant-apps",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix the_engineer_burger_web run dev",
+    "build": "npm --prefix the_engineer_burger_web install && npm --prefix the_engineer_burger_web run build",
+    "preview": "npm --prefix the_engineer_burger_web run preview"
+  }
+}
