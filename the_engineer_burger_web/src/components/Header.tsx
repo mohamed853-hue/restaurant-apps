@@ -24,24 +24,69 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      {/* Top Announcement Bar */}
-      <div className="announcement d-flex justify-content-between align-items-center px-3 py-1">
-        <div className="d-flex align-items-center gap-2 small">
-          <i className="bi bi-lightning-charge-fill text-warning"></i>
-          <span>{t('freeDeliveryAnnounce')}</span>
+      {/* 1. TOP CENTERED LUXURY GOLDEN BRAND BANNER */}
+      <div
+        className="top-brand-strip py-2 px-3 d-flex flex-wrap justify-content-between align-items-center position-relative"
+        style={{
+          background: 'linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e1b4b 100%)',
+          borderBottom: '2px solid #d97706',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.35)'
+        }}
+      >
+        {/* Left: Free delivery badge */}
+        <div className="d-none d-md-flex align-items-center gap-2 small text-warning fw-bold">
+          <span className="badge bg-warning text-dark fw-extrabold rounded-pill px-2 py-1">OUARGLA</span>
+          <span className="text-white small">🛵 {t('freeDeliveryAnnounce')}</span>
         </div>
 
-        {/* Clean Language Toggle on the top right */}
+        {/* CENTERED: THE ENGINEER BURGER LUXURY GOLDEN EMBLEM */}
+        <div
+          className="mx-auto text-center cursor-pointer my-1 my-md-0"
+          onClick={() => setCurrentPage('home')}
+          style={{ cursor: 'pointer' }}
+          title="Accueil The Engineer Burger"
+        >
+          <div
+            className="d-inline-flex align-items-center gap-2 px-3 px-md-4 py-1 rounded-pill"
+            style={{
+              background: 'rgba(15, 23, 42, 0.92)',
+              border: '1.5px solid rgba(245, 158, 11, 0.65)',
+              boxShadow: '0 0 25px rgba(245, 158, 11, 0.35), inset 0 0 12px rgba(245, 158, 11, 0.2)'
+            }}
+          >
+            <span style={{ fontSize: '20px', filter: 'drop-shadow(0 2px 6px rgba(245, 158, 11, 0.8))' }}>🍔</span>
+            <span
+              className="fw-extrabold fs-5 tracking-wider text-nowrap"
+              style={{
+                background: 'linear-gradient(135deg, #FFFBEB 0%, #FDE047 30%, #F59E0B 70%, #D97706 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                letterSpacing: '1.2px',
+                fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                filter: 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9))'
+              }}
+            >
+              THE ENGINEER BURGER
+            </span>
+            <span className="badge bg-warning text-dark fw-extrabold rounded-pill px-2" style={{ fontSize: '9px', letterSpacing: '0.5px' }}>
+              PRO
+            </span>
+          </div>
+        </div>
+
+        {/* Right: Language switchers */}
         <div className="d-flex align-items-center gap-1">
           <button
-            className={`btn btn-xs px-2 py-0 rounded-pill ${language === 'fr' ? 'btn-light text-dark fw-bold' : 'btn-outline-light'}`}
+            className={`btn btn-xs px-2 py-0 rounded-pill ${language === 'fr' ? 'btn-warning text-dark fw-extrabold' : 'btn-outline-light text-white'}`}
             style={{ fontSize: '11px' }}
             onClick={() => setLanguage('fr')}
           >
             🇫🇷 FR
           </button>
           <button
-            className={`btn btn-xs px-2 py-0 rounded-pill ${language === 'ar' ? 'btn-warning text-dark fw-bold' : 'btn-outline-light'}`}
+            className={`btn btn-xs px-2 py-0 rounded-pill ${language === 'ar' ? 'btn-warning text-dark fw-extrabold' : 'btn-outline-light text-white'}`}
             style={{ fontSize: '11px', fontFamily: 'Cairo, sans-serif' }}
             onClick={() => setLanguage('ar')}
           >
@@ -64,27 +109,37 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <span
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, #f4511e, #d83a0a)',
+                width: '38px',
+                height: '38px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
+                border: '1.5px solid #f59e0b',
                 color: '#fff',
                 display: 'grid',
                 placeItems: 'center',
-                boxShadow: '0 6px 16px rgba(244,81,30,.28)',
-                fontSize: '18px'
+                boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)',
+                fontSize: '19px'
               }}
             >
               🍔
             </span>
-            <span
-              className="fw-extrabold fs-5 text-nowrap d-flex align-items-center gap-1"
-              style={{ letterSpacing: '-0.3px', fontWeight: 900 }}
-            >
-              <span style={{ color: '#ea580c' }}>THE</span>
-              <span style={{ color: '#111827' }}>ENGINEER</span>
-              <span style={{ color: '#d97706' }}>BURGER</span>
-            </span>
+            <div className="d-flex flex-column">
+              <span
+                className="fw-extrabold fs-5 text-nowrap"
+                style={{
+                  letterSpacing: '0.5px',
+                  fontWeight: 900,
+                  background: 'linear-gradient(135deg, #0f172a 0%, #d97706 60%, #b45309 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}
+              >
+                THE ENGINEER BURGER
+              </span>
+              <small className="text-muted fw-bold" style={{ fontSize: '9px', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '-4px' }}>
+                Ouargla · ورقلة
+              </small>
+            </div>
           </a>
 
           {/* Mobile Toggler */}
