@@ -9,7 +9,7 @@ interface OrderTrackerProps {
 }
 
 export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPage }) => {
-  const { currency, orders } = useCart();
+  const { currency, orders, favoriteDrivers, toggleFavoriteDriver, rateDriver } = useCart();
   const { isRTL } = useLanguage();
   const currentOrder = orders.find((o) => o.id === order?.id) || order || orders[0];
 
@@ -217,18 +217,88 @@ export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPag
                 </div>
               </div>
 
-              {/* Rider Contact Card */}
-              <div className="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 mt-3">
-                <div className="d-flex align-items-center gap-3">
-                  <div className="customer-avatar rounded-circle">🛵</div>
-                  <div>
-                    <b className="d-block small">Sofiane (Livreur Dédié)</b>
-                    <small className="text-muted">Moto Yamaha 125 · Ouargla Express Delivery</small>
+              {/* Rider Contact & Rating Card */}
+              <div className="card p-3 bg-light rounded-4 border-0 mt-3 shadow-sm">
+                <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                  <div className="d-flex align-items-center gap-3">
+                    <div
+                      style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+                        color: '#fff',
+                        display: 'grid',
+                        placeItems: 'center',
+                        fontSize: '20px'
+                      }}
+                    >
+                      🛵
+                    </div>
+                    <div>
+                      <div className="d-flex align-items-center gap-2">
+                        <b className="d-block small text-dark">Sofiane (Votre Livreur Dédié)</b>
+                        {favoriteDrivers.includes('00000000-0000-0000-0000-000000000004') && (
+                          <span className="badge bg-danger rounded-pill" style={{ fontSize: '9px' }}>
+                            ❤️ Livreur Favori
+                          </span>
+                        )}
+                      </div>
+                      <small className="text-muted">⭐ 4.9 · Moto Yamaha 125 · Ouargla Express</small>
+                    </div>
+                  </div>
+
+                  <div className="d-flex gap-2">
+                    <button
+                      className={`btn btn-sm rounded-pill px-3 fw-bold ${
+                        favoriteDrivers.includes('00000000-0000-0000-0000-000000000004')
+                          ? 'btn-danger text-white'
+                          : 'btn-outline-danger'
+                      }`}
+                      onClick={() => toggleFavoriteDriver('00000000-0000-0000-0000-000000000004')}
+                      title="Enregistrer ce livreur pour vos prochaines commandes"
+                    >
+                      <i className="bi bi-heart-fill me-1"></i>
+                      {favoriteDrivers.includes('00000000-0000-0000-0000-000000000004') ? 'Favori' : 'Ajouter aux favoris'}
+                    </button>
+                    <a
+                      href="https://wa.me/213550000004?text=Bonjour%20Sofiane%20!%20Je%20vous%20contacte%20concernant%20ma%20commande%20The%20Engineer%20Burger"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn-success btn-sm rounded-pill px-3 fw-bold"
+                    >
+                      <i className="bi bi-whatsapp me-1"></i> WhatsApp
+                    </a>
                   </div>
                 </div>
-                <a href="tel:0550123456" className="btn btn-outline-dark btn-sm rounded-pill px-3 fw-bold">
-                  <i className="bi bi-telephone-fill me-1"></i> {isRTL ? 'اتصال' : 'Appeler'}
-                </a>
+
+                {/* Rating section if delivered */}
+                {currentOrder.status === 'delivered' && (
+                  <div className="pt-3 border-top border-secondary border-opacity-25">
+                    <small className="fw-bold d-block mb-2 text-dark">
+                      ⭐ Notez l'expérience avec votre livreur :
+                    </small>
+                    <div className="d-flex align-items-center gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          className="btn btn-sm p-0 fs-5 border-0 bg-transparent"
+                          onClick={() => rateDriver(currentOrder.id, star, 'Livraison impeccable et soignée')}
+                          title={`${star} étoiles`}
+                        >
+                          <span className={(currentOrder.driver_rating || 5) >= star ? 'text-warning' : 'text-muted'}>
+                            ★
+                          </span>
+                        </button>
+                      ))}
+                      <span className="small text-muted ms-2">
+                        {currentOrder.driver_rating
+                          ? `Noté ${currentOrder.driver_rating}/5 ⭐`
+                          : 'Cliquez sur une étoile pour noter'}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -112,6 +112,8 @@ export const translations = {
   tabDelivery: { fr: 'File Livraison', ar: 'طلبات التوصيل' },
   tabMenu: { fr: 'Gestion du Menu', ar: 'إدارة الوجبات' },
   tabCoupons: { fr: 'Codes Promo', ar: 'أكواد الخصم' },
+  tabStaff: { fr: 'Équipe & Staff', ar: 'طاقم العمل والموظفين' },
+  tabCashSettlement: { fr: 'Caisse & Livreurs', ar: 'صندوق التسليم والسائقين' },
   tabSettings: { fr: 'Paramètres Restaurant', ar: 'إعدادات المطعم' },
   startCooking: { fr: 'Lancer la Cuisson (Grill)', ar: 'بدء الشواء والتحضير' },
   markReady: { fr: 'Marquer Prêt pour Livraison', ar: 'تحديد كـ جاهز للتوصيل' },
@@ -119,7 +121,16 @@ export const translations = {
   markDelivered: { fr: 'Marquer comme Livré', ar: 'تحديد كـ تم التوصيل' },
   revenueToday: { fr: 'Chiffre d\'Affaires', ar: 'إجمالي المبيعات' },
   activeKitchen: { fr: 'En Cuisine', ar: 'في المطبخ حالياً' },
-  exportCsvBtn: { fr: 'Exporter en CSV', ar: 'تصدير كملف CSV' }
+  exportCsvBtn: { fr: 'Exporter en CSV', ar: 'تصدير كملف CSV' },
+  
+  // Users & Stock & Additional Translations
+  tabUsers: { fr: 'Utilisateurs & Clients', ar: 'الزبائن والمستخدمين' },
+  orderHistory: { fr: 'Historique des Commandes', ar: 'سجل الطلبات' },
+  available: { fr: 'Disponible', ar: 'متوفر' },
+  outOfStock: { fr: 'Épuisé (Rupture)', ar: 'نفدت الكمية' },
+  confirmAssign: { fr: 'Assigner au Livreur', ar: 'إسناد لرجل التوصيل' },
+  orderSuccessThankYou: { fr: 'Merci pour votre commande !', ar: 'شكراً لطلبكم من برجر المهندس !' },
+  orderSuccessDesc: { fr: 'Votre repas est préparé avec des ingrédients frais du jour.', ar: 'وجبتكم تُحضر بمكونات طازجة يومياً بكل إتقان.' }
 };
 
 interface LanguageContextType {

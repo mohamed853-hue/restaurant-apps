@@ -21,7 +21,7 @@ export const Menu: React.FC<MenuProps> = ({
   setSelectedDish,
   setCurrentPage
 }) => {
-  const { menuItems } = useCart();
+  const { menuItems, categories } = useCart();
   const [onlyVeg, setOnlyVeg] = useState(false);
   const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'rating'>('default');
 
@@ -30,7 +30,9 @@ export const Menu: React.FC<MenuProps> = ({
     const matchesSearch =
       !searchQuery ||
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+      (item.name_ar && item.name_ar.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description_ar && item.description_ar.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesVeg = !onlyVeg || item.is_veg;
     return matchesCat && matchesSearch && matchesVeg;
   });
@@ -65,7 +67,7 @@ export const Menu: React.FC<MenuProps> = ({
             >
               Tous les Plats ({menuItems.length})
             </button>
-            {INITIAL_CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.id}
                 className={`btn btn-sm rounded-pill px-3 fw-bold text-nowrap ${selectedCategory === cat.id ? 'btn-dark' : 'btn-outline-secondary'}`}

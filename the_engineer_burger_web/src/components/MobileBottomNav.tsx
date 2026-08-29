@@ -13,8 +13,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   setCurrentPage
 }) => {
   const { user } = useAuth();
-  const { cartCount, favorites } = useCart();
+  const { cartCount, favorites, orders } = useCart();
   const { isRTL } = useLanguage();
+
+  const activeOrdersCount = orders.filter(
+    (o) => (!user || o.user_id === user.id || (user?.phone && o.customer_phone === user.phone)) &&
+      o.status !== 'delivered' &&
+      o.status !== 'cancelled'
+  ).length;
 
   return (
     <nav className="mobile-app-bottom-nav d-lg-none fixed-bottom bg-white border-top shadow-lg">
@@ -62,28 +68,49 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           <span style={{ fontSize: '10px' }}>{isRTL ? 'السلة' : 'Panier'}</span>
         </button>
 
-        {/* 4. Favorites */}
+        {/* 4. Mes Commandes (Realtime tracking) */}
         <button
           className={`btn btn-link text-decoration-none d-flex flex-column align-items-center p-1 ${
-            currentPage === 'favorites' ? 'text-primary fw-bold active-nav-item' : 'text-secondary'
+            currentPage === 'orders' ? 'text-warning fw-bold active-nav-item' : 'text-secondary'
+          }`}
+          onClick={() => setCurrentPage('orders')}
+        >
+          <div className="position-relative">
+            <i className={`bi ${currentPage === 'orders' ? 'bi-receipt-cutoff text-warning' : 'bi-receipt'} fs-5`}></i>
+            {activeOrdersCount > 0 && (
+              <span
+                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark fw-bold"
+                style={{ fontSize: '8px', padding: '2px 4px' }}
+              >
+                {activeOrdersCount}
+              </span>
+            )}
+          </div>
+          <span style={{ fontSize: '10px' }}>{isRTL ? 'طلباتي' : 'Commandes'}</span>
+        </button>
+
+        {/* 5. Favorites */}
+        <button
+          className={`btn btn-link text-decoration-none d-flex flex-column align-items-center p-1 ${
+            currentPage === 'favorites' ? 'text-danger fw-bold active-nav-item' : 'text-secondary'
           }`}
           onClick={() => setCurrentPage('favorites')}
         >
           <div className="position-relative">
-            <i className={`bi ${currentPage === 'favorites' ? 'bi-heart-fill text-danger' : 'bi-heart'} fs-5`}></i>
-            {favorites.length > 0 && (
-              <span
-                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
-                style={{ fontSize: '8px', padding: '2px 4px' }}
-              >
-                {favorites.length}
-              </span>
-            )}
+            <i className={`bi ${favorites.length > 0 ? 'bi-heart-fill text-danger' : 'bi-heart'} fs-5`}></i>
+            <span
+              className={`position-absolute top-0 start-100 translate-middle badge rounded-pill ${
+                favorites.length > 0 ? 'bg-danger text-white' : 'bg-secondary bg-opacity-25 text-dark'
+              }`}
+              style={{ fontSize: '8px', padding: '2px 4px' }}
+            >
+              {favorites.length}
+            </span>
           </div>
           <span style={{ fontSize: '10px' }}>{isRTL ? 'المفضلة' : 'Favoris'}</span>
         </button>
 
-        {/* 5. Profile / Login */}
+        {/* 6. Profile / Login */}
         <button
           className={`btn btn-link text-decoration-none d-flex flex-column align-items-center p-1 ${
             currentPage === 'customer-dashboard' || currentPage === 'login' || currentPage === 'register'

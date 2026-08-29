@@ -37,10 +37,11 @@ export const KitchenPortal: React.FC<KitchenPortalProps> = ({ setCurrentPage }) 
 
         <div className="d-flex align-items-center gap-2">
           <button
-            className="btn btn-outline-light btn-sm rounded-pill px-3"
-            onClick={() => setCurrentPage('home')}
+            className="btn btn-outline-warning btn-sm rounded-pill px-3"
+            onClick={() => window.location.reload()}
+            title="Rafraîchir les commandes cuisine"
           >
-            <i className="bi bi-shop me-1"></i> {isRTL ? 'المتجر' : 'Boutique'}
+            <i className="bi bi-arrow-clockwise me-1"></i> {isRTL ? 'تحديث' : 'Actualiser'}
           </button>
         </div>
       </div>

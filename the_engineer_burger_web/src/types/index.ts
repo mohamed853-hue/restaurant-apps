@@ -5,9 +5,13 @@ export interface User {
   name: string;
   email: string;
   phone?: string;
+  address?: string;
   role: UserRole;
   avatar?: string;
   status?: string;
+  password?: string;
+  orders_count?: number;
+  total_spent?: number;
   created_at?: string;
 }
 
@@ -34,8 +38,10 @@ export interface MenuItem {
   id: string;
   category_id: string;
   name: string;
+  name_ar?: string;
   slug: string;
   description: string;
+  description_ar?: string;
   price: number;
   compare_price?: number;
   image: string;
@@ -97,6 +103,14 @@ export interface Order {
   status: OrderStatus;
   notes?: string;
   delivery_user_id?: string;
+  assigned_driver_name?: string;
+  driver_cash_collected?: boolean;
+  admin_cash_settled?: boolean;
+  settled_at?: string;
+  driver_notes?: string;
+  cancel_reason?: string;
+  driver_rating?: number;
+  driver_review?: string;
   estimated_minutes: number;
   items?: OrderItem[];
   created_at: string;
@@ -117,6 +131,18 @@ export interface Review {
   status?: number;
   created_at: string;
   user?: User;
+}
+
+export interface DriverProfile {
+  id: string;
+  name: string;
+  phone: string;
+  vehicle: string;
+  rating: number;
+  total_deliveries: number;
+  is_online: boolean;
+  cash_in_hand: number;
+  preferred_customers: string[]; // customer phone or names
 }
 
 export interface Notification {

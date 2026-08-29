@@ -17,7 +17,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
 
   const [newLabel, setNewLabel] = useState('Maison');
   const [newAddressLine, setNewAddressLine] = useState('');
-  const [newCity, setNewCity] = useState('Alger');
+  const [newCity, setNewCity] = useState('Ouargla');
   const [showAddAddress, setShowAddAddress] = useState(false);
 
   const userOrders = orders.filter((o) => !o.user_id || o.user_id === user?.id);
@@ -29,7 +29,7 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
       label: newLabel,
       address_line: newAddressLine,
       city: newCity,
-      pincode: '16000',
+      pincode: '30000',
       is_default: addresses.length === 0
     });
     setNewAddressLine('');
@@ -228,6 +228,29 @@ export const CustomerDashboard: React.FC<CustomerDashboardProps> = ({
                     </button>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Favorite Drivers Card */}
+            <div className="card border-0 p-4 rounded-4 shadow-sm bg-white mt-4">
+              <h3 className="fs-5 fw-bold mb-1">❤️ Mes Livreurs Préférés</h3>
+              <small className="text-muted d-block mb-3">Livreurs ayant reçu vos 5 étoiles</small>
+              <div className="p-3 rounded-3 bg-light border d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center gap-2">
+                  <span className="fs-4">🛵</span>
+                  <div>
+                    <b className="d-block small text-dark">Sofiane Livreur (Moto)</b>
+                    <span className="text-warning small">⭐⭐⭐⭐⭐ · 4.9</span>
+                  </div>
+                </div>
+                <a
+                  href="https://wa.me/213550000004"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-sm btn-success rounded-pill px-3"
+                >
+                  <i className="bi bi-whatsapp"></i>
+                </a>
               </div>
             </div>
           </div>

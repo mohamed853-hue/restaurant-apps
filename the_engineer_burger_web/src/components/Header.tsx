@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   setSearchQuery
 }) => {
   const { user, unreadCount, notifications, markNotificationsAsRead, logout } = useAuth();
-  const { cartCount, favorites } = useCart();
+  const { cartCount, favorites, orders } = useCart();
   const { language, setLanguage, t, isRTL } = useLanguage();
   const [showNotifs, setShowNotifs] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -77,8 +77,13 @@ export const Header: React.FC<HeaderProps> = ({
             >
               🍔
             </span>
-            <span className="fw-extrabold fs-5" style={{ letterSpacing: '-0.5px' }}>
-              {t('brandName')}
+            <span
+              className="fw-extrabold fs-5 text-nowrap d-flex align-items-center gap-1"
+              style={{ letterSpacing: '-0.3px', fontWeight: 900 }}
+            >
+              <span style={{ color: '#ea580c' }}>THE</span>
+              <span style={{ color: '#111827' }}>ENGINEER</span>
+              <span style={{ color: '#d97706' }}>BURGER</span>
             </span>
           </a>
 
@@ -326,22 +331,48 @@ export const Header: React.FC<HeaderProps> = ({
                 </li>
               )}
 
+              {/* My Orders Button in Navbar */}
+              <li className="nav-item">
+                <button
+                  className={`btn btn-sm rounded-pill px-3 py-1 fw-bold d-flex align-items-center gap-2 border shadow-sm ${
+                    currentPage === 'orders'
+                      ? 'btn-primary text-white border-primary shadow'
+                      : 'btn-light text-dark bg-white'
+                  }`}
+                  onClick={() => setCurrentPage('orders')}
+                  title="Mes Commandes & Suivi en Direct"
+                  style={{ fontSize: '13px' }}
+                >
+                  <i className="bi bi-receipt text-warning"></i>
+                  <span>{isRTL ? 'طلباتي' : 'Mes Commandes'}</span>
+                  {orders.filter((o) => (!user || o.user_id === user.id || (user?.phone && o.customer_phone === user.phone)) && o.status !== 'delivered' && o.status !== 'cancelled').length > 0 && (
+                    <span className="badge rounded-pill bg-warning text-dark fw-bold" style={{ fontSize: '10px' }}>
+                      {orders.filter((o) => (!user || o.user_id === user.id || (user?.phone && o.customer_phone === user.phone)) && o.status !== 'delivered' && o.status !== 'cancelled').length}
+                    </span>
+                  )}
+                </button>
+              </li>
+
               {/* Favorites Button in Navbar */}
               <li className="nav-item">
                 <button
-                  className={`btn btn-sm rounded-pill px-3 fw-bold d-flex align-items-center gap-1 ${
-                    currentPage === 'favorites' ? 'btn-danger text-white' : 'btn-outline-danger'
+                  className={`btn btn-sm rounded-pill px-3 py-1 fw-bold d-flex align-items-center gap-2 border shadow-sm ${
+                    currentPage === 'favorites'
+                      ? 'btn-danger text-white border-danger'
+                      : 'btn-light text-dark bg-white'
                   }`}
                   onClick={() => setCurrentPage('favorites')}
                   title="Mes Plats Favoris"
+                  style={{ fontSize: '13px' }}
                 >
-                  <i className="bi bi-heart-fill text-danger text-white-hover"></i>
+                  <i className={`bi ${favorites.length > 0 ? 'bi-heart-fill text-danger' : 'bi-heart text-muted'}`}></i>
                   <span>{t('favorites')}</span>
-                  {favorites.length > 0 && (
-                    <span className="badge rounded-pill bg-danger text-white ms-1">
-                      {favorites.length}
-                    </span>
-                  )}
+                  <span
+                    className={`badge rounded-pill ${favorites.length > 0 ? 'bg-danger text-white' : 'bg-light text-dark border'}`}
+                    style={{ fontSize: '10px' }}
+                  >
+                    {favorites.length}
+                  </span>
                 </button>
               </li>
 

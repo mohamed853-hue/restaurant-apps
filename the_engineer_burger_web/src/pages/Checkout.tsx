@@ -15,14 +15,35 @@ export const Checkout: React.FC<CheckoutProps> = ({ setCurrentPage, setLastOrder
 
   const [orderType, setOrderType] = useState<OrderType>('delivery');
   const [customerName, setCustomerName] = useState(user?.name || '');
-  const [customerPhone, setCustomerPhone] = useState(user?.phone || '0550123456');
+  const [customerPhone, setCustomerPhone] = useState(user?.phone || '');
   const [selectedAddressId, setSelectedAddressId] = useState(addresses[0]?.id || '');
   const [customAddress, setCustomAddress] = useState(
-    addresses[0] ? `${addresses[0].address_line}, ${addresses[0].city}` : '14 Boulevard Sidi Yahia, Hydra, Alger'
+    addresses[0] ? `${addresses[0].address_line}, ${addresses[0].city}` : 'Boulevard 1er Novembre, Centre-Ville, Ouargla'
   );
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cod');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [gpsLoading, setGpsLoading] = useState(false);
+
+  const handleDetectLocation = () => {
+    if (navigator.geolocation) {
+      setGpsLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setGpsLoading(false);
+          const coords = `Ouargla (GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)})`;
+          setCustomAddress(coords);
+        },
+        (err) => {
+          setGpsLoading(false);
+          console.warn('Geolocation error', err);
+          setCustomAddress('Centre-Ville, Ouargla');
+        }
+      );
+    } else {
+      setCustomAddress('Centre-Ville, Ouargla');
+    }
+  };
 
   const finalDeliveryFee = orderType === 'delivery' ? deliveryFee : 0;
   const finalTotal = orderType === 'delivery' ? total : total - deliveryFee;
@@ -38,7 +59,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ setCurrentPage, setLastOrder
     const orderData: Partial<Order> = {
       customer_name: customerName,
       customer_phone: customerPhone,
-      delivery_address: orderType === 'delivery' ? customAddress : 'Retrait Restaurant (Hydra)',
+      delivery_address: orderType === 'delivery' ? customAddress : 'Retrait Restaurant (Centre-Ville Ouargla)',
       order_type: orderType,
       payment_method: paymentMethod,
       notes
@@ -109,7 +130,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ setCurrentPage, setLastOrder
                     >
                       <i className="bi bi-shop fs-3 text-primary mb-2"></i>
                       <b className="d-block">À Emporter / Retrait</b>
-                      <small className="text-muted">Au comptoir à Hydra</small>
+                      <small className="text-muted">Au comptoir à Ouargla</small>
                     </div>
                   </div>
                 </div>
@@ -146,7 +167,18 @@ export const Checkout: React.FC<CheckoutProps> = ({ setCurrentPage, setLastOrder
 
                   {orderType === 'delivery' && (
                     <div className="col-12">
-                      <label className="form-label small fw-bold">Adresse de Livraison Complète *</label>
+                      <div className="d-flex justify-content-between align-items-center mb-1">
+                        <label className="form-label small fw-bold mb-0">Adresse de Livraison Complète (Ouargla) *</label>
+                        <button
+                          type="button"
+                          className="btn btn-link p-0 text-primary small text-decoration-none fw-bold d-flex align-items-center gap-1"
+                          style={{ fontSize: '11px' }}
+                          onClick={handleDetectLocation}
+                        >
+                          <i className="bi bi-crosshair text-danger"></i>
+                          <span>{gpsLoading ? 'Localisation...' : '📍 Détecter Position GPS'}</span>
+                        </button>
+                      </div>
                       {addresses.length > 0 && (
                         <div className="d-flex gap-2 mb-2">
                           {addresses.map((a) => (
@@ -167,7 +199,7 @@ export const Checkout: React.FC<CheckoutProps> = ({ setCurrentPage, setLastOrder
                       <textarea
                         className="form-control"
                         rows={2}
-                        placeholder="Rue, Bâtiment, Étage, Numéro d'appartement, Quartier..."
+                        placeholder="Quartier, Bâtiment, Numéro, Repère à Ouargla..."
                         value={customAddress}
                         onChange={(e) => setCustomAddress(e.target.value)}
                         required

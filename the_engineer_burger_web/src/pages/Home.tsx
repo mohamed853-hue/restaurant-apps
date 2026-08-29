@@ -16,7 +16,7 @@ export const Home: React.FC<HomeProps> = ({
   setSelectedCategory,
   setSelectedDish
 }) => {
-  const { menuItems, currency } = useCart();
+  const { menuItems, categories, currency } = useCart();
   const { t, isRTL } = useLanguage();
   const bestsellers = menuItems.filter((m) => m.is_bestseller || m.is_featured).slice(0, 4);
 
@@ -159,7 +159,7 @@ export const Home: React.FC<HomeProps> = ({
           </div>
 
           <div className="row g-3">
-            {INITIAL_CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <div key={cat.id} className="col-6 col-md-4 col-lg-2">
                 <div
                   className="category-card card h-100 p-2 text-center border-0 shadow-sm"

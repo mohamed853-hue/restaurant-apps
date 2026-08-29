@@ -3,6 +3,7 @@ import { MenuItem, Review } from '../types';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface DishDetailProps {
   dish: MenuItem | null;
@@ -24,6 +25,10 @@ export const DishDetail: React.FC<DishDetailProps> = ({ dish, setCurrentPage }) 
   const { addToCart, toggleFavorite, isFavorite, currency } = useCart();
   const { user } = useAuth();
   const { addToast } = useToast();
+  const { isRTL, t } = useLanguage();
+
+  const displayName = isRTL && dish.name_ar ? dish.name_ar : dish.name;
+  const displayDesc = isRTL && dish.description_ar ? dish.description_ar : dish.description;
 
   const [quantity, setQuantity] = useState(1);
   const [instructions, setInstructions] = useState('');
@@ -110,8 +115,8 @@ export const DishDetail: React.FC<DishDetailProps> = ({ dish, setCurrentPage }) 
               </div>
             </div>
 
-            <h1 className="display-5 fw-extrabold mb-3">{dish.name}</h1>
-            <p className="lead text-muted fs-6 mb-4">{dish.description}</p>
+            <h1 className="display-5 fw-extrabold mb-3">{displayName}</h1>
+            <p className="lead text-muted fs-6 mb-4">{displayDesc}</p>
 
             {/* Dish Meta Notes */}
             <div className="detail-notes d-flex gap-4 py-3 border-top border-bottom mb-4">

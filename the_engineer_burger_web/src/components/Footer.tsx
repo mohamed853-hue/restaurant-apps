@@ -30,14 +30,14 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentPage }) => {
               <span>{settings.restaurant_name}</span>
             </div>
             <p className="text-secondary" style={{ fontSize: '13px', lineHeight: '1.7' }}>
-              L'art de l'ingénierie culinaire & smash burgers d'exception à Alger. Viande fraîche 100% pur bœuf,
+              L'art de l'ingénierie culinaire & smash burgers d'exception à Ouargla. Viande fraîche 100% pur bœuf,
               pain brioché artisanal toasté au beurre, sauces gourmet secrètes et frites dorées coupées main.
             </p>
             <div className="socials mt-3 d-flex gap-2">
-              <a href={settings.instagram_url || 'https://instagram.com'} target="_blank" rel="noreferrer" className="social-icon" title="Instagram"><i className="bi bi-instagram"></i></a>
-              <a href={settings.facebook_url || 'https://facebook.com'} target="_blank" rel="noreferrer" className="social-icon" title="Facebook"><i className="bi bi-facebook"></i></a>
-              <a href={settings.tiktok_url || 'https://tiktok.com'} target="_blank" rel="noreferrer" className="social-icon" title="TikTok"><i className="bi bi-tiktok"></i></a>
-              <a href={`https://wa.me/${(settings.whatsapp_number || '213550123456').replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="social-icon" title="WhatsApp"><i className="bi bi-whatsapp"></i></a>
+              <a href={String(settings.instagram_url || 'https://instagram.com')} target="_blank" rel="noreferrer" className="social-icon" title="Instagram"><i className="bi bi-instagram"></i></a>
+              <a href={String(settings.facebook_url || 'https://facebook.com')} target="_blank" rel="noreferrer" className="social-icon" title="Facebook"><i className="bi bi-facebook"></i></a>
+              <a href={String(settings.tiktok_url || 'https://tiktok.com')} target="_blank" rel="noreferrer" className="social-icon" title="TikTok"><i className="bi bi-tiktok"></i></a>
+              <a href={`https://wa.me/${String(settings.whatsapp_number || '213550123456').replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="social-icon" title="WhatsApp"><i className="bi bi-whatsapp"></i></a>
             </div>
           </div>
 
@@ -82,7 +82,6 @@ export const Footer: React.FC<FooterProps> = ({ setCurrentPage }) => {
           <div className="d-flex gap-3">
             <a href="#" className="text-secondary text-decoration-none">Conditions de Vente</a>
             <a href="#" className="text-secondary text-decoration-none">Confidentialité</a>
-            <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('admin-dashboard'); }} className="text-primary text-decoration-none fw-bold">Espace Staff & Admin</a>
           </div>
         </div>
       </div>

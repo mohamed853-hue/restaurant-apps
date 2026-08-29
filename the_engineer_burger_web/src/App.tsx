@@ -15,6 +15,7 @@ import { Checkout } from './pages/Checkout';
 import { OrderSuccess } from './pages/OrderSuccess';
 import { OrderTracker } from './pages/OrderTracker';
 import { CustomerDashboard } from './pages/CustomerDashboard';
+import { MyOrders } from './pages/MyOrders';
 import { Favorites } from './pages/Favorites';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
@@ -25,22 +26,79 @@ import { MenuItem, Order } from './types';
 import './styles/style.css';
 import './styles/custom-theme.css';
 
+const resolvePageFromLocation = (): string => {
+  const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+  const search = new URLSearchParams(window.location.search);
+  const portal = search.get('portal')?.toLowerCase() || search.get('role')?.toLowerCase() || search.get('page')?.toLowerCase();
+
+  if (portal === 'admin' || path.startsWith('/admin') || hash.includes('admin')) return 'admin-dashboard';
+  if (portal === 'delivery' || portal === 'livreur' || path.startsWith('/delivery') || path.startsWith('/livreur') || hash.includes('delivery') || hash.includes('livreur')) return 'delivery-portal';
+  if (portal === 'kitchen' || portal === 'cuisine' || path.startsWith('/kitchen') || path.startsWith('/cuisine') || hash.includes('kitchen') || hash.includes('cuisine')) return 'kitchen-portal';
+  if (path.startsWith('/menu') || hash.includes('menu')) return 'menu';
+  if (path.startsWith('/cart') || hash.includes('cart') || path.startsWith('/panier')) return 'cart';
+  if (path.startsWith('/checkout') || hash.includes('checkout')) return 'checkout';
+  if (path.startsWith('/track') || hash.includes('track')) return 'track';
+  if (path.startsWith('/favorites') || hash.includes('favorites')) return 'favorites';
+  if (path.startsWith('/orders') || hash.includes('orders') || path.startsWith('/commandes')) return 'orders';
+  if (path.startsWith('/customer-dashboard') || path.startsWith('/profile') || hash.includes('profile')) return 'customer-dashboard';
+  if (path.startsWith('/login') || hash.includes('login')) return 'login';
+  if (path.startsWith('/register') || hash.includes('register')) return 'register';
+  return 'home';
+};
+
+const pageToPathMap: Record<string, string> = {
+  'home': '/',
+  'menu': '/menu',
+  'dish-detail': '/menu',
+  'cart': '/cart',
+  'checkout': '/checkout',
+  'order-success': '/order-success',
+  'track': '/track',
+  'customer-dashboard': '/profile',
+  'orders': '/orders',
+  'favorites': '/favorites',
+  'login': '/login',
+  'register': '/register',
+  'admin-dashboard': '/admin',
+  'kitchen-portal': '/kitchen',
+  'delivery-portal': '/delivery'
+};
+
 const MainApp: React.FC = () => {
   const { user } = useAuth();
-  const [currentPage, setCurrentPage] = useState<string>(() => {
-    if (user?.role === 'kitchen') return 'kitchen-portal';
-    if (user?.role === 'delivery') return 'delivery-portal';
-    if (user?.role === 'admin') return 'admin-dashboard';
-    return 'home';
-  });
+  const [currentPage, setCurrentPage] = useState<string>(() => resolvePageFromLocation());
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedDish, setSelectedDish] = useState<MenuItem | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
+  // Sync state with URL changes (back/forward or hash change)
+  React.useEffect(() => {
+    const handleUrlChange = () => {
+      const page = resolvePageFromLocation();
+      setCurrentPage(page);
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
+
   const handleSetCurrentPage = (page: string) => {
     setCurrentPage(page);
+    const targetPath = pageToPathMap[page] || '/';
+    if (window.location.pathname !== targetPath) {
+      try {
+        window.history.pushState(null, '', targetPath);
+      } catch {
+        // Fallback for isolated webview contexts
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -115,8 +173,8 @@ const MainApp: React.FC = () => {
           />
         )}
 
-        {currentPage === 'orders' && (
-          <CustomerDashboard
+        {(currentPage === 'orders' || currentPage === 'my-orders') && (
+          <MyOrders
             setCurrentPage={handleSetCurrentPage}
             setSelectedOrder={setSelectedOrder}
           />
@@ -134,15 +192,27 @@ const MainApp: React.FC = () => {
         {currentPage === 'register' && <Register setCurrentPage={handleSetCurrentPage} />}
 
         {currentPage === 'admin-dashboard' && (
-          <AdminDashboard setCurrentPage={handleSetCurrentPage} />
+          user?.role === 'admin' ? (
+            <AdminDashboard setCurrentPage={handleSetCurrentPage} />
+          ) : (
+            <Login setCurrentPage={handleSetCurrentPage} />
+          )
         )}
 
         {currentPage === 'kitchen-portal' && (
-          <KitchenPortal setCurrentPage={handleSetCurrentPage} />
+          (user?.role === 'kitchen' || user?.role === 'admin') ? (
+            <KitchenPortal setCurrentPage={handleSetCurrentPage} />
+          ) : (
+            <Login setCurrentPage={handleSetCurrentPage} />
+          )
         )}
 
         {currentPage === 'delivery-portal' && (
-          <DeliveryPortal setCurrentPage={handleSetCurrentPage} />
+          (user?.role === 'delivery' || user?.role === 'admin') ? (
+            <DeliveryPortal setCurrentPage={handleSetCurrentPage} />
+          ) : (
+            <Login setCurrentPage={handleSetCurrentPage} />
+          )
         )}
       </main>
 

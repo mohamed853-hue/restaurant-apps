@@ -5,17 +5,20 @@ import { useToast } from './ToastContext';
 
 interface AuthContextType {
   user: User | null;
+  allUsers: User[];
   addresses: Address[];
   notifications: Notification[];
   unreadCount: number;
-  login: (email: string, password?: string) => Promise<boolean>;
-  loginAsDemo: (role: UserRole) => void;
-  register: (name: string, email: string, phone: string, password?: string) => Promise<boolean>;
+  login: (email: string, password?: string) => Promise<User | null>;
+  register: (name: string, email: string, phone: string, password?: string, address?: string) => Promise<User | null>;
+  registerStaff: (name: string, email: string, phone: string, role: UserRole, password?: string, address?: string) => Promise<User | null>;
   logout: () => void;
   addAddress: (address: Omit<Address, 'id' | 'user_id'>) => Promise<void>;
   deleteAddress: (id: string) => Promise<void>;
   markNotificationsAsRead: () => Promise<void>;
+  sendNotification: (userId: string, title: string, message: string, icon?: string) => Promise<void>;
   refreshUserData: () => Promise<void>;
+  refreshAllUsers: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,11 +26,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('engineer_burger_user');
-    return saved ? JSON.parse(saved) : DEMO_USERS[0]; // Default to customer
+    return saved ? JSON.parse(saved) : null;
   });
+
+  const [allUsers, setAllUsers] = useState<User[]>(() => {
+    const saved = localStorage.getItem('engineer_burger_all_users');
+    return saved ? JSON.parse(saved) : DEMO_USERS;
+  });
+
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const { addToast } = useToast();
+
+  useEffect(() => {
+    localStorage.setItem('engineer_burger_all_users', JSON.stringify(allUsers));
+  }, [allUsers]);
 
   useEffect(() => {
     if (user) {
@@ -39,6 +52,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setNotifications([]);
     }
   }, [user?.id]);
+
+  useEffect(() => {
+    refreshAllUsers();
+  }, []);
+
+  const refreshAllUsers = async () => {
+    try {
+      const { data, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        // Merge with demo users
+        const map = new Map<string, User>();
+        DEMO_USERS.forEach((u) => map.set(u.email.toLowerCase(), u));
+        data.forEach((u: User) => map.set(u.email.toLowerCase(), u));
+        allUsers.forEach((u) => {
+          if (!map.has(u.email.toLowerCase())) map.set(u.email.toLowerCase(), u);
+        });
+        const combined = Array.from(map.values());
+        setAllUsers(combined);
+        localStorage.setItem('engineer_burger_all_users', JSON.stringify(combined));
+      }
+    } catch (e) {
+      console.warn('Could not fetch all users from Supabase', e);
+    }
+  };
 
   const refreshUserData = async () => {
     if (!user) return;
@@ -58,12 +95,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           setAddresses([
             {
-              id: 'addr-1',
+              id: '00000000-0000-0000-0000-' + String(Date.now()).slice(-12).padStart(12, '0'),
               user_id: user.id,
               label: 'Maison',
-              address_line: 'Résidence Les Palmiers, Hydra',
-              city: 'Alger',
-              pincode: '16035',
+              address_line: user.address || 'Centre-Ville, Ouargla',
+              city: 'Ouargla',
+              pincode: '30000',
               is_default: true
             }
           ]);
@@ -80,87 +117,158 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!notifError && notifData && notifData.length > 0) {
         setNotifications(notifData);
       } else {
-        setNotifications([
-          {
-            id: 'n1',
-            user_id: user.id,
-            title: 'Bienvenue chez The Engineer Burger ! 🍔',
-            message: 'Profitez de 300 DA de réduction avec le code WELCOME300.',
-            icon: 'bi-stars',
-            is_read: false,
-            created_at: new Date().toISOString()
-          }
-        ]);
+        const localNotifs = localStorage.getItem(`notifs_${user.id}`);
+        if (localNotifs) {
+          setNotifications(JSON.parse(localNotifs));
+        } else {
+          setNotifications([
+            {
+              id: 'n1',
+              user_id: user.id,
+              title: 'Bienvenue chez The Engineer Burger Ouargla ! 🍔',
+              message: 'Profitez de 300 DA de réduction avec le code WELCOME300.',
+              icon: 'bi-stars',
+              is_read: false,
+              created_at: new Date().toISOString()
+            }
+          ]);
+        }
       }
     } catch (e) {
       console.warn('Using local state for user data', e);
     }
   };
 
-  const login = async (email: string, _password?: string): Promise<boolean> => {
+  const login = async (email: string, password?: string): Promise<User | null> => {
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Check in Supabase first
     try {
-      // Check in Supabase first
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .eq('email', email.trim().toLowerCase())
+        .eq('email', cleanEmail)
         .single();
 
       if (!error && data) {
         setUser(data);
         addToast('success', `Bon retour parmi nous, ${data.name} !`);
-        return true;
+        return data;
       }
     } catch (err) {
-      console.warn('Supabase query fallback', err);
+      console.warn('Supabase login check', err);
     }
 
-    // Fallback to local demo users
-    const matched = DEMO_USERS.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+    // Check in allUsers list (including Demo and locally registered users)
+    const matched = allUsers.find((u) => u.email.toLowerCase() === cleanEmail);
     if (matched) {
       setUser(matched);
-      addToast('success', `Bon retour, ${matched.name} ! (${matched.role})`);
-      return true;
+      addToast('success', `Bon retour, ${matched.name} !`);
+      return matched;
     }
 
-    // Default create custom user
+    // Check in DEMO_USERS
+    const demo = DEMO_USERS.find((u) => u.email.toLowerCase() === cleanEmail);
+    if (demo) {
+      setUser(demo);
+      addToast('success', `Bon retour, ${demo.name} !`);
+      return demo;
+    }
+
+    // Default create custom customer user
     const newUser: User = {
-      id: 'usr-' + Date.now(),
+      id: '00000000-0000-0000-0000-' + String(Date.now()).slice(-12).padStart(12, '0'),
       name: email.split('@')[0],
-      email: email.trim().toLowerCase(),
+      email: cleanEmail,
       role: 'customer',
-      status: 'active'
+      status: 'active',
+      orders_count: 0,
+      total_spent: 0,
+      created_at: new Date().toISOString()
     };
+
+    setAllUsers((prev) => [newUser, ...prev]);
     setUser(newUser);
     addToast('success', `Connecté avec succès en tant que ${newUser.name}`);
-    return true;
+    return newUser;
   };
 
-  const loginAsDemo = (role: UserRole) => {
-    const demo = DEMO_USERS.find((u) => u.role === role) || DEMO_USERS[0];
-    setUser(demo);
-    addToast('info', `Connecté en mode Démo : ${demo.name} (${role.toUpperCase()})`);
-  };
+  const register = async (
+    name: string,
+    email: string,
+    phone: string,
+    password?: string,
+    address?: string
+  ): Promise<User | null> => {
+    const cleanEmail = email.trim().toLowerCase();
+    const safeId = '00000000-0000-0000-0000-' + String(Date.now()).slice(-12).padStart(12, '0');
 
-  const register = async (name: string, email: string, phone: string, _password?: string): Promise<boolean> => {
     const newUser: User = {
-      id: 'usr-' + Date.now(),
-      name,
-      email: email.trim().toLowerCase(),
-      phone,
+      id: safeId,
+      name: name.trim(),
+      email: cleanEmail,
+      phone: phone.trim(),
+      address: address?.trim() || 'Centre-Ville, Ouargla',
       role: 'customer',
-      status: 'active'
+      status: 'active',
+      password: password || '123456',
+      orders_count: 0,
+      total_spent: 0,
+      created_at: new Date().toISOString()
     };
 
+    const updatedUsers = [newUser, ...allUsers.filter((u) => u.email.toLowerCase() !== cleanEmail)];
+    setAllUsers(updatedUsers);
+    localStorage.setItem('engineer_burger_all_users', JSON.stringify(updatedUsers));
+    setUser(newUser);
+
     try {
-      await supabase.from('users').insert([newUser]);
+      await supabase.from('users').upsert([newUser], { onConflict: 'email' });
     } catch (e) {
-      console.warn('User registered in local state', e);
+      console.warn('User registered locally', e);
     }
 
-    setUser(newUser);
     addToast('success', `Bienvenue chez The Engineer Burger, ${name} !`);
-    return true;
+    return newUser;
+  };
+
+  const registerStaff = async (
+    name: string,
+    email: string,
+    phone: string,
+    role: UserRole,
+    password?: string,
+    address?: string
+  ): Promise<User | null> => {
+    const cleanEmail = email.trim().toLowerCase();
+    const safeId = '00000000-0000-0000-0000-' + String(Date.now()).slice(-12).padStart(12, '0');
+
+    const newStaff: User = {
+      id: safeId,
+      name: name.trim(),
+      email: cleanEmail,
+      phone: phone.trim(),
+      address: address?.trim() || 'Ouargla',
+      role,
+      status: 'active',
+      password: password || '123456',
+      orders_count: 0,
+      total_spent: 0,
+      created_at: new Date().toISOString()
+    };
+
+    const updatedUsers = [newStaff, ...allUsers.filter((u) => u.email.toLowerCase() !== cleanEmail)];
+    setAllUsers(updatedUsers);
+    localStorage.setItem('engineer_burger_all_users', JSON.stringify(updatedUsers));
+
+    try {
+      await supabase.from('users').upsert([newStaff], { onConflict: 'email' });
+    } catch (e) {
+      console.warn('Staff registered locally', e);
+    }
+
+    addToast('success', `Compte ${role.toUpperCase()} "${name}" créé avec succès !`);
+    return newStaff;
   };
 
   const logout = () => {
@@ -170,9 +278,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addAddress = async (address: Omit<Address, 'id' | 'user_id'>) => {
     if (!user) return;
+    const safeId = '00000000-0000-0000-0000-' + String(Date.now()).slice(-12).padStart(12, '0');
     const newAddr: Address = {
       ...address,
-      id: 'addr-' + Date.now(),
+      id: safeId,
       user_id: user.id
     };
 
@@ -202,14 +311,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     addToast('info', 'Adresse supprimée.');
   };
 
+  const sendNotification = async (userId: string, title: string, message: string, icon?: string) => {
+    const newNotif: Notification = {
+      id: 'notif-' + Date.now(),
+      user_id: userId,
+      title,
+      message,
+      icon: icon || 'bi-bell-fill',
+      is_read: false,
+      created_at: new Date().toISOString()
+    };
+
+    if (user && user.id === userId) {
+      setNotifications((prev) => [newNotif, ...prev]);
+      localStorage.setItem(`notifs_${userId}`, JSON.stringify([newNotif, ...notifications]));
+    }
+
+    try {
+      await supabase.from('notifications').insert([{
+        user_id: userId,
+        title: newNotif.title,
+        message: newNotif.message,
+        icon: newNotif.icon,
+        is_read: false
+      }]);
+    } catch (e) {
+      console.warn('Notification saved locally', e);
+    }
+  };
+
   const markNotificationsAsRead = async () => {
+    if (!user) return;
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
-    if (user) {
-      try {
-        await supabase.from('notifications').update({ is_read: true }).eq('user_id', user.id);
-      } catch (e) {
-        console.warn('Notifications marked read locally', e);
-      }
+    localStorage.setItem(`notifs_${user.id}`, JSON.stringify(notifications.map((n) => ({ ...n, is_read: true }))));
+
+    try {
+      await supabase.from('notifications').update({ is_read: true }).eq('user_id', user.id);
+    } catch (e) {
+      console.warn('Notifications marked read locally', e);
     }
   };
 
@@ -219,17 +358,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider
       value={{
         user,
+        allUsers,
         addresses,
         notifications,
         unreadCount,
         login,
-        loginAsDemo,
         register,
+        registerStaff,
         logout,
         addAddress,
         deleteAddress,
         markNotificationsAsRead,
-        refreshUserData
+        sendNotification,
+        refreshUserData,
+        refreshAllUsers
       }}
     >
       {children}
