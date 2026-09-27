@@ -11,53 +11,54 @@ export interface Translations {
 
 export const translations = {
   // Navigation & Brand
-  brandName: { fr: 'The Engineer Burger', ar: 'برجر المهندس' },
-  brandTagline: { fr: 'L\'Art de l\'Ingénierie Culinaire & Smash Burgers', ar: 'فن الهندسة الغذائية وأشهى سماش برجر في الجزائر' },
+  brandName: { fr: "Restaurant l'Amitié", ar: 'مطعم الصداقة' },
+  brandTagline: { fr: "Saveurs Gourmandes, Grillades & Plats d'Exception", ar: 'أشهى المأكولات والمشويات والبرجر الفاخر' },
   exploreMenu: { fr: 'Notre Menu', ar: 'قائمة الطعام' },
   cart: { fr: 'Panier', ar: 'السلة' },
-  login: { fr: 'Connexion', ar: 'تسجيل الدخول' },
+  login: { fr: 'Connexion Client', ar: 'تسجيل دخول الزبائن' },
   logout: { fr: 'Se Déconnecter', ar: 'تسجيل الخروج' },
   myProfile: { fr: 'Mon Profil', ar: 'حسابي' },
   myOrders: { fr: 'Mes Commandes', ar: 'طلباتي' },
   favorites: { fr: 'Plats Favoris', ar: 'المفضلة' },
-  adminDashboard: { fr: 'Dashboard Staff & Admin', ar: 'لوحة تحكم الإدارة والموظفين' },
+  adminDashboard: { fr: 'Administration Privée', ar: 'لوحة تحكم الإدارة' },
+  adminPortalTitle: { fr: "Portail Administration & Staff Privé", ar: 'بوابة الإدارة والموظفين الخاصة' },
   switchToStore: { fr: 'Voir la Boutique Client', ar: 'عرض متجر الزبائن' },
   switchToAdmin: { fr: 'Accéder au Dashboard Admin', ar: 'الدخول للوحة الإدارة' },
-  freeDeliveryAnnounce: { fr: 'Livraison offerte dès 2500 DA | Utilisez WELCOME300 pour 300 DA offerts', ar: 'توصيل مجاني للطلبات فوق 2500 د.ج | استخدم كود WELCOME300 لخصم 300 د.ج' },
+  freeDeliveryAnnounce: { fr: 'Livraison offerte dès 10 000 FCFA | Code BIENVENUE1000 pour 1 000 FCFA offerts', ar: 'توصيل مجاني للطلبات فوق 10,000 فرنك سيفا | كود BIENVENUE1000 لخصم 1,000 FCFA' },
   
   // Hero
-  heroEyebrow: { fr: '🔥 LE NUMÉRO 1 DU SMASH BURGER À OUARGLA', ar: '🔥 الرقم 1 في السماش برجر في ورقلة' },
-  heroTitle1: { fr: 'L\'Ingénierie du', ar: 'هندسة' },
-  heroTitle2: { fr: 'Vrai Burger Gourmet', ar: 'البرجر الفاخر الحقيقي' },
+  heroEyebrow: { fr: '🔥 BIENVENUE AU RESTAURANT L\'AMITIÉ', ar: '🔥 مرحباً بكم في مطعم الصداقة' },
+  heroTitle1: { fr: 'Le Goût Unique du', ar: 'المذاق الأصيل لـ' },
+  heroTitle2: { fr: 'Vrai Repas Gourmet', ar: 'أشهى الأطباق والمشويات' },
   heroDesc: {
-    fr: 'Découvrez nos smash burgers pur bœuf croustillants aux bords dorés, nos pains briochés toastés au beurre et nos sauces secrètes à Ouargla.',
-    ar: 'اكتشف أشهى برجر سماش بلحم بقري طازج 100%، خبز بريوش محمص بالزبدة وصلصات المهندس السرية الخاصة في ورقلة.'
+    fr: 'Découvrez nos délicieuses grillades, nos burgers gourmets pur bœuf, nos sauces maison secrètes et nos plats authentiques préparés chaque jour avec passion et fraîcheur.',
+    ar: 'اكتشف أشهى المشويات الطازجة والبرجر الفاخر والوجبات الشهية المحضرة بمكونات طبيعية طازجة وبكل إتقان.'
   },
   orderNow: { fr: 'Commander Maintenant', ar: 'اطلب الآن' },
   viewFullMenu: { fr: 'Découvrir le Menu', ar: 'استكشف القائمة' },
-  servingsCount: { fr: '+12 500 burgers smash servis avec passion à Ouargla', ar: '+12,500 برجر تم تحضيرها بكل إتقان في ورقلة' },
+  servingsCount: { fr: '+15 000 repas préparés avec passion au Restaurant l\'Amitié', ar: '+15,000 وجبة شهية تم تحضيرها بكل حب وإتقان' },
 
   // Perks
-  perk1Title: { fr: '100% Bœuf Frais', ar: 'لحم بقري طازج 100%' },
-  perk1Desc: { fr: 'Jamais de congelé', ar: 'طازج يومياً بدون تجميد' },
+  perk1Title: { fr: '100% Frais & Savoureux', ar: 'طازج وشهي 100%' },
+  perk1Desc: { fr: 'Ingrédients sélectionnés', ar: 'مكونات ممتازة يومياً' },
   perk2Title: { fr: 'Préparation Minute', ar: 'تحضير فوري' },
-  perk2Desc: { fr: 'Smashé à la commande', ar: 'يُشوى فور طلبك' },
-  perk3Title: { fr: 'Livraison Chaude', ar: 'توصيل ساخن وسريع' },
+  perk2Desc: { fr: 'Cuit à la commande', ar: 'يُحضر فور طلبك' },
+  perk3Title: { fr: 'Livraison Rapide', ar: 'توصيل سريع وساخن' },
   perk3Desc: { fr: 'Sacs thermiques scellés', ar: 'حقائب حرارية مخصصة' },
-  perk4Title: { fr: 'Offres Exclusives', ar: 'عروض حصرية' },
-  perk4Desc: { fr: 'Code WELCOME300', ar: 'كود خصم WELCOME300' },
+  perk4Title: { fr: 'Offres Spéciales', ar: 'عروض حصرية' },
+  perk4Desc: { fr: 'Code BIENVENUE1000', ar: 'كود BIENVENUE1000' },
 
   // Categories & Menu
   categoriesTitle: { fr: 'Nos Catégories', ar: 'أقسام القائمة' },
-  categoriesDesc: { fr: 'Du smash burger gourmet aux desserts maison', ar: 'من السماش برجر الفاخر إلى التحليات اللذيذة' },
+  categoriesDesc: { fr: 'Des grillades authentiques aux burgers et desserts maison', ar: 'من المشويات والبرجر الفاخر إلى الحلويات والمشروبات' },
   bestsellersTitle: { fr: 'Nos Plats Phares ⭐', ar: 'الأطباق الأكثر طلباً ⭐' },
-  bestsellersDesc: { fr: 'Les favoris plébiscités par nos clients à Ouargla', ar: 'المفضلة لدى زبائننا في ورقلة' },
+  bestsellersDesc: { fr: "Les spécialités plébiscitées par nos clients fidèles", ar: 'المفضلة لدى زبائننا الكرام' },
   allDishes: { fr: 'Tous les Plats', ar: 'جميع الأطباق' },
   vegOnly: { fr: 'Végétarien uniquement', ar: 'أطباق نباتية فقط' },
-  searchPlaceholder: { fr: 'Rechercher burgers, smash, frites, sauces...', ar: 'ابحث عن برجر، سماش، بطاطا، صلصات...' },
+  searchPlaceholder: { fr: 'Rechercher grillades, burgers, frites, sauces, jus...', ar: 'ابحث عن مشويات، برجر، أطباق، عصير...' },
   add: { fr: 'Ajouter', ar: 'إضافة' },
   addToCart: { fr: 'Ajouter au Panier', ar: 'إضافة إلى السلة' },
-  prepTime: { fr: 'Temps de cuisson', ar: 'مدة التحضير' },
+  prepTime: { fr: 'Temps de préparation', ar: 'مدة التحضير' },
   spiceLevel: { fr: 'Niveau Épicé', ar: 'درجة الحرارة' },
   specialNotes: { fr: 'Instructions spéciales (Optionnel)', ar: 'ملاحظات خاصة (اختياري)' },
   reviewsTitle: { fr: 'Avis & Évaluations Clients ⭐', ar: 'تقييمات وآراء الزبائن ⭐' },
@@ -65,9 +66,9 @@ export const translations = {
   publishReview: { fr: 'Publier mon avis', ar: 'نشر التقييم' },
 
   // Cart & Checkout
-  cartTitle: { fr: 'Votre Panier Gourmet', ar: 'سلة المشتريات' },
+  cartTitle: { fr: 'Votre Panier Gourmand', ar: 'سلة المشتريات' },
   emptyCart: { fr: 'Votre panier est vide', ar: 'سلتك فارغة حالياً' },
-  emptyCartDesc: { fr: 'Parcourez notre carte et ajoutez vos smash burgers préférés !', ar: 'تصفح القائمة واختر وجبتك المفضلة !' },
+  emptyCartDesc: { fr: 'Parcourez notre carte et découvrez les délices du Restaurant l\'Amitié !', ar: 'تصفح القائمة واختر وجبتك المفضلة من مطعم الصداقة !' },
   subtotal: { fr: 'Sous-total', ar: 'المجموع الفرعي' },
   discountCoupon: { fr: 'Réduction Coupon', ar: 'خصم الكوبون' },
   deliveryFee: { fr: 'Frais de Livraison', ar: 'تكلفة التوصيل' },
@@ -75,7 +76,7 @@ export const translations = {
   totalToPay: { fr: 'Total à Payer', ar: 'المجموع الإجمالي' },
   checkoutBtn: { fr: 'Passer la Commande', ar: 'إتمام الطلب' },
   applyCoupon: { fr: 'Appliquer', ar: 'تطبيق' },
-  couponPlaceholder: { fr: 'Code Promo (ex: WELCOME300)', ar: 'كود الخصم (مثال: WELCOME300)' },
+  couponPlaceholder: { fr: 'Code Promo (ex: BIENVENUE1000)', ar: 'كود الخصم (مثال: BIENVENUE1000)' },
 
   // Checkout Form
   checkoutTitle: { fr: 'Finaliser votre Commande', ar: 'تأكيد ودفع الطلب' },
@@ -88,16 +89,16 @@ export const translations = {
   deliveryAddress: { fr: 'Adresse de Livraison Complète', ar: 'عنوان التوصيل بالتفصيل' },
   orderNotes: { fr: 'Notes pour la Cuisine ou le Livreur', ar: 'ملاحظات للمطبخ أو رجل التوصيل' },
   paymentMethod: { fr: 'Mode de Paiement', ar: 'طريقة الدفع' },
-  cashOnDelivery: { fr: 'Paiement à la Livraison (Cash)', ar: 'الدفع نقداً عند الاستلام (كاش)' },
-  baridimob: { fr: 'BaridiMob (Algérie Poste)', ar: 'بريدي موب (بريد الجزائر)' },
-  cardCIB: { fr: 'Carte CIB / Edahabia', ar: 'البطاقة الذهبية / CIB' },
+  cashOnDelivery: { fr: 'Paiement à la Livraison (Espèces / Cash)', ar: 'الدفع نقداً عند الاستلام (كاش)' },
+  baridimob: { fr: 'Paiement Mobile / Wave / Orange Money', ar: 'الدفع عبر الهاتف / محفظة إلكترونية' },
+  cardCIB: { fr: 'Carte Bancaire / Visa / Mastercard', ar: 'بطاقة بنكية / فيزا' },
   confirmOrder: { fr: 'Confirmer la Commande', ar: 'تأكيد الطلب الآن' },
 
   // Order Tracker
   trackingTitle: { fr: 'Suivi de Commande en Direct', ar: 'تتبع حالة الطلب المباشر' },
   stepPending: { fr: 'Reçue', ar: 'تم الاستلام' },
   stepConfirmed: { fr: 'Confirmée', ar: 'تم التأكيد' },
-  stepKitchen: { fr: 'En Cuisine (Grill)', ar: 'قيد الشواء في المطبخ' },
+  stepKitchen: { fr: 'En Cuisine (Grill)', ar: 'قيد التحضير في المطبخ' },
   stepDelivery: { fr: 'En Livraison', ar: 'مع رجل التوصيل' },
   stepDelivered: { fr: 'Livrée avec Succès', ar: 'تم التوصيل بنجاح' },
   estimatedArrival: { fr: 'Arrivée Estimée', ar: 'الوقت التقديري للوصول' },
@@ -105,7 +106,7 @@ export const translations = {
   callRider: { fr: 'Appeler le Livreur', ar: 'اتصال برجل التوصيل' },
 
   // Dashboard Staff
-  staffPortal: { fr: 'Espace Staff & Gestion', ar: 'فضاء إدارة المطعم والموظفين' },
+  staffPortal: { fr: "Restaurant l'Amitié · Espace Staff & Gestion", ar: 'فضاء إدارة مطعم الصداقة والموظفين' },
   tabOverview: { fr: 'Vue d\'ensemble', ar: 'نظرة عامة' },
   tabOrders: { fr: 'Commandes', ar: 'الطلبات' },
   tabKitchen: { fr: 'File Cuisine (Grill)', ar: 'طلبات المطبخ' },
@@ -115,7 +116,7 @@ export const translations = {
   tabStaff: { fr: 'Équipe & Staff', ar: 'طاقم العمل والموظفين' },
   tabCashSettlement: { fr: 'Caisse & Livreurs', ar: 'صندوق التسليم والسائقين' },
   tabSettings: { fr: 'Paramètres Restaurant', ar: 'إعدادات المطعم' },
-  startCooking: { fr: 'Lancer la Cuisson (Grill)', ar: 'بدء الشواء والتحضير' },
+  startCooking: { fr: 'Lancer la Cuisson', ar: 'بدء الطهي والتحضير' },
   markReady: { fr: 'Marquer Prêt pour Livraison', ar: 'تحديد كـ جاهز للتوصيل' },
   startDelivery: { fr: 'Démarrer la Course', ar: 'بدء التوصيل' },
   markDelivered: { fr: 'Marquer comme Livré', ar: 'تحديد كـ تم التوصيل' },
@@ -129,7 +130,7 @@ export const translations = {
   available: { fr: 'Disponible', ar: 'متوفر' },
   outOfStock: { fr: 'Épuisé (Rupture)', ar: 'نفدت الكمية' },
   confirmAssign: { fr: 'Assigner au Livreur', ar: 'إسناد لرجل التوصيل' },
-  orderSuccessThankYou: { fr: 'Merci pour votre commande !', ar: 'شكراً لطلبكم من برجر المهندس !' },
+  orderSuccessThankYou: { fr: "Merci pour votre commande chez Restaurant l'Amitié !", ar: 'شكراً لطلبكم من مطعم الصداقة !' },
   orderSuccessDesc: { fr: 'Votre repas est préparé avec des ingrédients frais du jour.', ar: 'وجبتكم تُحضر بمكونات طازجة يومياً بكل إتقان.' }
 };
 
@@ -145,17 +146,17 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('engineer_burger_lang');
+    const saved = localStorage.getItem('amitie_restaurant_lang') || localStorage.getItem('engineer_burger_lang');
     return (saved === 'ar' || saved === 'fr') ? saved : 'fr';
   });
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('engineer_burger_lang', lang);
+    localStorage.setItem('amitie_restaurant_lang', lang);
   };
 
   const isRTL = language === 'ar';
-  const currency = language === 'ar' ? 'د.ج' : 'DA';
+  const currency = 'FCFA';
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';

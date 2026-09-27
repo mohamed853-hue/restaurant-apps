@@ -160,7 +160,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `commandes_engineer_burger_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `commandes_restaurant_amitie_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
   };
 
@@ -273,7 +273,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
 
   // Generate Random Coupon Code
   const generateRandomCouponCode = () => {
-    const prefixes = ['SMASH', 'BURGER', 'VIP', 'OFFER', 'CHEF', 'ENGINEER'];
+    const prefixes = ['AMITIE', 'PROMO', 'VIP', 'OFFER', 'CHEF', 'GRILL'];
     const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
     const randomNum = Math.floor(10 + Math.random() * 90);
     setCouponCode(`${randomPrefix}${randomNum}`);
@@ -402,7 +402,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
             <span className="small fw-bold">Caisse & Livreurs</span>
             {totalUnsettledCashInTransit > 0 && (
               <span className="badge bg-warning text-dark ms-auto" style={{ fontSize: '10px' }}>
-                {totalUnsettledCashInTransit} DA
+                {totalUnsettledCashInTransit} {currency}
               </span>
             )}
           </button>
@@ -1473,7 +1473,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
               <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
                   <h3 className="fs-6 fw-bold mb-0">Gestionnaire de Codes Promo & Réductions</h3>
-                  <small className="text-muted">Créez des coupons en pourcentage (%) ou montant fixe (DA)</small>
+                  <small className="text-muted">Créez des coupons en pourcentage (%) ou montant fixe ({currency})</small>
                 </div>
                 <button
                   className="btn btn-primary btn-sm rounded-pill px-3 fw-bold shadow-sm"
@@ -1952,7 +1952,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
                             <input
                               type="email"
                               className="form-control"
-                              placeholder="livreur@engineerburger.dz"
+                              placeholder="staff@restaurantlamitie.com"
                               value={newStaffEmail}
                               onChange={(e) => setNewStaffEmail(e.target.value)}
                               required
@@ -1960,11 +1960,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
                           </div>
 
                           <div className="mb-3">
-                            <label className="form-label small fw-bold">Numéro de Téléphone (Ouargla)</label>
+                            <label className="form-label small fw-bold">Numéro de Téléphone</label>
                             <input
                               type="tel"
                               className="form-control"
-                              placeholder="0550 00 00 00"
+                              placeholder="77 123 45 67"
                               value={newStaffPhone}
                               onChange={(e) => setNewStaffPhone(e.target.value)}
                               required
@@ -2117,7 +2117,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
                       <input
                         type="url"
                         className="form-control form-control-sm"
-                        placeholder="https://facebook.com/theengineerburger"
+                        placeholder="https://facebook.com/restaurantlamitie"
                         value={settingsForm.facebook_url || ''}
                         onChange={(e) => setSettingsForm({ ...settingsForm, facebook_url: e.target.value })}
                       />
@@ -2130,7 +2130,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
                       <input
                         type="url"
                         className="form-control form-control-sm"
-                        placeholder="https://instagram.com/theengineerburger"
+                        placeholder="https://instagram.com/restaurantlamitie"
                         value={settingsForm.instagram_url || ''}
                         onChange={(e) => setSettingsForm({ ...settingsForm, instagram_url: e.target.value })}
                       />
@@ -2143,7 +2143,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
                       <input
                         type="url"
                         className="form-control form-control-sm"
-                        placeholder="https://tiktok.com/@theengineerburger"
+                        placeholder="https://tiktok.com/@restaurantlamitie"
                         value={settingsForm.tiktok_url || ''}
                         onChange={(e) => setSettingsForm({ ...settingsForm, tiktok_url: e.target.value })}
                       />
@@ -2156,7 +2156,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = () => {
                       <input
                         type="text"
                         className="form-control form-control-sm"
-                        placeholder="+213 550 12 34 56"
+                        placeholder="+221 77 123 45 67"
                         value={settingsForm.whatsapp_number || ''}
                         onChange={(e) => setSettingsForm({ ...settingsForm, whatsapp_number: e.target.value })}
                       />

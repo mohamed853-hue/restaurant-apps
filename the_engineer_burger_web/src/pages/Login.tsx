@@ -17,18 +17,6 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  const routeByRole = (role: string) => {
-    if (role === 'admin') {
-      setCurrentPage('admin-dashboard');
-    } else if (role === 'kitchen') {
-      setCurrentPage('kitchen-portal');
-    } else if (role === 'delivery') {
-      setCurrentPage('delivery-portal');
-    } else {
-      setCurrentPage('home');
-    }
-  };
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
@@ -37,7 +25,8 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
     setIsSubmitting(false);
 
     if (loggedUser) {
-      routeByRole(loggedUser.role);
+      // Customer lands on Home or Customer Profile
+      setCurrentPage('home');
     }
   };
 
@@ -46,7 +35,7 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
       <div className="container" style={{ maxWidth: '460px' }}>
         <div className="card border-0 p-4 p-md-5 rounded-4 shadow-sm bg-white position-relative overflow-hidden">
           
-          {/* Glowing Animated Brand Header (Orange Doré & Effet Lumineux) */}
+          {/* Glowing Animated Brand Header */}
           <div className="text-center mb-3">
             <div
               className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2 shadow-sm"
@@ -55,8 +44,8 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
                 border: '1px solid #fde68a'
               }}
             >
-              <span className="fs-6">🍔</span>
-              <span className="badge bg-warning text-dark fw-bold" style={{ fontSize: '11px' }}>OUARGLA · ورقلة</span>
+              <span className="fs-6">🍲</span>
+              <span className="badge bg-warning text-dark fw-bold" style={{ fontSize: '11px' }}>RESTAURANT L'AMITIÉ</span>
             </div>
 
             {/* Shimmering Animated Brand Title */}
@@ -64,7 +53,7 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
               className="fw-extrabold text-uppercase tracking-wider mb-0"
               style={{
                 fontSize: '24px',
-                letterSpacing: '1.5px',
+                letterSpacing: '1px',
                 background: 'linear-gradient(90deg, #ea580c, #f59e0b, #d97706, #ea580c)',
                 backgroundSize: '200% auto',
                 WebkitBackgroundClip: 'text',
@@ -73,14 +62,14 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
                 filter: 'drop-shadow(0 2px 8px rgba(245, 158, 11, 0.25))'
               }}
             >
-              The Engineer Burger
+              Restaurant l'Amitié
             </h2>
             <small className="text-muted d-block mt-1" style={{ fontSize: '12px', fontWeight: 600 }}>
-              {isRTL ? 'فن البرجر السماش الفاخر' : 'L\'Ingénierie du Smash Burger Gourmet'}
+              {isRTL ? 'أشهى المأكولات والمشويات والبرجر الفاخر' : 'Espace Client · Saveurs Authentiques & Gourmandes'}
             </small>
           </div>
 
-          {/* Animated SVG Avatar (Yéti Interactif) */}
+          {/* Animated SVG Avatar */}
           <div className="mb-2">
             <AnimatedAvatar
               isPasswordFocused={isPasswordFocused}
@@ -92,7 +81,7 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
           <div className="text-center mb-4">
             <h1 className="fs-5 fw-extrabold mb-1">{t('login')}</h1>
             <p className="text-muted small mb-0">
-              {isRTL ? 'أدخل بريدك الإلكتروني وكلمة المرور' : 'Entrez vos identifiants pour vous connecter'}
+              {isRTL ? 'أدخل بريدك الإلكتروني وكلمة المرور' : 'Connectez-vous pour passer et suivre vos commandes'}
             </p>
           </div>
 
@@ -160,7 +149,7 @@ export const Login: React.FC<LoginProps> = ({ setCurrentPage }) => {
             </button>
           </form>
 
-          {/* Clean registration footer (NO ROLE BUTTONS) */}
+          {/* Clean customer registration footer */}
           <div className="text-center mt-4 pt-3 border-top">
             <small className="text-muted">
               {isRTL ? 'ليس لديك حساب بعد ؟ ' : 'Nouveau client ? '}

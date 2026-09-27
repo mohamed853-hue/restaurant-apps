@@ -159,15 +159,15 @@ export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPag
                   <line x1="70%" y1="10%" x2="70%" y2="90%" stroke="#334155" strokeWidth="10" />
                 </svg>
 
-                {/* 1. Restaurant Pin (The Engineer Burger - Centre-Ville Ouargla) */}
+                {/* 1. Restaurant Pin (Restaurant l'Amitié) */}
                 <div
                   className="position-absolute p-2 bg-dark text-white rounded-3 shadow d-flex align-items-center gap-2 border border-warning"
                   style={{ top: '20%', left: '10%', zIndex: 3 }}
                 >
-                  <span className="fs-5">🍔</span>
+                  <span className="fs-5">🍲</span>
                   <div>
-                    <strong className="d-block small text-warning">The Engineer Burger</strong>
-                    <small className="text-light" style={{ fontSize: '9px' }}>Bd 1er Novembre, Ouargla</small>
+                    <strong className="d-block small text-warning">Restaurant l'Amitié</strong>
+                    <small className="text-light" style={{ fontSize: '9px' }}>Avenue Centrale, Amitié</small>
                   </div>
                 </div>
 
@@ -191,11 +191,11 @@ export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPag
                     className="badge bg-warning text-dark mt-1 shadow-sm text-nowrap"
                     style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
                   >
-                    Sofiane (En route · 2.4 km)
+                    Ousmane (En route · 2.1 km)
                   </div>
                 </div>
 
-                {/* 3. Destination Pin (Customer Home - Ouargla) */}
+                {/* 3. Destination Pin (Customer Home) */}
                 <div
                   className="position-absolute p-2 bg-success text-white rounded-3 shadow d-flex align-items-center gap-2 border border-light"
                   style={{ bottom: '18%', right: '10%', zIndex: 3 }}
@@ -203,7 +203,7 @@ export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPag
                   <span className="fs-5">📍</span>
                   <div>
                     <strong className="d-block small">Votre Adresse</strong>
-                    <small className="text-light" style={{ fontSize: '9px' }}>Ouargla (Livraison)</small>
+                    <small className="text-light" style={{ fontSize: '9px' }}>Quartier Amitié (Livraison)</small>
                   </div>
                 </div>
 
@@ -213,7 +213,7 @@ export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPag
                   style={{ zIndex: 5, fontSize: '11px' }}
                 >
                   <i className="bi bi-speedometer text-warning me-1"></i>
-                  Distance restante : <strong>2.4 km</strong> · Vitesse moy : <strong>35 km/h</strong>
+                  Distance restante : <strong>2.1 km</strong> · Vitesse moy : <strong>35 km/h</strong>
                 </div>
               </div>
 
@@ -237,14 +237,14 @@ export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPag
                     </div>
                     <div>
                       <div className="d-flex align-items-center gap-2">
-                        <b className="d-block small text-dark">Sofiane (Votre Livreur Dédié)</b>
+                        <b className="d-block small text-dark">Ousmane (Votre Livreur Express)</b>
                         {favoriteDrivers.includes('00000000-0000-0000-0000-000000000004') && (
                           <span className="badge bg-danger rounded-pill" style={{ fontSize: '9px' }}>
                             ❤️ Livreur Favori
                           </span>
                         )}
                       </div>
-                      <small className="text-muted">⭐ 4.9 · Moto Yamaha 125 · Ouargla Express</small>
+                      <small className="text-muted">⭐ 4.9 · Moto Express · Amitié Rapide</small>
                     </div>
                   </div>
 
@@ -262,7 +262,7 @@ export const OrderTracker: React.FC<OrderTrackerProps> = ({ order, setCurrentPag
                       {favoriteDrivers.includes('00000000-0000-0000-0000-000000000004') ? 'Favori' : 'Ajouter aux favoris'}
                     </button>
                     <a
-                      href="https://wa.me/213550000004?text=Bonjour%20Sofiane%20!%20Je%20vous%20contacte%20concernant%20ma%20commande%20The%20Engineer%20Burger"
+                      href="https://wa.me/221771230004?text=Bonjour%20Ousmane%20!%20Je%20vous%20contacte%20concernant%20ma%20commande%20Restaurant%20l%27Amiti%C3%A9"
                       target="_blank"
                       rel="noreferrer"
                       className="btn btn-success btn-sm rounded-pill px-3 fw-bold"

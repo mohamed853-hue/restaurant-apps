@@ -35,16 +35,16 @@ export const Header: React.FC<HeaderProps> = ({
       >
         {/* Left: Free delivery badge */}
         <div className="d-none d-md-flex align-items-center gap-2 small text-warning fw-bold">
-          <span className="badge bg-warning text-dark fw-extrabold rounded-pill px-2 py-1">OUARGLA</span>
+          <span className="badge bg-warning text-dark fw-extrabold rounded-pill px-2 py-1">L'AMITIÉ</span>
           <span className="text-white small">🛵 {t('freeDeliveryAnnounce')}</span>
         </div>
 
-        {/* CENTERED: THE ENGINEER BURGER LUXURY GOLDEN EMBLEM */}
+        {/* CENTERED: RESTAURANT L'AMITIE LUXURY GOLDEN EMBLEM */}
         <div
           className="mx-auto text-center cursor-pointer my-1 my-md-0"
           onClick={() => setCurrentPage('home')}
           style={{ cursor: 'pointer' }}
-          title="Accueil The Engineer Burger"
+          title="Accueil Restaurant l'Amitié"
         >
           <div
             className="d-inline-flex align-items-center gap-2 px-3 px-md-4 py-1 rounded-pill"
@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
               boxShadow: '0 0 25px rgba(245, 158, 11, 0.35), inset 0 0 12px rgba(245, 158, 11, 0.2)'
             }}
           >
-            <span style={{ fontSize: '20px', filter: 'drop-shadow(0 2px 6px rgba(245, 158, 11, 0.8))' }}>🍔</span>
+            <span style={{ fontSize: '20px', filter: 'drop-shadow(0 2px 6px rgba(245, 158, 11, 0.8))' }}>🍲</span>
             <span
               className="fw-extrabold fs-5 tracking-wider text-nowrap"
               style={{
@@ -68,10 +68,10 @@ export const Header: React.FC<HeaderProps> = ({
                 filter: 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9))'
               }}
             >
-              THE ENGINEER BURGER
+              RESTAURANT L'AMITIÉ
             </span>
             <span className="badge bg-warning text-dark fw-extrabold rounded-pill px-2" style={{ fontSize: '9px', letterSpacing: '0.5px' }}>
-              PRO
+              GOURMET
             </span>
           </div>
         </div>
@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
             style={{ fontSize: '11px', fontFamily: 'Cairo, sans-serif' }}
             onClick={() => setLanguage('ar')}
           >
-            🇩🇿 العربية
+            العربية
           </button>
         </div>
       </div>
@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
                 fontSize: '19px'
               }}
             >
-              🍔
+              🍲
             </span>
             <div className="d-flex flex-column">
               <span
@@ -134,10 +134,10 @@ export const Header: React.FC<HeaderProps> = ({
                   WebkitTextFillColor: 'transparent'
                 }}
               >
-                THE ENGINEER BURGER
+                RESTAURANT L'AMITIÉ
               </span>
               <small className="text-muted fw-bold" style={{ fontSize: '9px', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '-4px' }}>
-                Ouargla · ورقلة
+                Saveurs & Grillades Gourmandes
               </small>
             </div>
           </a>

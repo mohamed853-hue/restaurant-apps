@@ -59,107 +59,107 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 const INITIAL_DEMO_ORDERS: Order[] = [
   {
     id: 'o-live-01',
-    order_number: 'EB260824B2',
+    order_number: 'AM260824B2',
     user_id: '00000000-0000-0000-0000-000000000001',
-    customer_name: 'Amine Khelifi',
-    customer_phone: '0550000001',
-    delivery_address: 'Quartier Rouissat, Ouargla',
+    customer_name: 'Moussa Traoré',
+    customer_phone: '771230001',
+    delivery_address: 'Quartier Amitié 2, Villa 45',
     order_type: 'delivery',
-    subtotal: 1450,
+    subtotal: 6000,
     discount: 0,
-    delivery_fee: 250,
+    delivery_fee: 1000,
     tax: 0,
-    total: 1700,
+    total: 7000,
     payment_method: 'cod',
     payment_status: 'pending',
     status: 'out_for_delivery',
     delivery_user_id: '00000000-0000-0000-0000-000000000004',
-    assigned_driver_name: 'Sofiane Livreur (Moto)',
+    assigned_driver_name: 'Ousmane Livreur Express (Moto)',
     driver_cash_collected: false,
     admin_cash_settled: false,
     estimated_minutes: 15,
     created_at: new Date(Date.now() - 18 * 60000).toISOString(),
     items: [
-      { item_name: 'Architect Smash Burger', item_price: 1100, quantity: 1, instructions: 'Sans oignons crus' },
-      { item_name: 'Frites Maison & Sauce Fromagère', item_price: 350, quantity: 1 }
+      { item_name: "Grillade Mixte Spéciale Amitié", item_price: 4500, quantity: 1, instructions: 'Bien cuit' },
+      { item_name: 'Frites Maison Croustillantes & Sauce Fromagère', item_price: 1500, quantity: 1 }
     ]
   },
   {
     id: 'o-live-02',
-    order_number: 'EB260824D4',
+    order_number: 'AM260824D4',
     user_id: 'usr-demo-nadia',
-    customer_name: 'Nadia Bensalem',
-    customer_phone: '0661234567',
-    delivery_address: 'Boulevard 1er Novembre, En face Université Kasdi Merbah, Ouargla',
+    customer_name: 'Awa Diop',
+    customer_phone: '776123456',
+    delivery_address: 'Avenue Mandela, Résidence Les Palmiers',
     order_type: 'delivery',
-    subtotal: 2050,
+    subtotal: 8400,
     discount: 0,
-    delivery_fee: 250,
+    delivery_fee: 1000,
     tax: 0,
-    total: 2300,
+    total: 9400,
     payment_method: 'cod',
     payment_status: 'pending',
     status: 'ready',
     delivery_user_id: '00000000-0000-0000-0000-000000000004',
-    assigned_driver_name: 'Sofiane Livreur (Moto)',
+    assigned_driver_name: 'Ousmane Livreur Express (Moto)',
     driver_cash_collected: false,
     admin_cash_settled: false,
     estimated_minutes: 20,
     created_at: new Date(Date.now() - 25 * 60000).toISOString(),
     items: [
-      { item_name: 'Double Engineer Burger', item_price: 950, quantity: 1 },
-      { item_name: 'Tower Cheese Supreme', item_price: 1350, quantity: 1 }
+      { item_name: "Burger Gourmand L'Amitié Double Cheese", item_price: 3500, quantity: 2 },
+      { item_name: 'Aloco Banane Plantain Dorée', item_price: 1800, quantity: 1 }
     ]
   },
   {
     id: 'o-settle-01',
-    order_number: 'EB260824H8',
+    order_number: 'AM260824H8',
     user_id: 'usr-demo-karim',
-    customer_name: 'Karim Brahimi',
-    customer_phone: '0770987654',
-    delivery_address: 'Cité 400 Logements, Beni Thour, Ouargla',
+    customer_name: 'Ibrahima Cissé',
+    customer_phone: '777098765',
+    delivery_address: 'Rue 10 x Corniche, Amitié',
     order_type: 'delivery',
-    subtotal: 1350,
+    subtotal: 4800,
     discount: 0,
-    delivery_fee: 250,
+    delivery_fee: 1000,
     tax: 0,
-    total: 1600,
+    total: 5800,
     payment_method: 'cod',
     payment_status: 'paid',
     status: 'delivered',
     delivery_user_id: '00000000-0000-0000-0000-000000000004',
-    assigned_driver_name: 'Sofiane Livreur (Moto)',
+    assigned_driver_name: 'Ousmane Livreur Express (Moto)',
     driver_cash_collected: true,
     admin_cash_settled: false,
     driver_notes: 'Client ponctuel, payé en espèces',
     driver_rating: 5,
-    driver_review: 'Livraison express en 18 min, burger brûlant et livreur très courtois !',
+    driver_review: 'Livraison rapide en 20 min, grillades très chaudes et délicieuses !',
     estimated_minutes: 20,
     created_at: new Date(Date.now() - 2 * 3600000).toISOString(),
     items: [
-      { item_name: 'Tower Cheese Supreme', item_price: 1350, quantity: 1 },
-      { item_name: 'Hamoud Boualem Selecto', item_price: 150, quantity: 1 }
+      { item_name: 'Poulet Braisé & Sauce Verte Pimentée', item_price: 3800, quantity: 1 },
+      { item_name: 'Jus de Bissap & Gingembre Frais Maison', item_price: 1000, quantity: 1 }
     ]
   },
   {
     id: 'o-past-01',
-    order_number: 'EB260801A1',
+    order_number: 'AM260801A1',
     user_id: '00000000-0000-0000-0000-000000000001',
-    customer_name: 'Amine Khelifi',
-    customer_phone: '0550000001',
-    delivery_address: 'Centre-Ville, Ouargla',
+    customer_name: 'Moussa Traoré',
+    customer_phone: '771230001',
+    delivery_address: 'Quartier Amitié 2, Villa 45',
     order_type: 'delivery',
-    subtotal: 2050,
-    discount: 300,
+    subtotal: 8000,
+    discount: 1000,
     delivery_fee: 0,
     tax: 0,
-    total: 1750,
-    coupon_code: 'WELCOME300',
+    total: 7000,
+    coupon_code: 'BIENVENUE1000',
     payment_method: 'baridimob',
     payment_status: 'paid',
     status: 'delivered',
     delivery_user_id: '00000000-0000-0000-0000-000000000004',
-    assigned_driver_name: 'Sofiane Livreur (Moto)',
+    assigned_driver_name: 'Ousmane Livreur Express (Moto)',
     driver_cash_collected: false,
     admin_cash_settled: true,
     settled_at: new Date(Date.now() - 24 * 3600000).toISOString(),
@@ -168,8 +168,8 @@ const INITIAL_DEMO_ORDERS: Order[] = [
     estimated_minutes: 25,
     created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
     items: [
-      { item_name: 'Double Engineer Burger', item_price: 950, quantity: 1 },
-      { item_name: 'Architect Smash Burger', item_price: 1100, quantity: 1 }
+      { item_name: "Grillade Mixte Spéciale Amitié", item_price: 4500, quantity: 1 },
+      { item_name: "Burger Gourmand L'Amitié Double Cheese", item_price: 3500, quantity: 1 }
     ]
   }
 ];
@@ -179,23 +179,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { addToast } = useToast();
 
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('engineer_burger_cart');
+    const saved = localStorage.getItem('amitie_restaurant_cart') || localStorage.getItem('engineer_burger_cart');
     return saved ? JSON.parse(saved) : [];
   });
 
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(() => {
-    const saved = localStorage.getItem('engineer_burger_coupon');
+    const saved = localStorage.getItem('amitie_restaurant_coupon') || localStorage.getItem('engineer_burger_coupon');
     return saved ? JSON.parse(saved) : null;
   });
 
   const [favorites, setFavorites] = useState<string[]>(() => {
-    // Clear old demo favorites if stored
     try {
-      const old = localStorage.getItem('engineer_burger_favorites');
-      if (old && (old.includes('20000000-0000-0000-0000-000000000001') || old.includes('20000000-0000-0000-0000-000000000002'))) {
-        localStorage.removeItem('engineer_burger_favorites');
-      }
-      const saved = localStorage.getItem('engineer_burger_user_favorites');
+      const saved = localStorage.getItem('amitie_restaurant_favorites');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -203,66 +198,98 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [favoriteDrivers, setFavoriteDrivers] = useState<string[]>(() => {
-    const saved = localStorage.getItem('engineer_burger_fav_drivers');
+    const saved = localStorage.getItem('amitie_restaurant_fav_drivers');
     return saved ? JSON.parse(saved) : ['00000000-0000-0000-0000-000000000004'];
   });
 
   const [driverPreferredCustomers, setDriverPreferredCustomers] = useState<string[]>(() => {
-    const saved = localStorage.getItem('engineer_burger_driver_fav_clients');
-    return saved ? JSON.parse(saved) : ['0550000001', '0661234567'];
+    const saved = localStorage.getItem('amitie_restaurant_driver_fav_clients');
+    return saved ? JSON.parse(saved) : ['771230001', '776123456'];
   });
 
   const [settings, setSettings] = useState<RestaurantSettings>(() => {
-    const saved = localStorage.getItem('engineer_burger_settings');
-    return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
+    try {
+      const saved = localStorage.getItem('amitie_restaurant_settings');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.currency === 'FCFA' && parsed.restaurant_name?.includes('Amiti')) return parsed;
+      }
+    } catch {}
+    return DEFAULT_SETTINGS;
   });
 
   const [menuItems, setMenuItems] = useState<MenuItem[]>(() => {
-    const saved = localStorage.getItem('engineer_burger_menu');
-    return saved ? JSON.parse(saved) : INITIAL_MENU_ITEMS;
+    try {
+      const saved = localStorage.getItem('amitie_restaurant_menu');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].name?.includes('Amiti')) return parsed;
+      }
+    } catch {}
+    return INITIAL_MENU_ITEMS;
   });
 
   const [categories, setCategories] = useState<Category[]>(() => {
-    const saved = localStorage.getItem('engineer_burger_categories');
-    return saved ? JSON.parse(saved) : INITIAL_CATEGORIES;
+    try {
+      const saved = localStorage.getItem('amitie_restaurant_categories');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].name?.includes('Grillades')) return parsed;
+      }
+    } catch {}
+    return INITIAL_CATEGORIES;
   });
 
   const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = localStorage.getItem('engineer_burger_orders');
-    return saved ? JSON.parse(saved) : INITIAL_DEMO_ORDERS;
+    try {
+      const saved = localStorage.getItem('amitie_restaurant_orders');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].order_number?.startsWith('AM')) return parsed;
+      }
+    } catch {}
+    return INITIAL_DEMO_ORDERS;
   });
 
   useEffect(() => {
-    localStorage.setItem('engineer_burger_cart', JSON.stringify(cart));
+    localStorage.setItem('amitie_restaurant_cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
     if (appliedCoupon) {
-      localStorage.setItem('engineer_burger_coupon', JSON.stringify(appliedCoupon));
+      localStorage.setItem('amitie_restaurant_coupon', JSON.stringify(appliedCoupon));
     } else {
-      localStorage.removeItem('engineer_burger_coupon');
+      localStorage.removeItem('amitie_restaurant_coupon');
     }
   }, [appliedCoupon]);
 
   useEffect(() => {
-    localStorage.setItem('engineer_burger_user_favorites', JSON.stringify(favorites));
+    localStorage.setItem('amitie_restaurant_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
   useEffect(() => {
-    localStorage.setItem('engineer_burger_fav_drivers', JSON.stringify(favoriteDrivers));
+    localStorage.setItem('amitie_restaurant_fav_drivers', JSON.stringify(favoriteDrivers));
   }, [favoriteDrivers]);
 
   useEffect(() => {
-    localStorage.setItem('engineer_burger_driver_fav_clients', JSON.stringify(driverPreferredCustomers));
+    localStorage.setItem('amitie_restaurant_driver_fav_clients', JSON.stringify(driverPreferredCustomers));
   }, [driverPreferredCustomers]);
 
   useEffect(() => {
-    localStorage.setItem('engineer_burger_orders', JSON.stringify(orders));
+    localStorage.setItem('amitie_restaurant_orders', JSON.stringify(orders));
   }, [orders]);
 
   useEffect(() => {
-    localStorage.setItem('engineer_burger_categories', JSON.stringify(categories));
+    localStorage.setItem('amitie_restaurant_categories', JSON.stringify(categories));
   }, [categories]);
+
+  useEffect(() => {
+    localStorage.setItem('amitie_restaurant_settings', JSON.stringify(settings));
+  }, [settings]);
+
+  useEffect(() => {
+    localStorage.setItem('amitie_restaurant_menu', JSON.stringify(menuItems));
+  }, [menuItems]);
 
   // Real-Time Cross-Tab & Supabase Live Synchronizer
   useEffect(() => {
@@ -1077,7 +1104,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         tax,
         total,
         cartCount,
-        currency: settings.currency || 'DA'
+        currency: settings.currency || 'FCFA'
       }}
     >
       {children}

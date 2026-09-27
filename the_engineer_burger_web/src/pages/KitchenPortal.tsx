@@ -27,7 +27,7 @@ export const KitchenPortal: React.FC<KitchenPortalProps> = ({ setCurrentPage }) 
               <h1 className="fs-5 fw-extrabold text-warning mb-0">
                 {isRTL ? 'شاشة المطبخ والشواء (KDS)' : 'Écran Cuisine & Grill (KDS)'}
               </h1>
-              <span className="badge bg-danger px-2 py-1">Chef Karim</span>
+              <span className="badge bg-danger px-2 py-1">Chef Ibrahima</span>
             </div>
             <small className="text-secondary">
               {isRTL ? 'الطلبات النشطة التي تنتظر التحضير :' : 'Commandes actives en attente de cuisson :'} <strong>{kitchenOrders.length}</strong>

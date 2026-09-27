@@ -25,12 +25,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('engineer_burger_user');
+    const saved = localStorage.getItem('amitie_restaurant_user') || localStorage.getItem('engineer_burger_user');
     return saved ? JSON.parse(saved) : null;
   });
 
   const [allUsers, setAllUsers] = useState<User[]>(() => {
-    const saved = localStorage.getItem('engineer_burger_all_users');
+    const saved = localStorage.getItem('amitie_restaurant_all_users') || localStorage.getItem('engineer_burger_all_users');
     return saved ? JSON.parse(saved) : DEMO_USERS;
   });
 
@@ -39,15 +39,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { addToast } = useToast();
 
   useEffect(() => {
-    localStorage.setItem('engineer_burger_all_users', JSON.stringify(allUsers));
+    localStorage.setItem('amitie_restaurant_all_users', JSON.stringify(allUsers));
   }, [allUsers]);
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('engineer_burger_user', JSON.stringify(user));
+      localStorage.setItem('amitie_restaurant_user', JSON.stringify(user));
       refreshUserData();
     } else {
-      localStorage.removeItem('engineer_burger_user');
+      localStorage.removeItem('amitie_restaurant_user');
       setAddresses([]);
       setNotifications([]);
     }
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
         const combined = Array.from(map.values());
         setAllUsers(combined);
-        localStorage.setItem('engineer_burger_all_users', JSON.stringify(combined));
+        localStorage.setItem('amitie_restaurant_all_users', JSON.stringify(combined));
       }
     } catch (e) {
       console.warn('Could not fetch all users from Supabase', e);
@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!addressError && addressData && addressData.length > 0) {
         setAddresses(addressData);
       } else {
-        const localAddresses = localStorage.getItem(`addresses_${user.id}`);
+        const localAddresses = localStorage.getItem(`amitie_addresses_${user.id}`);
         if (localAddresses) {
           setAddresses(JSON.parse(localAddresses));
         } else {
@@ -98,9 +98,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               id: '00000000-0000-0000-0000-' + String(Date.now()).slice(-12).padStart(12, '0'),
               user_id: user.id,
               label: 'Maison',
-              address_line: user.address || 'Centre-Ville, Ouargla',
-              city: 'Ouargla',
-              pincode: '30000',
+              address_line: user.address || 'Quartier Amitié',
+              city: 'Amitié',
+              pincode: '00000',
               is_default: true
             }
           ]);
@@ -117,7 +117,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!notifError && notifData && notifData.length > 0) {
         setNotifications(notifData);
       } else {
-        const localNotifs = localStorage.getItem(`notifs_${user.id}`);
+        const localNotifs = localStorage.getItem(`amitie_notifs_${user.id}`);
         if (localNotifs) {
           setNotifications(JSON.parse(localNotifs));
         } else {
@@ -125,8 +125,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             {
               id: 'n1',
               user_id: user.id,
-              title: 'Bienvenue chez The Engineer Burger Ouargla ! 🍔',
-              message: 'Profitez de 300 DA de réduction avec le code WELCOME300.',
+              title: "Bienvenue chez Restaurant l'Amitié ! 🍲",
+              message: 'Profitez de 1 000 FCFA de réduction dès 6 000 FCFA avec le code BIENVENUE1000.',
               icon: 'bi-stars',
               is_read: false,
               created_at: new Date().toISOString()
@@ -208,7 +208,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       name: name.trim(),
       email: cleanEmail,
       phone: phone.trim(),
-      address: address?.trim() || 'Centre-Ville, Ouargla',
+      address: address?.trim() || 'Quartier Amitié',
       role: 'customer',
       status: 'active',
       password: password || '123456',
@@ -219,7 +219,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const updatedUsers = [newUser, ...allUsers.filter((u) => u.email.toLowerCase() !== cleanEmail)];
     setAllUsers(updatedUsers);
-    localStorage.setItem('engineer_burger_all_users', JSON.stringify(updatedUsers));
+    localStorage.setItem('amitie_restaurant_all_users', JSON.stringify(updatedUsers));
     setUser(newUser);
 
     try {
@@ -228,7 +228,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.warn('User registered locally', e);
     }
 
-    addToast('success', `Bienvenue chez The Engineer Burger, ${name} !`);
+    addToast('success', `Bienvenue chez Restaurant l'Amitié, ${name} !`);
     return newUser;
   };
 
@@ -259,7 +259,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const updatedUsers = [newStaff, ...allUsers.filter((u) => u.email.toLowerCase() !== cleanEmail)];
     setAllUsers(updatedUsers);
-    localStorage.setItem('engineer_burger_all_users', JSON.stringify(updatedUsers));
+    localStorage.setItem('amitie_restaurant_all_users', JSON.stringify(updatedUsers));
 
     try {
       await supabase.from('users').upsert([newStaff], { onConflict: 'email' });
@@ -287,7 +287,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const updated = [...addresses.map((a) => (address.is_default ? { ...a, is_default: false } : a)), newAddr];
     setAddresses(updated);
-    localStorage.setItem(`addresses_${user.id}`, JSON.stringify(updated));
+    localStorage.setItem(`amitie_addresses_${user.id}`, JSON.stringify(updated));
 
     try {
       await supabase.from('addresses').insert([newAddr]);

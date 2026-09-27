@@ -101,8 +101,8 @@ export const MyOrders: React.FC<MyOrdersProps> = ({ setCurrentPage, setSelectedO
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
           <div>
             <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-2 bg-white border shadow-sm">
-              <span className="fs-6">🍔</span>
-              <span className="fw-bold text-dark" style={{ fontSize: '11px' }}>THE ENGINEER BURGER · OUARGLA</span>
+              <span className="fs-6">🍲</span>
+              <span className="fw-bold text-dark" style={{ fontSize: '11px' }}>RESTAURANT L'AMITIÉ</span>
             </div>
             <h1 className="fs-3 fw-extrabold mb-1 text-dark">
               {isRTL ? '🛍️ متابعة وتاريخ طلباتي' : '🛍️ Mes Commandes & Suivi en Direct'}

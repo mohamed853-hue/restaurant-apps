@@ -83,9 +83,9 @@ export const DeliveryPortal: React.FC<DeliveryPortalProps> = () => {
 
   const openWhatsApp = (phone: string, customerName: string, orderNumber: string) => {
     const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const intlPhone = cleanPhone.startsWith('0') ? '213' + cleanPhone.substring(1) : cleanPhone;
+    const intlPhone = cleanPhone.startsWith('0') ? '221' + cleanPhone.substring(1) : cleanPhone;
     const message = encodeURIComponent(
-      `Salam ${customerName} ! C'est Sofiane, votre livreur The Engineer Burger 🍔. Je suis en route avec votre commande #${orderNumber}. Je serai là dans quelques minutes !`
+      `Bonjour ${customerName} ! C'est votre livreur Restaurant l'Amitié 🍲. Je suis en route avec votre commande #${orderNumber}. Je serai là dans quelques minutes !`
     );
     window.open(`https://wa.me/${intlPhone}?text=${message}`, '_blank');
   };

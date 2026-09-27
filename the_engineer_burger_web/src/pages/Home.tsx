@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
-import { INITIAL_CATEGORIES } from '../lib/supabase';
 import { FoodCard } from '../components/FoodCard';
 import { MenuItem } from '../types';
 
@@ -57,7 +56,7 @@ export const Home: React.FC<HomeProps> = ({
 
               <div className="hero-trust d-flex align-items-center gap-3 pt-3 border-top">
                 <div className="avatars d-flex">
-                  <span style={{ background: '#f4511e' }}>🍔</span>
+                  <span style={{ background: '#f4511e' }}>🍲</span>
                   <span style={{ background: '#181512' }}>⭐</span>
                   <span style={{ background: '#218653' }}>🚀</span>
                 </div>
@@ -78,8 +77,8 @@ export const Home: React.FC<HomeProps> = ({
             <div className="col-lg-6 hero-visual text-center position-relative">
               <div className="hero-ring position-absolute"></div>
               <img
-                src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=85"
-                alt="The Engineer Burger Smash"
+                src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=85"
+                alt="Restaurant l'Amitié Grillades et Plats"
                 className="hero-main img-fluid shadow-lg rounded-circle"
                 style={{ width: '420px', height: '420px', objectFit: 'cover' }}
               />
@@ -89,15 +88,15 @@ export const Home: React.FC<HomeProps> = ({
                 <span><i className="bi bi-scooter text-primary fs-4"></i></span>
                 <div className="text-start">
                   <b>{isRTL ? 'توصيل سريع' : 'Livraison Express'}</b>
-                  <small>{isRTL ? 'ورقلة وضواحيها (15-25 د)' : 'Ouargla & Environs (15-25 min)'}</small>
+                  <small>{isRTL ? 'توصيل ساخن في 20-30 دقيقة' : 'Livraison Chaude (20-30 min)'}</small>
                 </div>
               </div>
 
               <div className="floating-card rating">
                 <i className="bi bi-patch-check-fill text-warning fs-3"></i>
                 <div className="text-start">
-                  <b>{isRTL ? 'لحم طازج 100%' : '100% Viande Fraîche'}</b>
-                  <small>{isRTL ? 'لحم بقري حلال مضمون' : 'Pur Bœuf Certifié Halal'}</small>
+                  <b>{isRTL ? 'طازج وشهي 100%' : '100% Frais & Fait Maison'}</b>
+                  <small>{isRTL ? 'جودة ونكهة مضمونة' : 'Qualité & Saveurs Garanties'}</small>
                 </div>
               </div>
             </div>
@@ -193,25 +192,25 @@ export const Home: React.FC<HomeProps> = ({
             <div className="row align-items-center">
               <div className="col-lg-7">
                 <span className="badge bg-warning text-dark fw-bold px-3 py-2 text-uppercase mb-3">
-                  {isRTL ? 'عرض الافتتاح الخاص' : "Offre Spéciale d'Ouverture"}
+                  {isRTL ? 'عرض ترحيبي خاص' : "Offre de Bienvenue"}
                 </span>
                 <h2 className="display-5 fw-extrabold mb-3">
-                  {isRTL ? `خصم 300 ${currency} على أول طلبية !` : `300 ${currency} de Réduction sur votre 1ère Commande !`}
+                  {isRTL ? `خصم 1,000 ${currency} على أول طلبية !` : `1 000 ${currency} de Réduction sur votre Commande !`}
                 </h2>
                 <p className="text-secondary mb-4">
                   {isRTL
-                    ? 'تذوق الدبل برجر الشهير مع البصل المكرمل وجبن الشيدر الذائب والصلصة الخاصة.'
-                    : 'Goûtez au légendaire Double Engineer Burger avec ses oignons caramélisés et sa sauce dorée.'}
+                    ? 'تذوق أشهى المشويات المشكلة والبرجر الفاخر مع الصلصات الخاصة بالصداقة.'
+                    : 'Découvrez la Grillade Mixte Spéciale Amitié ou nos Burgers Gourmets avec frites maison et sauces secrètes.'}
                 </p>
 
                 <div className="coupon-pill d-inline-flex align-items-center gap-3 p-2 px-3 rounded-3" style={{ background: '#2c2622', border: '1px dashed #e65100' }}>
                   <span className="text-secondary small">{isRTL ? 'كود الخصم :' : 'CODE PROMO :'}</span>
-                  <b className="text-warning fs-5 tracking-wide">WELCOME300</b>
+                  <b className="text-warning fs-5 tracking-wide">BIENVENUE1000</b>
                   <button
                     className="btn btn-sm btn-primary ms-2"
                     onClick={() => {
-                      navigator.clipboard.writeText('WELCOME300');
-                      alert('Code promo WELCOME300 copié !');
+                      navigator.clipboard.writeText('BIENVENUE1000');
+                      alert('Code promo BIENVENUE1000 copié !');
                     }}
                   >
                     <i className="bi bi-clipboard me-1"></i> {isRTL ? 'نسخ' : 'Copier'}
@@ -221,8 +220,8 @@ export const Home: React.FC<HomeProps> = ({
 
               <div className="col-lg-5 text-center mt-4 mt-lg-0">
                 <img
-                  src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=85"
-                  alt="Smash Tower"
+                  src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=85"
+                  alt="Grillade Spéciale Amitié"
                   className="img-fluid rounded-4 shadow-lg"
                   style={{ maxHeight: '300px', objectFit: 'cover' }}
                 />

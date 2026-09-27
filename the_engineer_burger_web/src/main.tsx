@@ -44,16 +44,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             maxWidth: '520px',
             textAlign: 'center'
           }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🍔</div>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🍲</div>
             <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#1c1917', marginBottom: '12px' }}>
-              The Engineer Burger
+              Restaurant l'Amitié
             </h2>
             <p style={{ color: '#78716c', fontSize: '14px', lineHeight: '1.6', marginBottom: '24px' }}>
               Une mise à jour a été effectuée. Cliquez sur le bouton ci-dessous pour recharger l'interface en toute sécurité.
             </p>
             <button
               onClick={() => {
-                localStorage.removeItem('engineer_burger_settings_v3');
+                localStorage.removeItem('amitie_restaurant_settings');
                 window.location.reload();
               }}
               style={{

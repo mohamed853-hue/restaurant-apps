@@ -27,17 +27,17 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setGpsLoading(false);
-          const coords = `Ouargla (GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)})`;
+          const coords = `Quartier Amitié (GPS: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)})`;
           setAddress(coords);
         },
         (err) => {
           setGpsLoading(false);
           console.warn('GPS location access rejected or unavailable', err);
-          setAddress('Centre-Ville, Ouargla');
+          setAddress('Quartier Amitié');
         }
       );
     } else {
-      setAddress('Centre-Ville, Ouargla');
+      setAddress('Quartier Amitié');
     }
   };
 
@@ -65,7 +65,7 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
     }
 
     setIsSubmitting(true);
-    const created = await register(name, email, phone, password, address || 'Centre-Ville, Ouargla');
+    const created = await register(name, email, phone, password, address || 'Quartier Amitié');
     setIsSubmitting(false);
 
     if (created) {
@@ -87,15 +87,15 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
                 border: '1px solid #fde68a'
               }}
             >
-              <span className="fs-6">🍔</span>
-              <span className="badge bg-warning text-dark fw-bold" style={{ fontSize: '11px' }}>OUARGLA · ورقلة</span>
+              <span className="fs-6">🍲</span>
+              <span className="badge bg-warning text-dark fw-bold" style={{ fontSize: '11px' }}>RESTAURANT L'AMITIÉ</span>
             </div>
 
             <h2
               className="fw-extrabold text-uppercase tracking-wider mb-0"
               style={{
                 fontSize: '22px',
-                letterSpacing: '1.5px',
+                letterSpacing: '1px',
                 background: 'linear-gradient(90deg, #ea580c, #f59e0b, #d97706, #ea580c)',
                 backgroundSize: '200% auto',
                 WebkitBackgroundClip: 'text',
@@ -104,10 +104,10 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
                 filter: 'drop-shadow(0 2px 8px rgba(245, 158, 11, 0.25))'
               }}
             >
-              The Engineer Burger
+              Restaurant l'Amitié
             </h2>
             <p className="text-muted small mt-1 mb-0">
-              {isRTL ? 'أنشئ حسابك واستمتع بأشهى برجر سماش وعروض حصرية' : 'Rejoignez The Engineer Burger et commandez en quelques clics à Ouargla'}
+              {isRTL ? 'أنشئ حسابك واستمتع بأشهى المشويات والأطباق الفاخرة' : 'Rejoignez Restaurant l\'Amitié et commandez en quelques clics'}
             </p>
           </div>
 
@@ -130,7 +130,7 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
                 <input
                   type="text"
                   className="form-control border-start-0"
-                  placeholder="Ex: Karim Bensalem"
+                  placeholder="Ex: Moussa Traoré"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -159,7 +159,7 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
 
             <div className="mb-3">
               <label className="form-label small fw-bold">
-                {isRTL ? 'رقم الهاتف' : 'Numéro de Téléphone (Algérie)'} *
+                {isRTL ? 'رقم الهاتف' : 'Numéro de Téléphone'} *
               </label>
               <div className="input-group">
                 <span className="input-group-text bg-light border-end-0">
@@ -168,7 +168,7 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
                 <input
                   type="tel"
                   className="form-control border-start-0"
-                  placeholder="0550 12 34 56"
+                  placeholder="77 123 45 67"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   required
@@ -180,7 +180,7 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
             <div className="mb-3">
               <div className="d-flex justify-content-between align-items-center mb-1">
                 <label className="form-label small fw-bold mb-0">
-                  {isRTL ? 'عنوان التوصيل في ورقلة' : 'Adresse de Livraison (Ouargla)'}
+                  {isRTL ? 'عنوان التوصيل' : 'Adresse de Livraison'}
                 </label>
                 <button
                   type="button"
@@ -195,7 +195,7 @@ export const Register: React.FC<RegisterProps> = ({ setCurrentPage }) => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Ex: Quartier Rouissat, Centre-Ville Ouargla..."
+                placeholder="Ex: Quartier Amitié 2, Villa 45..."
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />

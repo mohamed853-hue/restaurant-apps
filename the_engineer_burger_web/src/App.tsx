@@ -18,6 +18,7 @@ import { CustomerDashboard } from './pages/CustomerDashboard';
 import { MyOrders } from './pages/MyOrders';
 import { Favorites } from './pages/Favorites';
 import { Login } from './pages/Login';
+import { AdminLogin } from './pages/AdminLogin';
 import { Register } from './pages/Register';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { KitchenPortal } from './pages/KitchenPortal';
@@ -32,6 +33,7 @@ const resolvePageFromLocation = (): string => {
   const search = new URLSearchParams(window.location.search);
   const portal = search.get('portal')?.toLowerCase() || search.get('role')?.toLowerCase() || search.get('page')?.toLowerCase();
 
+  if (path.startsWith('/admin/login') || path.startsWith('/admin-login')) return 'admin-login';
   if (portal === 'admin' || path.startsWith('/admin') || hash.includes('admin')) return 'admin-dashboard';
   if (portal === 'delivery' || portal === 'livreur' || path.startsWith('/delivery') || path.startsWith('/livreur') || hash.includes('delivery') || hash.includes('livreur')) return 'delivery-portal';
   if (portal === 'kitchen' || portal === 'cuisine' || path.startsWith('/kitchen') || path.startsWith('/cuisine') || hash.includes('kitchen') || hash.includes('cuisine')) return 'kitchen-portal';
@@ -60,6 +62,7 @@ const pageToPathMap: Record<string, string> = {
   'favorites': '/favorites',
   'login': '/login',
   'register': '/register',
+  'admin-login': '/admin/login',
   'admin-dashboard': '/admin',
   'kitchen-portal': '/kitchen',
   'delivery-portal': '/delivery'
@@ -105,7 +108,8 @@ const MainApp: React.FC = () => {
   const isDedicatedPortal =
     currentPage === 'admin-dashboard' ||
     currentPage === 'kitchen-portal' ||
-    currentPage === 'delivery-portal';
+    currentPage === 'delivery-portal' ||
+    currentPage === 'admin-login';
 
   return (
     <div className="app-container d-flex flex-column min-vh-100 pb-5 pb-lg-0">
@@ -191,11 +195,13 @@ const MainApp: React.FC = () => {
 
         {currentPage === 'register' && <Register setCurrentPage={handleSetCurrentPage} />}
 
+        {currentPage === 'admin-login' && <AdminLogin setCurrentPage={handleSetCurrentPage} />}
+
         {currentPage === 'admin-dashboard' && (
-          user?.role === 'admin' ? (
+          (user?.role === 'admin' || user?.role === 'staff') ? (
             <AdminDashboard setCurrentPage={handleSetCurrentPage} />
           ) : (
-            <Login setCurrentPage={handleSetCurrentPage} />
+            <AdminLogin setCurrentPage={handleSetCurrentPage} />
           )
         )}
 
@@ -203,7 +209,7 @@ const MainApp: React.FC = () => {
           (user?.role === 'kitchen' || user?.role === 'admin') ? (
             <KitchenPortal setCurrentPage={handleSetCurrentPage} />
           ) : (
-            <Login setCurrentPage={handleSetCurrentPage} />
+            <AdminLogin setCurrentPage={handleSetCurrentPage} />
           )
         )}
 
@@ -211,7 +217,7 @@ const MainApp: React.FC = () => {
           (user?.role === 'delivery' || user?.role === 'admin') ? (
             <DeliveryPortal setCurrentPage={handleSetCurrentPage} />
           ) : (
-            <Login setCurrentPage={handleSetCurrentPage} />
+            <AdminLogin setCurrentPage={handleSetCurrentPage} />
           )
         )}
       </main>
